@@ -9,7 +9,7 @@ namespace FreestyleSlalomCompetitionManager.Data.Models.Categories
 {
     public class BaseCategory : BaseModel
     {
-        public Competition Competition { get; set; }
+        public required Competition Competition { get; set; }
         public AgeCategory AgeCategory { get; set; }
         public SexCategory SexCategory { get; set; }
     }
