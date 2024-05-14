@@ -18,8 +18,12 @@ namespace FreestyleSlalomCompetitionManager.BL
             Console.WriteLine("  importfolder <folder>     - Import world rankings from the specified folder");
             Console.WriteLine("  importfile <file>         - Import world rankings from the specified file");
             Console.WriteLine("  createcompetition <args>  - Create a new competition with the specified details");
+            Console.WriteLine("  newskater <WSID> <name> <country> - Add a new skater");
+            Console.WriteLine("  addexistingskater <WSID>  - Add an existing skater to the competition");
+            Console.WriteLine("  export <file>             - Export skaters to a CSV file");
             Console.WriteLine("  exit                      - Exit the program");
         }
+
 
         public static void DisplayUnknownCommandMessage()
         {
