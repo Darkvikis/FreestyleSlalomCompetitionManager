@@ -1,7 +1,7 @@
 ﻿using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
 
-namespace FreestyleSlalomCompetitionManager.Data.Models
+namespace FreestyleSlalomCompetitionManager.BL.Models
 {
     public class Competition(string name, DateTime startDate, DateTime endDate, string description, string address, Organizer organizer) : BaseModel
     {

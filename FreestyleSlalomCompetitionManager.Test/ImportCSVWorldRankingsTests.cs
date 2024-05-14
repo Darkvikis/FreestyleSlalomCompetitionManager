@@ -1,5 +1,5 @@
+using FreestyleSlalomCompetitionManager.BL.Models;
 using FreestyleSlalomCompetitionManager.BL.Enums;
-using FreestyleSlalomCompetitionManager.Data.Models;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;

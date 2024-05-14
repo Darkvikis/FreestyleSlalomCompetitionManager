@@ -1,20 +1,17 @@
-﻿using FreestyleSlalomCompetitionManager.Data.Enums;
+﻿using FreestyleSlalomCompetitionManager.BL.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FreestyleSlalomCompetitionManager.Data.Models
+namespace FreestyleSlalomCompetitionManager.BL.Models
 {
-    public class SkaterOnCompetition(Skater skater) : BaseModel
+    public class SkaterOnCompetition(string name, string country) : BaseSkater(name, country)
     {
-        public required Skater Skater { get; set; } = skater;
         public bool PayedFee { get; set; }
         public SendMusic SendMusic { get; set; }
         public string? Music { get; set; }
-        public AgeCategory AgeCategory { get; set; } = skater.AgeCategory;
-        public SexCategory SexCategory { get; set; } = skater.SexCategory;
         public int CompetitionRankBattle { get; set; }
         public int CompetitionRankSpeed { get; set; }
         public int CompetitionRankClassic { get; set; }

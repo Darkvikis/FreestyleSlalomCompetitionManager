@@ -1,5 +1,5 @@
 ﻿using FreestyleSlalomCompetitionManager.BL.Impotrs;
-using FreestyleSlalomCompetitionManager.Data.Models;
+using FreestyleSlalomCompetitionManager.BL.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

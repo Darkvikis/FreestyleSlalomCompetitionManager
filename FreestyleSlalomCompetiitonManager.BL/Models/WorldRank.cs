@@ -1,4 +1,4 @@
-﻿using FreestyleSlalomCompetitionManager.Data.Enums;
+﻿using FreestyleSlalomCompetitionManager.BL.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace FreestyleSlalomCompetitionManager.Data.Models
+namespace FreestyleSlalomCompetitionManager.BL.Models
 {
     public class WorldRank (string WSID, DateTime dateAdded) : BaseModel
     {

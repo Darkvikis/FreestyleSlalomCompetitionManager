@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FreestyleSlalomCompetitionManager.Data.Models
+namespace FreestyleSlalomCompetitionManager.BL.Models
 {
     public class Organizer (string WSID, string name) : BaseModel
     {

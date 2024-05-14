@@ -1,4 +1,4 @@
-﻿using FreestyleSlalomCompetitionManager.Data.Enums;
+﻿using FreestyleSlalomCompetitionManager.BL.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FreestyleSlalomCompetitionManager.Data.Models.Categories
+namespace FreestyleSlalomCompetitionManager.BL.Models.Categories
 {
     public class Speed : BaseCategory
     {

@@ -1,6 +1,5 @@
 ﻿using FreestyleSlalomCompetitionManager.BL.Enums;
-using FreestyleSlalomCompetitionManager.Data.Enums;
-using FreestyleSlalomCompetitionManager.Data.Models;
+using FreestyleSlalomCompetitionManager.BL.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -16,7 +15,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
         {
             List<WorldRank> allWorldRanks = [];
 
-            DirectoryInfo directory = new (folderPath);
+            DirectoryInfo directory = new(folderPath);
 
             // Loop through each CSV file in the folder
             foreach (FileInfo file in directory.GetFiles("*.csv"))
@@ -36,7 +35,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
             List<WorldRank> worldRanks = [];
 
-            using (StreamReader reader = new (filePath))
+            using (StreamReader reader = new(filePath))
             {
                 string line;
                 while ((line = await reader.ReadLineAsync()) != null)
