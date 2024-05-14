@@ -78,7 +78,8 @@ namespace FreestyleSlalomCompetitionManager.BL
             string folderPath = args[0]; 
             try
             {
-                await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
+               var worldRanks = await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
+                ConsoleCommunicator.DisplayImportSuccessMessage(worldRanks.Count, folderPath);
             }
             catch (Exception ex)
             {
