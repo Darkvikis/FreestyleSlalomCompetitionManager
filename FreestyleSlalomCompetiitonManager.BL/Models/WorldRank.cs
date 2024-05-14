@@ -8,13 +8,13 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FreestyleSlalomCompetitionManager.Data.Models
 {
-    public class WorldRank (Skater skater, Date dateAdded) : BaseModel
+    public class WorldRank (string WSID, DateTime dateAdded) : BaseModel
     {
-        public Skater Skater { get; set; } = skater;
+        public string WSID { get; set; } = WSID;
         public Discipline Discipline { get; set; }
         public AgeCategory AgeCategory { get; set; }
         public SexCategory SexCategory { get; set; }
         public ushort Rank { get; set; }
-        public Date DateAdded { get; set; } = dateAdded;
+        public DateTime DateAdded { get; set; } = dateAdded;
     }
 }

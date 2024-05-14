@@ -8,11 +8,10 @@ namespace FreestyleSlalomCompetitionManager.Data.Enums
 {
     public enum Discipline
     {
-        Base = 0,
-        Classic = 1,
-        Battle = 2,
-        Speed = 3,
-        Slide = 4,
-        Jump = 5,
+        Classic = 0,
+        Battle = 1,
+        Speed = 2,
+        Slide = 3,
+        Jump = 4,
     }
 }
