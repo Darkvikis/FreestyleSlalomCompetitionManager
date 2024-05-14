@@ -15,9 +15,14 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
         {
             List<WorldRank> allWorldRanks = [];
 
+
             DirectoryInfo directory = new(folderPath);
 
-            // Loop through each CSV file in the folder
+            if (!directory.Exists)
+            {
+                throw new Exception($"Directory {folderPath} not found. Please provide valid folder path to import from.");
+            }
+
             foreach (FileInfo file in directory.GetFiles("*.csv"))
             {
                 List<WorldRank> worldRanks = await ImportAsync(file.FullName, existingSkaters);
@@ -30,6 +35,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
         public static async Task<List<WorldRank>> ImportAsync(string filePath, ConcurrentDictionary<string, Skater> existingSkaters)
         {
+            if (!File.Exists(filePath))
+                throw new Exception($"File {filePath} not found. Please provide valid file path to import from.");
+
             // Extract category and discipline from file name
             (Discipline discipline, SexCategory sexCategory, AgeCategory ageCategory) = ExtractFileParts(filePath);
 
@@ -62,6 +70,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
         {
             string fileName = Path.GetFileNameWithoutExtension(filePath);
             string[] fileParts = fileName.Split('-');
+
+            if (fileParts.Length != 4)
+                throw new FormatException($"File name {fileName} is not in the correct format. Please provide file names in the format: 'World Ranking March - <Discipline> - <SexCategory> - <AgeCategory>.csv'");
 
             string disciplineStr = fileParts[1].Trim();
             string sexCategoryStr = fileParts[2].Trim();

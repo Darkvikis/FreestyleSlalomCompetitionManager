@@ -11,8 +11,8 @@ namespace FreestyleSlalomCompetitionManager.BL
 {
     public class FreestyleSlalomCompetitionManagerRunner
     {
-        private readonly ConcurrentDictionary<string, Skater> existingSkaters = new();
-        private Competition? currentCompetition;
+        public readonly ConcurrentDictionary<string, Skater> existingSkaters = new();
+        public Competition? currentCompetition;
 
         public async Task RunAsync()
         {
@@ -33,7 +33,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             }
         }
 
-        private async Task ExecuteCommandAsync(string command, string[] args)
+        public async Task ExecuteCommandAsync(string command, string[] args)
         {
             switch (command)
             {
@@ -47,7 +47,7 @@ namespace FreestyleSlalomCompetitionManager.BL
                     await ImportFromFileAsync(args);
                     break;
                 case "createcompetition":
-                    _ = CreateCompetitionAsync(args);
+                    CreateCompetition(args);
                     break;
                 case "newskater":
                     AddNewSkater(args);
@@ -72,8 +72,15 @@ namespace FreestyleSlalomCompetitionManager.BL
                 return;
             }
 
-            string folderPath = args[0];
-            await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
+            string folderPath = args[0]; 
+            try
+            {
+                await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
+            }
+            catch (Exception ex)
+            {
+                ConsoleCommunicator.DisplayImportErrorMessage(folderPath, ex.Message);
+            }
         }
 
         private async Task ImportFromFileAsync(string[] args)
@@ -95,8 +102,7 @@ namespace FreestyleSlalomCompetitionManager.BL
                 ConsoleCommunicator.DisplayImportErrorMessage(filePath, ex.Message);
             }
         }
-
-        private async Task CreateCompetitionAsync(string[] args)
+        private void CreateCompetition(string[] args)
         {
             if (args.Length < 7)
             {
@@ -128,15 +134,15 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         private void AddNewSkater(string[] args)
         {
-            if (args.Length < 4)
+            if (args.Length < 3)
             {
                 ConsoleCommunicator.DisplaySkaterDetailsMissingMessage();
                 return;
             }
 
-            string wsid = args[1];
-            string name = args[2];
-            string country = args[3];
+            string wsid = args[0];
+            string name = args[1];
+            string country = args[2];
 
             if (existingSkaters.ContainsKey(wsid))
             {
@@ -152,13 +158,13 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         private void AddExistingSkaterToCompetition(string[] args)
         {
-            if (args.Length < 2)
+            if (args.Length < 1)
             {
                 ConsoleCommunicator.DisplaySkaterWsidMissingMessage();
                 return;
             }
 
-            string skaterWsid = args[1];
+            string skaterWsid = args[0];
 
             if (!existingSkaters.TryGetValue(skaterWsid, out Skater skater))
             {

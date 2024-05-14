@@ -58,7 +58,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         public static void DisplayCompetitionCreationSuccessMessage(string competitionName)
         {
-            Console.WriteLine($"Competition '{competitionName}' created successfully!");
+            Console.WriteLine($"Competition '{competitionName}' created successfully.");
         }
 
         public static void DisplaySkaterDetailsMissingMessage()
