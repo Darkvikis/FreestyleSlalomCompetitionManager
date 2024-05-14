@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.Data.Models
 {
-    public class Organizer (int WSID, string name) : BaseModel
+    public class Organizer (string WSID, string name) : BaseModel
     {
-        int WSID { get; set; } = WSID;
-        string Name { get; set; } = name;
+        public string WSID { get; set; } = WSID;
+        public string Name { get; set; } = name;
     }
 }
