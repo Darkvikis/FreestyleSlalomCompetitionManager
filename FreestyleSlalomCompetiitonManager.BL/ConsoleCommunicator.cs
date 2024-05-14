@@ -60,5 +60,40 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             Console.WriteLine($"Competition '{competitionName}' created successfully!");
         }
+
+        public static void DisplaySkaterDetailsMissingMessage()
+        {
+            Console.WriteLine("Please provide the skater details in the format: newskater <WSID> <name> <country>");
+        }
+
+        public static void DisplaySkaterAlreadyExistsMessage(string wsid)
+        {
+            Console.WriteLine($"Skater with WSID '{wsid}' already exists.");
+        }
+
+        public static void DisplaySkaterCreationSuccessMessage(string name, string wsid)
+        {
+            Console.WriteLine($"New skater '{name}' added successfully with WSID '{wsid}'.");
+        }
+
+        public static void DisplaySkaterWsidMissingMessage()
+        {
+            Console.WriteLine("Please provide the WSID of the skater to add.");
+        }
+
+        public static void DisplaySkaterNotFoundMessage(string wsid)
+        {
+            Console.WriteLine($"Skater with WSID '{wsid}' not found.");
+        }
+
+        public static void DisplayNoCompetitionCreatedMessage()
+        {
+            Console.WriteLine("No competition created. Please create a competition first.");
+        }
+
+        public static void DisplaySkaterAddedToCompetitionMessage(string wsid, string competitionName)
+        {
+            Console.WriteLine($"Skater with WSID '{wsid}' added to the competition '{competitionName}'.");
+        }
     }
 }

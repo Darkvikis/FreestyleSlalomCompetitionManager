@@ -9,6 +9,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
 {
     public class SkaterOnCompetition(string name, string country) : BaseSkater(name, country)
     {
+        public string? WSID { get; set; }
         public bool PayedFee { get; set; }
         public SendMusic SendMusic { get; set; }
         public string? Music { get; set; }

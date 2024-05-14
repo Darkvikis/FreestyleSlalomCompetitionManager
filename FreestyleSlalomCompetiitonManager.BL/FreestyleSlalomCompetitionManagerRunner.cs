@@ -49,6 +49,12 @@ namespace FreestyleSlalomCompetitionManager.BL
                 case "createcompetition":
                     _ = CreateCompetitionAsync(args);
                     break;
+                case "newskater":
+                    AddNewSkater(args);
+                    break;
+                case "addexistingskater":
+                    AddExistingSkaterToCompetition(args);
+                    break;
                 case "exit":
                     Environment.Exit(0);
                     break;
@@ -124,7 +130,7 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             if (args.Length < 4)
             {
-                Console.WriteLine("Please provide the skater details in the format: newskater <WSID> <name> <country>");
+                ConsoleCommunicator.DisplaySkaterDetailsMissingMessage();
                 return;
             }
 
@@ -134,14 +140,47 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             if (existingSkaters.ContainsKey(wsid))
             {
-                Console.WriteLine($"Skater with WSID '{wsid}' already exists.");
+                ConsoleCommunicator.DisplaySkaterAlreadyExistsMessage(wsid);
                 return;
             }
 
-            Skater newSkater = new (name, country, wsid);
+            Skater newSkater = new(name, country, wsid);
             existingSkaters.TryAdd(wsid, newSkater);
 
-            Console.WriteLine($"New skater '{name}' added successfully with WSID '{wsid}'.");
+            ConsoleCommunicator.DisplaySkaterCreationSuccessMessage(name, wsid);
         }
+
+        private void AddExistingSkaterToCompetition(string[] args)
+        {
+            if (args.Length < 2)
+            {
+                ConsoleCommunicator.DisplaySkaterWsidMissingMessage();
+                return;
+            }
+
+            string skaterWsid = args[1];
+
+            if (!existingSkaters.TryGetValue(skaterWsid, out Skater skater))
+            {
+                ConsoleCommunicator.DisplaySkaterNotFoundMessage(skaterWsid);
+                return;
+            }
+
+            if (currentCompetition == null)
+            {
+                ConsoleCommunicator.DisplayNoCompetitionCreatedMessage();
+                return;
+            }
+
+            SkaterOnCompetition skaterOnCompetition = new(skater.Name, skater.Country)
+            {
+                WSID = skater.WSID,
+            };
+
+            currentCompetition.Skaters.Add(skaterOnCompetition);
+
+            ConsoleCommunicator.DisplaySkaterAddedToCompetitionMessage(skaterWsid, currentCompetition.Name);
+        }
+
     }
 }
