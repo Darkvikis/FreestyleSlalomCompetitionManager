@@ -14,6 +14,7 @@ namespace FreestyleSlalomCompetitionManager.Data.Models
         public AgeCategory AgeCategory { get; set; }
         public SexCategory SexCategory { get; set; }
         public string WSID { get; set; } = WSID;
+        public List<WorldRank> WorldRanks { get; set; } = [];
     }
 }
 
