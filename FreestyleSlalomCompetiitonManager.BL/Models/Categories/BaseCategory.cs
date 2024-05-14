@@ -1,11 +1,11 @@
-﻿using FreestyleSlalomCompetiitonManager.Data.Enums;
+﻿using FreestyleSlalomCompetitionManager.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FreestyleSlalomCompetiitonManager.Data.Models.Categories
+namespace FreestyleSlalomCompetitionManager.Data.Models.Categories
 {
     public class BaseCategory : BaseModel
     {

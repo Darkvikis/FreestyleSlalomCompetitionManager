@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FreestyleSlalomCompetiitonManager.Data.Enums
+namespace FreestyleSlalomCompetitionManager.Data.Enums
 {
     public enum Discipline
     {

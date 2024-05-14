@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FreestyleSlalomCompetiitonManager.Data.Models.Categories
+namespace FreestyleSlalomCompetitionManager.Data.Models.Categories
 {
     public class Classic : BaseCategory
     {
