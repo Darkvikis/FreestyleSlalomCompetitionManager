@@ -1,1 +1,1 @@
-# FreestyleSlalomCompetiitonManager
+# FreestyleSlalomCompetitionManager
