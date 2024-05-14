@@ -52,8 +52,11 @@ namespace FreestyleSlalomCompetitionManager.BL
                 case "newskater":
                     AddNewSkater(args);
                     break;
-                case "addexistingskater":
+                case "skatertocompetition":
                     AddExistingSkaterToCompetition(args);
+                    break;
+                case "export":
+                    ExportSkatersToCsv(args);
                     break;
                 case "exit":
                     Environment.Exit(0);
@@ -186,6 +189,24 @@ namespace FreestyleSlalomCompetitionManager.BL
             currentCompetition.Skaters.Add(skaterOnCompetition);
 
             ConsoleCommunicator.DisplaySkaterAddedToCompetitionMessage(skaterWsid, currentCompetition.Name);
+        }
+        private void ExportSkatersToCsv(string[] args)
+        {
+            if (currentCompetition == null)
+            {
+                Console.WriteLine("No active competition to export skaters from.");
+                return;
+            }
+
+            if (args.Length < 1)
+            {
+                Console.WriteLine("Please provide the file path to export to.");
+                return;
+            }
+
+            string filePath = args[0];
+            CsvExporter.ExportSkatersToCsv(currentCompetition, filePath);
+            Console.WriteLine($"Skaters have been exported to {filePath}");
         }
 
     }

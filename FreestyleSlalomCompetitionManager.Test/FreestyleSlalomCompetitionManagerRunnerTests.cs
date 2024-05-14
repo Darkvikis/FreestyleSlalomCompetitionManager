@@ -24,7 +24,7 @@ namespace FreestyleSlalomCompetitionManager.Test
         [InlineData("importfile invalidpath", "Please provide valid file path to import from.")]
         [InlineData("createcompetition", "Please provide the competition details")]
         [InlineData("newskater", "Please provide the skater details")]
-        [InlineData("addexistingskater", "Please provide the WSID")]
+        [InlineData("skatertocompetition", "Please provide the WSID")]
         public async Task ExecuteCommandAsync_InvalidInput_ReturnsExpectedMessage(string command, string expectedOutput)
         {
             // Arrange
@@ -77,7 +77,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             var runner = new FreestyleSlalomCompetitionManagerRunner();
             runner.currentCompetition = new Competition("TestCompetition", DateTime.Now, DateTime.Now, "Description", "Address", new("Organizer", "WSID"));
             runner.existingSkaters.TryAdd("WSID", new Skater("Name", "Country", "WSID"));
-            var input = "addexistingskater WSID".Split(' ');
+            var input = "skatertocompetition WSID".Split(' ');
 
             // Act
             await runner.ExecuteCommandAsync(input[0], input[1..]);
@@ -87,5 +87,38 @@ namespace FreestyleSlalomCompetitionManager.Test
             Assert.Contains("Skater with WSID 'WSID' added to the competition 'TestCompetition'.", output);
             Assert.True(runner.currentCompetition?.Skaters.Any(skater => skater.WSID == "WSID"));
         }
+
+        [Fact]
+        public async Task ExecuteCommandAsync_ExportSkatersToCsv_ShouldExportSkaters()
+        {
+            // Arrange
+            var runner = new FreestyleSlalomCompetitionManagerRunner();
+            var consoleOut = new StringWriter();
+            Console.SetOut(consoleOut);
+            var competitionInput = "createcompetition TestCompetition 2024-06-01 2024-06-02 Description Address OrganizerName OrganizerWSID";
+            await runner.ExecuteCommandAsync(competitionInput.Split(' ')[0], competitionInput.Split(' ')[1..]);
+
+            var skaterInput = "newskater WSID Name Country";
+            await runner.ExecuteCommandAsync(skaterInput.Split(' ')[0], skaterInput.Split(' ')[1..]);
+
+            await runner.ExecuteCommandAsync("skatertocompetition", new string[] { "WSID" });
+            var filePath = "test_skaters.csv";
+
+            // Act
+            await runner.ExecuteCommandAsync("export", new string[] { filePath });
+            var output = consoleOut.ToString().Trim();
+
+            // Assert
+            Assert.Contains($"Skaters have been exported to {filePath}", output);
+
+            // Verify the CSV content
+            var csvContent = File.ReadAllText(filePath);
+            Assert.Contains("Name,Country,WSID,PayedFee,SendMusic,Music,CompetitionRankBattle,CompetitionRankSpeed,CompetitionRankClassic,CompetitionRankJump,CompetitionRankSlide", csvContent);
+            Assert.Contains("Name,Country,WSID,False,No,,0,0,0,0,0", csvContent);
+
+            // Cleanup
+            File.Delete(filePath);
+        }
+
     }
 }
