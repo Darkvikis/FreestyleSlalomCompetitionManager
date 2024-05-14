@@ -1,4 +1,5 @@
-﻿using FreestyleSlalomCompetitionManager.Data.Enums;
+﻿using FreestyleSlalomCompetitionManager.BL.Enums;
+using FreestyleSlalomCompetitionManager.Data.Enums;
 using FreestyleSlalomCompetitionManager.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -24,9 +25,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             string ageCategoryStr = fileParts[3].Trim();
 
             // Map string values to enums
-            Discipline discipline = GetDisciplineFromString(disciplineStr);
-            SexCategory sexCategory = GetSexCategoryFromString(sexCategoryStr);
-            AgeCategory ageCategory = GetAgeCategoryFromString(ageCategoryStr);
+            Discipline discipline = EnumConventer.GetDisciplineFromString(disciplineStr);
+            SexCategory sexCategory = EnumConventer.GetSexCategoryFromString(sexCategoryStr);
+            AgeCategory ageCategory = EnumConventer.GetAgeCategoryFromString(ageCategoryStr);
 
             using (var reader = new StreamReader(filePath))
             {
@@ -54,40 +55,6 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             }
 
             return worldRanks;
-        }
-
-        private static Discipline GetDisciplineFromString(string disciplineStr)
-        {
-            return disciplineStr.ToLower() switch
-            {
-                "classic" => Discipline.Classic,
-                "battle" => Discipline.Battle,
-                "speed" => Discipline.Speed,
-                "slide" => Discipline.Slide,
-                "jump" => Discipline.Jump,
-                _ => throw new ArgumentException("Invalid discipline string."),
-            };
-        }
-
-        private static SexCategory GetSexCategoryFromString(string sexCategoryStr)
-        {
-            return sexCategoryStr.ToLower() switch
-            {
-                "men" => SexCategory.Man,
-                "women" => SexCategory.Woman,
-                _ => throw new ArgumentException("Invalid sex category string."),
-            };
-        }
-
-        private static AgeCategory GetAgeCategoryFromString(string ageCategoryStr)
-        {
-            // Assuming only Junior and Senior categories
-            return ageCategoryStr.ToLower() switch
-            {
-                "junior" => AgeCategory.Junior,
-                "senior" => AgeCategory.Senior,
-                _ => throw new ArgumentException("Invalid age category string."),
-            };
         }
     }
 }
