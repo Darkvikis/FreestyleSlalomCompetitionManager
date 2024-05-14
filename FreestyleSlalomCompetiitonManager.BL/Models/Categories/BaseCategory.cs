@@ -9,7 +9,6 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Categories
 {
     public class BaseCategory : BaseModel
     {
-        public required Competition Competition { get; set; }
         public AgeCategory AgeCategory { get; set; }
         public SexCategory SexCategory { get; set; }
     }
