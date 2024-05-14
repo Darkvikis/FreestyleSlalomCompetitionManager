@@ -114,18 +114,3 @@ Exits the application.
 ```bash
 exit
 ```
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any changes.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-For any questions or inquiries, please contact [yourname@example.com](mailto:yourname@example.com).
-```
-
-This `README.md` provides an overview of the project, how to get started, usage instructions, and information on contributing and licensing. Be sure to replace placeholders like `yourusername` and `yourname@example.com` with your actual GitHub username and email address.
