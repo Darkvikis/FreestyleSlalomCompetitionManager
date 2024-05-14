@@ -1,9 +1,8 @@
 using FreestyleSlalomCompetitionManager.BL.Enums;
 using FreestyleSlalomCompetitionManager.Data.Models;
-using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Xunit;
 
 namespace FreestyleSlalomCompetitionManager.BL.Impotrs.Tests
@@ -13,11 +12,13 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs.Tests
         readonly string folderPath = "C:\\Users\\vkonupcik\\source\\repos\\FreestyleSlalomCompetitionManager\\FreestyleSlalomCompetitionManager.Test\\CSVsToTest";
 
         [Fact]
-        public void Import_ValidFolder_ReturnsExpectedNumberOfWorldRanks()
+        public async void Import_ValidFolder_ReturnsExpectedNumberOfWorldRanks()
         {
-            List<Skater> existingSkaters = [];
+            // Arrange
+            ConcurrentDictionary<string, Skater> existingSkaters = [];
+
             // Act
-            var worldRanks = ImportCSVWorldRankings.ImportFromFolder(folderPath, existingSkaters);
+            var worldRanks = await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
 
             // Assert
             Assert.NotNull(worldRanks);
@@ -29,15 +30,15 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs.Tests
         [InlineData("Classic", "Men", "Senior")]
         [InlineData("Battle", "Women", "Junior")]
         [InlineData("Speed", "Men", "Junior")]
-        public void Import_CorrectCategoriesAndDisciplines(string disciplineStr, string sexCategoryStr, string ageCategoryStr)
+        public async void Import_CorrectCategoriesAndDisciplines(string disciplineStr, string sexCategoryStr, string ageCategoryStr)
         {
             // Arrange
             string fileName = $"World Ranking March 2024 - {disciplineStr} - {sexCategoryStr} - {ageCategoryStr}.csv";
             string filePath = Path.Combine(folderPath, fileName);
-            List<Skater> existingSkaters = [];
+            ConcurrentDictionary<string, Skater> existingSkaters = [];
 
             // Act
-            var worldRanks = ImportCSVWorldRankings.Import(filePath, existingSkaters);
+            var worldRanks = await ImportCSVWorldRankings.ImportAsync(filePath, existingSkaters);
 
             // Assert
             Assert.NotNull(worldRanks);

@@ -11,6 +11,6 @@ namespace FreestyleSlalomCompetitionManager.Data.Models
         public string Description { get; set; } = description;
         public string Address { get; set; } = address;
         public Organizer Organizer { get; set; } = organizer;
-
+        public List<SkaterOnCompetition> Skaters { get; set; } = [];
     }
 }

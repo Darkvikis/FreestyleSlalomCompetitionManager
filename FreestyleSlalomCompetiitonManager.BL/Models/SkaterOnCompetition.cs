@@ -20,5 +20,25 @@ namespace FreestyleSlalomCompetitionManager.Data.Models
         public int CompetitionRankClassic { get; set; }
         public int CompetitionRankJump { get; set; }
         public int CompetitionRankSlide { get; set; }
+
+        public SkaterOnCompetition(Skater skater)
+        {
+            Skater = skater;
+            AgeCategory = skater.AgeCategory;
+            SexCategory = skater.SexCategory;
+        }
+
+        public void SetMusic(string music, DateTime competitionDate)
+        {
+            Music = music;
+            if (competitionDate < DateTime.Now.AddDays(-7))
+            {
+                SendMusic = SendMusic.OnTime;
+            }
+            else
+            {
+                SendMusic = SendMusic.Late;
+            }
+        }
     }
 }

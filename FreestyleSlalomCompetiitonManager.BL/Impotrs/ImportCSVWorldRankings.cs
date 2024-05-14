@@ -2,14 +2,17 @@
 using FreestyleSlalomCompetitionManager.Data.Enums;
 using FreestyleSlalomCompetitionManager.Data.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 {
     public class ImportCSVWorldRankings
     {
-        public static List<WorldRank> ImportFromFolder(string folderPath, List<Skater> existingSkaters)
+        public static async Task<List<WorldRank>> ImportFromFolderAsync(string folderPath, ConcurrentDictionary<string, Skater> existingSkaters)
         {
             List<WorldRank> allWorldRanks = [];
 
@@ -18,7 +21,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             // Loop through each CSV file in the folder
             foreach (FileInfo file in directory.GetFiles("*.csv"))
             {
-                List<WorldRank> worldRanks = Import(file.FullName, existingSkaters);
+                List<WorldRank> worldRanks = await ImportAsync(file.FullName, existingSkaters);
 
                 allWorldRanks.AddRange(worldRanks);
             }
@@ -26,30 +29,31 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             return allWorldRanks;
         }
 
-        public static List<WorldRank> Import(string filePath, List<Skater> existingSkaters)
+        public static async Task<List<WorldRank>> ImportAsync(string filePath, ConcurrentDictionary<string, Skater> existingSkaters)
         {
             // Extract category and discipline from file name
             (Discipline discipline, SexCategory sexCategory, AgeCategory ageCategory) = ExtractFileParts(filePath);
 
-            // Create a dictionary to efficiently lookup skaters by WSID
-            Dictionary<string, Skater> skatersDictionary = existingSkaters.ToDictionary(s => s.WSID);
-
             List<WorldRank> worldRanks = [];
 
-            foreach (string line in File.ReadLines(filePath))
+            using (StreamReader reader = new (filePath))
             {
-                if (IsHeaderRow(line))
-                    continue;
+                string line;
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    if (IsHeaderRow(line))
+                        continue;
 
-                string[] values = line.Replace("\"", "").Split(',');
+                    string[] values = line.Replace("\"", "").Split(',');
 
-                string ranksWSID = values[5];
+                    string ranksWSID = values[5];
 
-                Skater skater = GetOrCreateSkater(ranksWSID, values[3], values[4], ageCategory, sexCategory, skatersDictionary);
+                    Skater skater = GetOrCreateSkater(ranksWSID, values[3], values[4], ageCategory, sexCategory, existingSkaters);
 
-                WorldRank worldRank = CreateWorldRank(ranksWSID, ageCategory, sexCategory, discipline, ushort.Parse(values[0]));
+                    WorldRank worldRank = CreateWorldRank(ranksWSID, ageCategory, sexCategory, discipline, ushort.Parse(values[0]));
 
-                AddWorldRankToWorldRanksList(worldRank, skater, worldRanks);
+                    AddWorldRankToWorldRanksList(worldRank, skater, worldRanks);
+                }
             }
 
             return worldRanks;
@@ -76,18 +80,13 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             return line.StartsWith("\"Rank\"");
         }
 
-        private static Skater GetOrCreateSkater(string wsid, string name, string country, AgeCategory ageCategory, SexCategory sexCategory, Dictionary<string, Skater> skatersDictionary)
+        private static Skater GetOrCreateSkater(string wsid, string name, string country, AgeCategory ageCategory, SexCategory sexCategory, ConcurrentDictionary<string, Skater> existingSkaters)
         {
-            if (!skatersDictionary.TryGetValue(wsid, out Skater skater))
+            return existingSkaters.GetOrAdd(wsid, _ => new Skater(name, country, wsid)
             {
-                skater = new Skater(name, country, wsid)
-                {
-                    AgeCategory = ageCategory,
-                    SexCategory = sexCategory
-                };
-            }
-
-            return skater;
+                AgeCategory = ageCategory,
+                SexCategory = sexCategory
+            });
         }
 
         private static WorldRank CreateWorldRank(string wsid, AgeCategory ageCategory, SexCategory sexCategory, Discipline discipline, ushort rank)
