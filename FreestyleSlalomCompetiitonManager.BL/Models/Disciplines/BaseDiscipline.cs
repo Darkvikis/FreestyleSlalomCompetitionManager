@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models.Categories
 {
-    public class BaseCategory : BaseModel
+    public class BaseDiscipline : BaseModel
     {
         public AgeCategory AgeCategory { get; set; }
         public SexCategory SexCategory { get; set; }

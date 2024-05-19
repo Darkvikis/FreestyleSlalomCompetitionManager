@@ -217,7 +217,7 @@ namespace FreestyleSlalomCompetitionManager.BL
                 return;
             }
 
-            CurrentCompetitionCheck();
+            if (!CurrentCompetitionCheck()) { return; }
 
             SkaterOnCompetition skaterOnCompetition = new(skater.Name, skater.Country)
             {
@@ -230,7 +230,7 @@ namespace FreestyleSlalomCompetitionManager.BL
         }
         private void ExportSkatersToCsv(string[] args)
         {
-            CurrentCompetitionCheck();
+            if (!CurrentCompetitionCheck()) { return; }
 
             if (args.Length < 1)
             {
@@ -254,7 +254,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             string filePath = args[0];
             List<SkaterOnCompetition> skaters = ImportCSVIntoSkaterOnCompetition.ImportCSV(filePath);
-            CurrentCompetitionCheck();
+            if (!CurrentCompetitionCheck()) { return; }
 
             foreach (var skater in skaters)
             {
@@ -266,7 +266,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         private void LinkMusicToSkater(string[] args)
         {
-            CurrentCompetitionCheck();
+            if (!CurrentCompetitionCheck()) { return; }
 
             if (args.Length < 2)
             {
@@ -291,7 +291,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         private void GetSkatersOnCurrentCompetition()
         {
-            CurrentCompetitionCheck();
+            if (!CurrentCompetitionCheck()) { return; }
 
             foreach (var skater in currentCompetition.Skaters)
             {
@@ -299,17 +299,18 @@ namespace FreestyleSlalomCompetitionManager.BL
             }
         }
 
-        private void CurrentCompetitionCheck()
+        private bool CurrentCompetitionCheck()
         {
             if (currentCompetition == null)
             {
                 ConsoleCommunicator.DisplayNoActiveCompetitionMessage();
-                return;
+                return false;
             }
+            return true;
         }
         private void GetRankingsForCurrentCompetition()
         {
-            CurrentCompetitionCheck();
+            if (!CurrentCompetitionCheck()) { return; }
 
             foreach (var skater in currentCompetition.Skaters)
             {

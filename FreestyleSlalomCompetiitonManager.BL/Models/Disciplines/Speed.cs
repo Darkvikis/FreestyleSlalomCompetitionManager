@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models.Categories
 {
-    public class Speed : BaseCategory
+    public class Speed : BaseDiscipline
     {
         public void AssignCompetitiors(List<SkaterOnCompetition> skaters)
         {

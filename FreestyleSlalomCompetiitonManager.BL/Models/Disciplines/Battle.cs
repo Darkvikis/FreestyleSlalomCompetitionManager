@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models.Categories
 {
-    public class Slide : BaseCategory
+    public class Battle : BaseDiscipline
     {
         public void AssignCompetitiors(List<SkaterOnCompetition> skaters)
         {
-            skaters.Where(s => s.CompetitionRankSlide != null).OrderBy(s => s.CompetitionRankSlide).ToList().ForEach(s => Competitors.Add(s));
+            skaters.Where(s => s.CompetitionRankBattle != null).OrderBy(s => s.CompetitionRankBattle).ToList().ForEach(s => Competitors.Add(s));
         }
     }
 }
