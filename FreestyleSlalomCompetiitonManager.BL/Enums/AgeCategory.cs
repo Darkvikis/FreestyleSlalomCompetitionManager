@@ -10,6 +10,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Enums
     {
         Junior = 0,
         Senior = 1,
-        kids = 2
+        Kids = 2,
+        Mixed = 3,
     }
 }

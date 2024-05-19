@@ -10,5 +10,6 @@ namespace FreestyleSlalomCompetitionManager.BL.Enums
     {
         Man = 0,
         Woman = 1,
+        Mixed = 2,
     }
 }
