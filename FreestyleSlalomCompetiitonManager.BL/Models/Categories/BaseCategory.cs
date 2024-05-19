@@ -11,5 +11,6 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Categories
     {
         public AgeCategory AgeCategory { get; set; }
         public SexCategory SexCategory { get; set; }
+        public List<SkaterOnCompetition> Competitors { get; set; } = [];
     }
 }

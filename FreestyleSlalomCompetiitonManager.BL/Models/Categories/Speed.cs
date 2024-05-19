@@ -8,5 +8,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Categories
 {
     public class Speed : BaseCategory
     {
+        public void AssignCompetitiors(List<SkaterOnCompetition> skaters)
+        {
+            skaters.Where(s => s.CompetitionRankSpeed != null).OrderBy(s => s.CompetitionRankSpeed).ToList().ForEach(s => Competitors.Add(s));
+        }
     }
 }

@@ -8,5 +8,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Categories
 {
     public class Slide : BaseCategory
     {
+        public void AssignCompetitiors(List<SkaterOnCompetition> skaters)
+        {
+            skaters.Where(s => s.CompetitionRankSlide != null).OrderBy(s => s.CompetitionRankSlide).ToList().ForEach(s => Competitors.Add(s));
+        }
     }
 }
