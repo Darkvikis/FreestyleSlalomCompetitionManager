@@ -71,58 +71,14 @@ dotnet test
 
 The application is command-line based and supports the following commands:
 
-### Help
+- `help`: Displays a list of available commands.
+- `importfolder <folder>`: Imports world rankings from the specified folder.
+- `importfile <file>`: Imports world rankings from the specified file.
+- `createcompetition <name> <start_date> <end_date> <description> <address> <organizer_wsid> <organizer_name>`: Creates a new competition with the specified details.
+- `newskater <WSID> <name> <country>`: Adds a new skater.
+- `skatertocompetition <WSID>`: Adds an existing skater to the competition.
+- `export <file>`: Exports skaters to a CSV file.
+- `importskatertoskateroncompetition <file>`: Imports skaters to the current competition from the specified file.
+- `linkmusictowsid <WSID> <music_path>`: Links music to a skater with the specified WSID.
+- `exit`: Exits the program.
 
-Displays a list of available commands.
-
-```bash
-help
-```
-
-### Create Competition
-
-Creates a new competition.
-
-```bash
-createcompetition <Name> <StartDate> <EndDate> <Description> <Address> <OrganizerName> <OrganizerWSID>
-```
-
-### Add New Skater
-
-Adds a new skater.
-
-```bash
-newskater <WSID> <Name> <Country>
-```
-
-### Add Existing Skater
-
-Adds an existing skater to the current competition.
-
-```bash
-addexistingskater <WSID>
-```
-
-### Import Folder
-
-Imports data from a folder.
-
-```bash
-importfolder <FolderPath>
-```
-
-### Import File
-
-Imports data from a file.
-
-```bash
-importfile <FilePath>
-```
-
-### Exit
-
-Exits the application.
-
-```bash
-exit
-```
