@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace FreestyleSlalomCompetitionManager.BL
+﻿namespace FreestyleSlalomCompetitionManager.BL
 {
     public static class ConsoleCommunicator
     {
@@ -113,9 +110,20 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             Console.WriteLine($"Skaters have been exported to {filePath}");
         }
+
         public static void DisplaySkatersImportedMessage(string filePath, string competitionName)
         {
             Console.WriteLine($"Skaters have been imported from {filePath} to competition '{competitionName}'.");
+        }
+
+        public static void DisplaySkaterWsidAndMusicPathMissingMessage()
+        {
+            Console.WriteLine("Please provide the WSID and music path of the skater.");
+        }
+
+        public static void DisplayMusicLinkedToSkaterMessage(string skaterWsid, string musicPath)
+        {
+            Console.WriteLine($"Music '{musicPath}' linked to skater with WSID '{skaterWsid}'.");
         }
     }
 }

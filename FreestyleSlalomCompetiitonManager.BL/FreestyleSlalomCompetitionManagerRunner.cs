@@ -61,6 +61,9 @@ namespace FreestyleSlalomCompetitionManager.BL
                 case "importskatertoskateroncompetition":
                     ImportSkatersToCompetition(args);
                     break;
+                case "linkmusictowsid":
+                    LinkMusicToSkater(args);
+                    break;
                 case "exit":
                     Environment.Exit(0);
                     break;
@@ -235,7 +238,36 @@ namespace FreestyleSlalomCompetitionManager.BL
                 currentCompetition.Skaters.Add(skater);
             }
 
-            ConsoleCommunicator.DisplaySkatersImportedMessage(filePath, currentCompetition.Name); 
+            ConsoleCommunicator.DisplaySkatersImportedMessage(filePath, currentCompetition.Name);
+        }
+
+        private void LinkMusicToSkater(string[] args)
+        {
+            if (currentCompetition == null)
+            {
+                ConsoleCommunicator.DisplayNoActiveCompetitionMessage();
+                return;
+            }
+
+            if (args.Length < 2)
+            {
+                ConsoleCommunicator.DisplaySkaterWsidAndMusicPathMissingMessage();
+                return;
+            }
+
+            string skaterWsid = args[0];
+            string musicPath = args[1];
+
+            if (!currentCompetition.Skaters.Any(x => x.WSID == skaterWsid))
+            {
+                ConsoleCommunicator.DisplaySkaterNotFoundMessage(skaterWsid);
+                return;
+            }
+
+            currentCompetition.Skaters?.FirstOrDefault()?
+                .SetMusic(musicPath, currentCompetition.StartDate);
+
+            ConsoleCommunicator.DisplayMusicLinkedToSkaterMessage(skaterWsid, musicPath);
         }
     }
 }

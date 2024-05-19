@@ -74,8 +74,10 @@ namespace FreestyleSlalomCompetitionManager.Test
         public async Task ExecuteCommandAsync_AddExistingSkaterCommand_ValidArgs_ShouldAddExistingSkaterToCompetition()
         {
             // Arrange
-            var runner = new FreestyleSlalomCompetitionManagerRunner();
-            runner.currentCompetition = new Competition("TestCompetition", DateTime.Now, DateTime.Now, "Description", "Address", new("Organizer", "WSID"));
+            FreestyleSlalomCompetitionManagerRunner runner = new()
+            {
+                currentCompetition = new Competition("TestCompetition", DateTime.Now, DateTime.Now, "Description", "Address", new("Organizer", "WSID"))
+            };
             runner.existingSkaters.TryAdd("WSID", new Skater("Name", "Country", "WSID"));
             var input = "skatertocompetition WSID".Split(' ');
 
@@ -101,11 +103,11 @@ namespace FreestyleSlalomCompetitionManager.Test
             var skaterInput = "newskater WSID Name Country";
             await runner.ExecuteCommandAsync(skaterInput.Split(' ')[0], skaterInput.Split(' ')[1..]);
 
-            await runner.ExecuteCommandAsync("skatertocompetition", new string[] { "WSID" });
+            await runner.ExecuteCommandAsync("skatertocompetition", ["WSID"]);
             var filePath = "test_skaters.csv";
 
             // Act
-            await runner.ExecuteCommandAsync("export", new string[] { filePath });
+            await runner.ExecuteCommandAsync("export", [filePath]);
             var output = consoleOut.ToString().Trim();
 
             // Assert

@@ -16,7 +16,10 @@ The Freestyle Slalom Competition Manager is a command-line application designed 
 
 - **Import Skaters to Competition**: Users can import skaters to the current competition from a CSV file using the `importskatertoskateroncompetition` command. They need to provide the file path of the CSV file.
 
+- **Link Music to Skater**: Users can link a music file to a skater in the current competition using the `linkmusictowsid` command. They need to provide the WSID of the skater and the path of the music file.
+
 - **Help**: Users can display the help message using the `help` command. The help message contains the list of available commands and their usage.
+
 
 
 ## Getting Started
