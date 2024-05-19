@@ -33,12 +33,12 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
                         PayedFee = false,
                         SendMusic = SendMusic.No,
                         Music = null,
-                        CompetitionRankBattle = csv.GetField(3).Contains("Battle") ? int.MaxValue : null,
-                        CompetitionRankSpeed = csv.GetField(6).Contains("Speed") ? int.MaxValue : null,
-                        CompetitionRankClassic = csv.GetField(4).Contains("Classic") ? int.MaxValue : null,
-                        CompetitionRankJump = csv.GetField(5).Contains("Jump") ? int.MaxValue : null,
-                        AgeCategory = csv.GetField(7).Contains("Senior") ? AgeCategory.Senior : AgeCategory.Junior,
-                        SexCategory = csv.GetField(7).Contains("women") ? SexCategory.Woman : SexCategory.Man,
+                        CompetitionRankBattle = csv.GetField(3).Contains("battle", StringComparison.InvariantCultureIgnoreCase) ? int.MaxValue : null,
+                        CompetitionRankSpeed = csv.GetField(6).Contains("speed", StringComparison.InvariantCultureIgnoreCase) ? int.MaxValue : null,
+                        CompetitionRankClassic = csv.GetField(4).Contains("classic", StringComparison.InvariantCultureIgnoreCase) ? int.MaxValue : null,
+                        CompetitionRankJump = csv.GetField(5).Contains("jump", StringComparison.InvariantCultureIgnoreCase) ? int.MaxValue : null,
+                        AgeCategory = csv.GetField(7).Contains("senior", StringComparison.InvariantCultureIgnoreCase) ? AgeCategory.Senior : AgeCategory.Junior,
+                        SexCategory = csv.GetField(7).Contains("women", StringComparison.InvariantCultureIgnoreCase) ? SexCategory.Woman : SexCategory.Man,
                     };
 
                     skaters.Add(skater);
@@ -50,7 +50,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             {
                 // Handle the exception here
                 Console.WriteLine($"An error occurred while importing the CSV file: {ex.Message}");
-                return null;
+                return [];
             }
         }
     }

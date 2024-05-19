@@ -325,7 +325,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             }
         }
 
-        private int? GetRankForDiscipline(Skater skater, Discipline discipline, AgeCategory ageCategory, SexCategory sexCategory)
+        private static int? GetRankForDiscipline(Skater skater, Discipline discipline, AgeCategory ageCategory, SexCategory sexCategory)
         {
             return skater.WorldRanks.FirstOrDefault(x => x.Discipline == discipline && x.AgeCategory == ageCategory && x.SexCategory == sexCategory)?.Rank;
         }
