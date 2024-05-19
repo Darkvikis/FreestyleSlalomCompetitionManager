@@ -316,14 +316,18 @@ namespace FreestyleSlalomCompetitionManager.BL
             {
                 if (skater.WSID != null && existingSkaters.TryGetValue(skater.WSID, out Skater WSRankSkater))
                 {
-                    skater.CompetitionRankBattle = WSRankSkater.WorldRanks.FirstOrDefault(x => x.Discipline == Discipline.Battle && x.AgeCategory == skater.AgeCategory && x.SexCategory == skater.SexCategory)?.Rank;
-                    skater.CompetitionRankSpeed = WSRankSkater.WorldRanks.FirstOrDefault(x => x.Discipline == Discipline.Speed && x.AgeCategory == skater.AgeCategory && x.SexCategory == skater.SexCategory)?.Rank;
-                    skater.CompetitionRankClassic = WSRankSkater.WorldRanks.FirstOrDefault(x => x.Discipline == Discipline.Classic && x.AgeCategory == skater.AgeCategory && x.SexCategory == skater.SexCategory)?.Rank;
-                    skater.CompetitionRankJump = WSRankSkater.WorldRanks.FirstOrDefault(x => x.Discipline == Discipline.Jump && x.AgeCategory == skater.AgeCategory && x.SexCategory == skater.SexCategory)?.Rank;
-                    skater.CompetitionRankSlide = WSRankSkater.WorldRanks.FirstOrDefault(x => x.Discipline == Discipline.Slide && x.AgeCategory == skater.AgeCategory && x.SexCategory == skater.SexCategory)?.Rank;
-
+                    skater.CompetitionRankBattle = GetRankForDiscipline(WSRankSkater, Discipline.Battle, skater.AgeCategory, skater.SexCategory);
+                    skater.CompetitionRankSpeed = GetRankForDiscipline(WSRankSkater, Discipline.Speed, skater.AgeCategory, skater.SexCategory);
+                    skater.CompetitionRankClassic = GetRankForDiscipline(WSRankSkater, Discipline.Classic, skater.AgeCategory, skater.SexCategory);
+                    skater.CompetitionRankJump = GetRankForDiscipline(WSRankSkater, Discipline.Jump, skater.AgeCategory, skater.SexCategory);
+                    skater.CompetitionRankSlide = GetRankForDiscipline(WSRankSkater, Discipline.Slide, skater.AgeCategory, skater.SexCategory);
                 }
             }
+        }
+
+        private int? GetRankForDiscipline(Skater skater, Discipline discipline, AgeCategory ageCategory, SexCategory sexCategory)
+        {
+            return skater.WorldRanks.FirstOrDefault(x => x.Discipline == discipline && x.AgeCategory == ageCategory && x.SexCategory == sexCategory)?.Rank;
         }
     }
 }
