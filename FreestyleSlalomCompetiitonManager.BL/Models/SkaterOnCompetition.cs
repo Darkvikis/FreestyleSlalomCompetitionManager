@@ -13,6 +13,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public bool PayedFee { get; set; }
         public SendMusic SendMusic { get; set; }
         public string? Music { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string ShirtSize { get; set; }
         public int CompetitionRankBattle { get; set; }
         public int CompetitionRankSpeed { get; set; }
         public int CompetitionRankClassic { get; set; }
