@@ -1,5 +1,6 @@
 ﻿using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
+using FreestyleSlalomCompetitionManager.BL.Models.Disciplines;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models
 {
@@ -12,5 +13,6 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public string Address { get; set; } = address;
         public Organizer Organizer { get; set; } = organizer;
         public List<SkaterOnCompetition> Skaters { get; set; } = [];
+        public List<BaseDiscipline> Disciplines { get; set; } = [];
     }
 }

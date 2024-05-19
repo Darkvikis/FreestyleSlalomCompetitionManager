@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FreestyleSlalomCompetitionManager.BL.Models.Categories
+namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
 {
     public class BaseDiscipline : BaseModel
     {
