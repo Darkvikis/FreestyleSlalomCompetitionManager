@@ -24,19 +24,21 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
                 while (csv.Read())
                 {
-                    SkaterOnCompetition skater = new(csv.GetField("Name/Jméno") + " " + csv.GetField("\"Surname/Příjmení"), csv.GetField("Nationality/Národnost"))
+                    SkaterOnCompetition skater = new(csv.GetField(1) + " " + csv.GetField(2), csv.GetField(10))
                     {
-                        WSID = csv.GetField("WSK ID"),
-                        PhoneNumber = csv.GetField("Phone number /Telefonní číslo"),
-                        Email = csv.GetField("Email address /Email"),
-                        ShirtSize = csv.GetField("T-shirt size/Velikost trička"),
+                        WSID = csv.GetField(9),
+                        PhoneNumber = csv.GetField(11),
+                        Email = csv.GetField(12),
+                        ShirtSize = csv.GetField(13),
                         PayedFee = false,
                         SendMusic = SendMusic.No,
                         Music = null,
-                        CompetitionRankBattle = csv.GetField("Freestyle Battle").Contains("Battle") ? int.MaxValue : null,
-                        CompetitionRankSpeed = csv.GetField("Speed slalom").Contains("Speed") ? int.MaxValue : null,
-                        CompetitionRankClassic = csv.GetField("Freestyle Classic").Contains("Classic") ? int.MaxValue : null,
-                        CompetitionRankJump = csv.GetField("Free Jump").Contains("Jump") ? int.MaxValue : null
+                        CompetitionRankBattle = csv.GetField(3).Contains("Battle") ? int.MaxValue : null,
+                        CompetitionRankSpeed = csv.GetField(6).Contains("Speed") ? int.MaxValue : null,
+                        CompetitionRankClassic = csv.GetField(4).Contains("Classic") ? int.MaxValue : null,
+                        CompetitionRankJump = csv.GetField(5).Contains("Jump") ? int.MaxValue : null,
+                        AgeCategory = csv.GetField(7).Contains("Senior") ? AgeCategory.Senior : AgeCategory.Junior,
+                        SexCategory = csv.GetField(7).Contains("women") ? SexCategory.Woman : SexCategory.Man,
                     };
 
                     skaters.Add(skater);

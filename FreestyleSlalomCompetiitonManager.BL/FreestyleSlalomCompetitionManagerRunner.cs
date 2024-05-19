@@ -1,4 +1,5 @@
-﻿using FreestyleSlalomCompetitionManager.BL.Impotrs;
+﻿using FreestyleSlalomCompetitionManager.BL.Enums;
+using FreestyleSlalomCompetitionManager.BL.Impotrs;
 using FreestyleSlalomCompetitionManager.BL.Models;
 using System;
 using System.Collections.Concurrent;
@@ -26,10 +27,38 @@ namespace FreestyleSlalomCompetitionManager.BL
                 if (string.IsNullOrWhiteSpace(input))
                     continue;
 
-                string[] parts = input.Split(' ');
+                List<string> parts = [];
+                bool inQuotes = false;
+                StringBuilder currentPart = new();
+
+                foreach (char c in input)
+                {
+                    if (c == ' ' && !inQuotes)
+                    {
+                        if (currentPart.Length > 0)
+                        {
+                            parts.Add(currentPart.ToString());
+                            currentPart.Clear();
+                        }
+                    }
+                    else if (c == '"')
+                    {
+                        inQuotes = !inQuotes;
+                    }
+                    else
+                    {
+                        currentPart.Append(c);
+                    }
+                }
+
+                if (currentPart.Length > 0)
+                {
+                    parts.Add(currentPart.ToString());
+                }
+
                 string command = parts[0].ToLower();
 
-                await ExecuteCommandAsync(command, parts[1..]);
+                await ExecuteCommandAsync(command, parts.GetRange(1, parts.Count - 1).ToArray());
             }
         }
 
@@ -58,11 +87,17 @@ namespace FreestyleSlalomCompetitionManager.BL
                 case "export":
                     ExportSkatersToCsv(args);
                     break;
-                case "importskatertoskateroncompetition":
+                case "importskatertocompetition":
                     ImportSkatersToCompetition(args);
                     break;
                 case "linkmusictowsid":
                     LinkMusicToSkater(args);
+                    break;
+                case "getskatersoncurrentcompetition":
+                    GetSkatersOnCurrentCompetition();
+                    break;
+                case "getrankingsforcurrentcompetition":
+                    GetRankingsForCurrentCompetition();
                     break;
                 case "exit":
                     Environment.Exit(0);
@@ -182,11 +217,7 @@ namespace FreestyleSlalomCompetitionManager.BL
                 return;
             }
 
-            if (currentCompetition == null)
-            {
-                ConsoleCommunicator.DisplayNoCompetitionCreatedMessage();
-                return;
-            }
+            CurrentCompetitionCheck();
 
             SkaterOnCompetition skaterOnCompetition = new(skater.Name, skater.Country)
             {
@@ -199,11 +230,7 @@ namespace FreestyleSlalomCompetitionManager.BL
         }
         private void ExportSkatersToCsv(string[] args)
         {
-            if (currentCompetition == null)
-            {
-                ConsoleCommunicator.DisplayNoActiveCompetitionMessage();
-                return;
-            }
+            CurrentCompetitionCheck();
 
             if (args.Length < 1)
             {
@@ -227,11 +254,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             string filePath = args[0];
             List<SkaterOnCompetition> skaters = ImportCSVIntoSkaterOnCompetition.ImportCSV(filePath);
-            if (currentCompetition == null)
-            {
-                ConsoleCommunicator.DisplayNoActiveCompetitionMessage();
-                return;
-            }
+            CurrentCompetitionCheck();
 
             foreach (var skater in skaters)
             {
@@ -243,11 +266,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         private void LinkMusicToSkater(string[] args)
         {
-            if (currentCompetition == null)
-            {
-                ConsoleCommunicator.DisplayNoActiveCompetitionMessage();
-                return;
-            }
+            CurrentCompetitionCheck();
 
             if (args.Length < 2)
             {
@@ -268,6 +287,42 @@ namespace FreestyleSlalomCompetitionManager.BL
                 .SetMusic(musicPath, currentCompetition.StartDate);
 
             ConsoleCommunicator.DisplayMusicLinkedToSkaterMessage(skaterWsid, musicPath);
+        }
+
+        private void GetSkatersOnCurrentCompetition()
+        {
+            CurrentCompetitionCheck();
+
+            foreach (var skater in currentCompetition.Skaters)
+            {
+                ConsoleCommunicator.DisplaySkaterDetails(skater);
+            }
+        }
+
+        private void CurrentCompetitionCheck()
+        {
+            if (currentCompetition == null)
+            {
+                ConsoleCommunicator.DisplayNoActiveCompetitionMessage();
+                return;
+            }
+        }
+        private void GetRankingsForCurrentCompetition()
+        {
+            CurrentCompetitionCheck();
+
+            foreach (var skater in currentCompetition.Skaters)
+            {
+                if (skater.WSID != null && existingSkaters.TryGetValue(skater.WSID, out Skater WSRankSkater))
+                {
+                    skater.CompetitionRankBattle = WSRankSkater.WorldRanks.FirstOrDefault(x => x.Discipline == Discipline.Battle && x.AgeCategory == skater.AgeCategory && x.SexCategory == skater.SexCategory)?.Rank;
+                    skater.CompetitionRankSpeed = WSRankSkater.WorldRanks.FirstOrDefault(x => x.Discipline == Discipline.Speed && x.AgeCategory == skater.AgeCategory && x.SexCategory == skater.SexCategory)?.Rank;
+                    skater.CompetitionRankClassic = WSRankSkater.WorldRanks.FirstOrDefault(x => x.Discipline == Discipline.Classic && x.AgeCategory == skater.AgeCategory && x.SexCategory == skater.SexCategory)?.Rank;
+                    skater.CompetitionRankJump = WSRankSkater.WorldRanks.FirstOrDefault(x => x.Discipline == Discipline.Jump && x.AgeCategory == skater.AgeCategory && x.SexCategory == skater.SexCategory)?.Rank;
+                    skater.CompetitionRankSlide = WSRankSkater.WorldRanks.FirstOrDefault(x => x.Discipline == Discipline.Slide && x.AgeCategory == skater.AgeCategory && x.SexCategory == skater.SexCategory)?.Rank;
+
+                }
+            }
         }
     }
 }

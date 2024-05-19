@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using FreestyleSlalomCompetitionManager.BL.Models;
+using System.Data;
 
 namespace FreestyleSlalomCompetitionManager.BL
 {
@@ -20,8 +21,10 @@ namespace FreestyleSlalomCompetitionManager.BL
             Console.WriteLine("  newskater <WSID> <name> <country> - Add a new skater");
             Console.WriteLine("  skatertocompetition <WSID> - Add an existing skater to the competition");
             Console.WriteLine("  export <file>             - Export skaters to a CSV file");
-            Console.WriteLine("  importskatertoskateroncompetition <file> - Import skaters to the current competition from the specified file");
+            Console.WriteLine("  importskatertocompetition <file> - Import skaters to the current competition from the specified file");
             Console.WriteLine("  linkmusictowsid <WSID> <music_path> - Link music to a skater with the specified WSID");
+            Console.WriteLine("  getskatersoncurrentcompetition - Get the skaters on the current competition");
+            Console.WriteLine("  getrankingsforcurrentcompetition - Get the rankings for the current competition");
             Console.WriteLine("  exit                      - Exit the program");
         }
 
@@ -128,6 +131,11 @@ namespace FreestyleSlalomCompetitionManager.BL
         public static void DisplayMusicLinkedToSkaterMessage(string skaterWsid, string musicPath)
         {
             Console.WriteLine($"Music '{musicPath}' linked to skater with WSID '{skaterWsid}'.");
+        }
+
+        public static void DisplaySkaterDetails(SkaterOnCompetition skater)
+        {
+            Console.WriteLine($"Skater Name: {skater.Name}, Country: {skater.Country}, WSID: {skater.WSID}, Guid: {skater.Id}");
         }
     }
 }

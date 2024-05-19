@@ -69,16 +69,18 @@ dotnet test
 
 ## Usage
 
-The application is command-line based and supports the following commands:
+Once the application is running, you can use the following commands:
 
-- `help`: Displays a list of available commands.
-- `importfolder <folder>`: Imports world rankings from the specified folder.
-- `importfile <file>`: Imports world rankings from the specified file.
-- `createcompetition <name> <start_date> <end_date> <description> <address> <organizer_wsid> <organizer_name>`: Creates a new competition with the specified details.
-- `newskater <WSID> <name> <country>`: Adds a new skater.
-- `skatertocompetition <WSID>`: Adds an existing skater to the competition.
-- `export <file>`: Exports skaters to a CSV file.
-- `importskatertoskateroncompetition <file>`: Imports skaters to the current competition from the specified file.
-- `linkmusictowsid <WSID> <music_path>`: Links music to a skater with the specified WSID.
-- `exit`: Exits the program.
+- `help`: Display the available commands and their descriptions.
+- `importfolder <folder>`: Import world rankings from the specified folder.
+- `importfile <file>`: Import world rankings from the specified file.
+- `createcompetition <name> <start_date> <end_date> <description> <address> <organizer_wsid> <organizer_name>`: Create a new competition with the specified details.
+- `newskater <WSID> <name> <country>`: Add a new skater.
+- `skatertocompetition <WSID>`: Add an existing skater to the competition.
+- `export <file>`: Export skaters to a CSV file.
+- `importskatertocompetition <file>`: Import skaters to the current competition from the specified file.
+- `linkmusictowsid <WSID> <music_path>`: Link music to a skater with the specified WSID.
+- `getskatersoncurrentcompetition`: Get the skaters on the current competition.
+- `getrankingsforcurrentcompetition`: Get the rankings for the current competition.
+- `exit`: Exit the program.
 
