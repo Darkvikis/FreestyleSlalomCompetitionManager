@@ -22,7 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CSVsToTest\" />
+    <Folder Include="FilesToImport\CSVsToTest\" />
+    <Folder Include="FilesToImport\RegistrationExcels\" />
   </ItemGroup>
 
   <ItemGroup>
