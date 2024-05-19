@@ -82,5 +82,10 @@ Once the application is running, you can use the following commands:
 - `linkmusictowsid <WSID> <music_path>`: Link music to a skater with the specified WSID.
 - `getskatersoncurrentcompetition`: Get the skaters on the current competition.
 - `getrankingsforcurrentcompetition`: Get the rankings for the current competition.
+- `createbasedisciplines`: Create standard disciplines.
+- `assignskaterstodisciplines`: Automatically assign skaters to their disciplines based on the imported skaters and their ranks.
 - `exit`: Exit the program.
+
+To execute a command, type the command followed by the required parameters. For example, to import world rankings from a folder, you would type `importfolder <folder>`, replacing `<folder>` with the actual folder path.
+
 

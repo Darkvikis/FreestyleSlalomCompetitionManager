@@ -12,5 +12,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
         public AgeCategory AgeCategory { get; set; }
         public SexCategory SexCategory { get; set; }
         public List<SkaterOnCompetition> Competitors { get; set; } = [];
+
+        public virtual void AssignCompetitiors(List<SkaterOnCompetition> skaters)
+        {
+        }
     }
 }

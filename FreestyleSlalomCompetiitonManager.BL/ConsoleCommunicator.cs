@@ -1,4 +1,5 @@
 ﻿using FreestyleSlalomCompetitionManager.BL.Models;
+using FreestyleSlalomCompetitionManager.BL.Models.Disciplines;
 using System.Data;
 
 namespace FreestyleSlalomCompetitionManager.BL
@@ -25,6 +26,8 @@ namespace FreestyleSlalomCompetitionManager.BL
             Console.WriteLine("  linkmusictowsid <WSID> <music_path> - Link music to a skater with the specified WSID");
             Console.WriteLine("  getskatersoncurrentcompetition - Get the skaters on the current competition");
             Console.WriteLine("  getrankingsforcurrentcompetition - Get the rankings for the current competition");
+            Console.WriteLine("  createbasedisciplines         - Create base disciplines");
+            Console.WriteLine("  assignskaterstodisciplines - Autamatically assign a skaters to their disciplines based on importskatertocompetition and their ranks");
             Console.WriteLine("  exit                      - Exit the program");
         }
 
@@ -136,6 +139,50 @@ namespace FreestyleSlalomCompetitionManager.BL
         public static void DisplaySkaterDetails(SkaterOnCompetition skater)
         {
             Console.WriteLine($"Skater Name: {skater.Name}, Country: {skater.Country}, WSID: {skater.WSID}, Guid: {skater.Id}");
+        }
+
+        public static void DisplayStandardDisciplinesCreatedMessage()
+        {
+            Console.WriteLine("Standard disciplines have been created.");
+        }
+        public static void DisplayNoDisciplinesCreatedMessage()
+        {
+            Console.WriteLine("No disciplines have been created. Please create disciplines first.");
+        }
+
+        public static void DisplayNoSkatersAddedToCompetitionMessage()
+        {
+            Console.WriteLine("No skaters have been added to the competition. Please add skaters first.");
+        }
+
+        public static void DisplayDisciplinesAndSkaters(IEnumerable<BaseDiscipline> disciplines, IEnumerable<SkaterOnCompetition> skaters)
+        {
+            Console.WriteLine("Available disciplines:");
+            foreach (var discipline in disciplines)
+            {
+                Console.WriteLine($"  {nameof(discipline) + discipline.AgeCategory + discipline.SexCategory}");
+            }
+
+            Console.WriteLine("Available skaters:");
+            foreach (var skater in skaters)
+            {
+                Console.WriteLine($"  {skater.Name} - {skater.WSID}");
+            }
+        }
+
+        public static void DisplayDisciplineNotFoundMessage(string disciplineName)
+        {
+            Console.WriteLine($"Discipline '{disciplineName}' not found.");
+        }
+
+        public static void DisplaySkaterAlreadyAssignedToDisciplineMessage(string skaterName, string disciplineName)
+        {
+            Console.WriteLine($"Skater '{skaterName}' is already assigned to discipline '{disciplineName}'.");
+        }
+
+        public static void DisplaySkaterAssignedToDisciplineMessage(string skaterName, string disciplineName)
+        {
+            Console.WriteLine($"Skater '{skaterName}' has been assigned to discipline '{disciplineName}'.");
         }
     }
 }

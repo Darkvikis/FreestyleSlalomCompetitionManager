@@ -8,9 +8,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
 {
     public class Speed : BaseDiscipline
     {
-        public void AssignCompetitiors(List<SkaterOnCompetition> skaters)
+        public override void AssignCompetitiors(List<SkaterOnCompetition> skaters)
         {
-            skaters.Where(s => s.CompetitionRankSpeed != null).OrderBy(s => s.CompetitionRankSpeed).ToList().ForEach(s => Competitors.Add(s));
+            skaters.Where(s => s.CompetitionRankSpeed != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankSpeed).ToList().ForEach(s => Competitors.Add(s));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FreestyleSlalomCompetitionManager.BL.Enums;
 using FreestyleSlalomCompetitionManager.BL.Impotrs;
 using FreestyleSlalomCompetitionManager.BL.Models;
+using FreestyleSlalomCompetitionManager.BL.Models.Disciplines;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -98,6 +99,12 @@ namespace FreestyleSlalomCompetitionManager.BL
                     break;
                 case "getrankingsforcurrentcompetition":
                     GetRankingsForCurrentCompetition();
+                    break;
+                case "createbasedisciplines":
+                    CreateBaseDisciplines();
+                    break;
+                case "assignskaterstodisciplines":
+                    AssignSkatersToDisciplines();
                     break;
                 case "exit":
                     Environment.Exit(0);
@@ -329,5 +336,58 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             return skater.WorldRanks.FirstOrDefault(x => x.Discipline == discipline && x.AgeCategory == ageCategory && x.SexCategory == sexCategory)?.Rank;
         }
+
+        private void CreateBaseDisciplines()
+        {
+            var ageCategories = Enum.GetValues(typeof(AgeCategory)).Cast<AgeCategory>();
+            var sexCategories = Enum.GetValues(typeof(SexCategory)).Cast<SexCategory>();
+
+            foreach (var ageCategory in ageCategories)
+            {
+                foreach (var sexCategory in sexCategories)
+                {
+                    var disciplines = GenerateBaseDisciplines(ageCategory, sexCategory);
+                    currentCompetition?.Disciplines.AddRange(disciplines);
+                }
+            }
+
+            ConsoleCommunicator.DisplayStandardDisciplinesCreatedMessage();
+        }
+
+        private static List<BaseDiscipline> GenerateBaseDisciplines(AgeCategory ageCategory, SexCategory sexCategory)
+        {
+            List<BaseDiscipline> disciplines = [];
+
+            disciplines.Add(new Battle() { AgeCategory = ageCategory, SexCategory = sexCategory });
+            disciplines.Add(new Speed() { AgeCategory = ageCategory, SexCategory = sexCategory });
+            disciplines.Add(new Slide() { AgeCategory = ageCategory, SexCategory = sexCategory });
+
+            return disciplines;
+        }
+
+        private void AssignSkatersToDisciplines()
+        {
+            if (!CurrentCompetitionCheck()) { return; }
+
+            if (currentCompetition.Disciplines.Count == 0)
+            {
+                ConsoleCommunicator.DisplayNoDisciplinesCreatedMessage();
+                return;
+            }
+
+            if (currentCompetition.Skaters.Count == 0)
+            {
+                ConsoleCommunicator.DisplayNoSkatersAddedToCompetitionMessage();
+                return;
+            }
+
+            ConsoleCommunicator.DisplayDisciplinesAndSkaters(currentCompetition.Disciplines, currentCompetition.Skaters);
+
+            foreach (var discipline in currentCompetition.Disciplines)
+            {
+                discipline.AssignCompetitiors(currentCompetition.Skaters);
+            }
+        }
+
     }
 }
