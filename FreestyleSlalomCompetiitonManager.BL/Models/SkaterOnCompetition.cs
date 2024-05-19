@@ -16,11 +16,11 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string ShirtSize { get; set; }
-        public int CompetitionRankBattle { get; set; }
-        public int CompetitionRankSpeed { get; set; }
-        public int CompetitionRankClassic { get; set; }
-        public int CompetitionRankJump { get; set; }
-        public int CompetitionRankSlide { get; set; }
+        public int? CompetitionRankBattle { get; set; }
+        public int? CompetitionRankSpeed { get; set; }
+        public int? CompetitionRankClassic { get; set; }
+        public int? CompetitionRankJump { get; set; }
+        public int? CompetitionRankSlide { get; set; }
 
         public void SetMusic(string music, DateTime competitionDate)
         {

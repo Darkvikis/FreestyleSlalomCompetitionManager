@@ -58,6 +58,9 @@ namespace FreestyleSlalomCompetitionManager.BL
                 case "export":
                     ExportSkatersToCsv(args);
                     break;
+                case "importskatertoskateroncompetition":
+                    ImportSkatersToCompetition(args);
+                    break;
                 case "exit":
                     Environment.Exit(0);
                     break;
@@ -75,10 +78,10 @@ namespace FreestyleSlalomCompetitionManager.BL
                 return;
             }
 
-            string folderPath = args[0]; 
+            string folderPath = args[0];
             try
             {
-               var worldRanks = await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
+                var worldRanks = await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
                 ConsoleCommunicator.DisplayImportSuccessMessage(worldRanks.Count, folderPath);
             }
             catch (Exception ex)
@@ -195,20 +198,44 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             if (currentCompetition == null)
             {
-                Console.WriteLine("No active competition to export skaters from.");
+                ConsoleCommunicator.DisplayNoActiveCompetitionMessage();
                 return;
             }
 
             if (args.Length < 1)
             {
-                Console.WriteLine("Please provide the file path to export to.");
+                ConsoleCommunicator.DisplayFilePathMissingExportMessage();
                 return;
             }
 
             string filePath = args[0];
             CsvExporter.ExportSkatersToCsv(currentCompetition, filePath);
-            Console.WriteLine($"Skaters have been exported to {filePath}");
+            ConsoleCommunicator.DisplaySkatersExportedMessage(filePath);
         }
 
+
+        private void ImportSkatersToCompetition(string[] args)
+        {
+            if (args.Length < 1)
+            {
+                ConsoleCommunicator.DisplayFolderPathMissingMessage();
+                return;
+            }
+
+            string filePath = args[0];
+            List<SkaterOnCompetition> skaters = ImportCSVIntoSkaterOnCompetition.ImportCSV(filePath);
+            if (currentCompetition == null)
+            {
+                ConsoleCommunicator.DisplayNoActiveCompetitionMessage();
+                return;
+            }
+
+            foreach (var skater in skaters)
+            {
+                currentCompetition.Skaters.Add(skater);
+            }
+
+            ConsoleCommunicator.DisplaySkatersImportedMessage(filePath, currentCompetition.Name); 
+        }
     }
 }

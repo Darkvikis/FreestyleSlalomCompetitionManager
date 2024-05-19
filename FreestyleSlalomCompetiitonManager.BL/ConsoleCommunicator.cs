@@ -24,7 +24,6 @@ namespace FreestyleSlalomCompetitionManager.BL
             Console.WriteLine("  exit                      - Exit the program");
         }
 
-
         public static void DisplayUnknownCommandMessage()
         {
             Console.WriteLine("Unknown command. Type 'help' to see available commands.");
@@ -98,6 +97,25 @@ namespace FreestyleSlalomCompetitionManager.BL
         public static void DisplaySkaterAddedToCompetitionMessage(string wsid, string competitionName)
         {
             Console.WriteLine($"Skater with WSID '{wsid}' added to the competition '{competitionName}'.");
+        }
+
+        public static void DisplayNoActiveCompetitionMessage()
+        {
+            Console.WriteLine("No active competition to work with.");
+        }
+
+        public static void DisplayFilePathMissingExportMessage()
+        {
+            Console.WriteLine("Please provide the file path to export to.");
+        }
+
+        public static void DisplaySkatersExportedMessage(string filePath)
+        {
+            Console.WriteLine($"Skaters have been exported to {filePath}");
+        }
+        public static void DisplaySkatersImportedMessage(string filePath, string competitionName)
+        {
+            Console.WriteLine($"Skaters have been imported from {filePath} to competition '{competitionName}'.");
         }
     }
 }

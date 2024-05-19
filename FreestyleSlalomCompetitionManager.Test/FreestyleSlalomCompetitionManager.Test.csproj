@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="FilesToImport\CSVsToTest\" />
-    <Folder Include="FilesToImport\RegistrationExcels\" />
   </ItemGroup>
 
   <ItemGroup>

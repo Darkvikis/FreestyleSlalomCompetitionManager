@@ -4,11 +4,20 @@ The Freestyle Slalom Competition Manager is a command-line application designed 
 
 ## Features
 
-- **Create Competition**: Create a new competition with details such as name, dates, description, address, and organizer.
-- **Add New Skater**: Add a new skater to the system with details like WSID, name, and country.
-- **Add Existing Skater**: Add an existing skater to the current competition using their WSID.
-- **Import Data**: Import skater or competition data from files or folders.
-- **Help**: Display a list of available commands.
+- **Import Data from CSV**: Users can import data from a CSV file or a folder containing multiple CSV files. The `importfile` and `importfolder` commands are used for this purpose.
+
+- **Create Competition**: Users can create a new competition using the `createcompetition` command. They need to provide the name, start date, end date, description, address, and organizer details.
+
+- **Add New Skater**: Users can add a new skater to the existing skaters list using the `newskater` command. They need to provide the WSID, name, and country of the skater.
+
+- **Add Existing Skater to Competition**: Users can add an existing skater to the current competition using the `skatertocompetition` command. They need to provide the WSID of the skater.
+
+- **Export Data to CSV**: Users can export the skaters of the current competition to a CSV file using the `export` command. They need to provide the file path where the CSV file will be saved.
+
+- **Import Skaters to Competition**: Users can import skaters to the current competition from a CSV file using the `importskatertoskateroncompetition` command. They need to provide the file path of the CSV file.
+
+- **Help**: Users can display the help message using the `help` command. The help message contains the list of available commands and their usage.
+
 
 ## Getting Started
 
