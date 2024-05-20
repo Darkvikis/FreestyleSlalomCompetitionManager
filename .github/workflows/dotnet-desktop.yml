@@ -18,6 +18,7 @@ jobs:
 
     env:
       Solution_Name: FreestyleSlalomCompetitionManager.sln
+      Test_Project_Path: FreestyleSlalomCompetitionManager.Tests/FreestyleSlalomCompetitionManager.Tests.csproj
 
     steps:
     - name: Checkout
@@ -28,7 +29,7 @@ jobs:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 8.0.x
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1
