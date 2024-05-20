@@ -136,7 +136,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             Console.WriteLine($"Music '{musicPath}' linked to skater with WSID '{skaterWsid}'.");
         }
 
-        public static void DisplaySkaterDetails(SkaterOnCompetition skater)
+        public static void DisplaySkaterDetails(Competitor skater)
         {
             Console.WriteLine($"Skater Name: {skater.Name}, Country: {skater.Country}, WSID: {skater.WSID}, Guid: {skater.Id}");
         }
@@ -155,7 +155,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             Console.WriteLine("No skaters have been added to the competition. Please add skaters first.");
         }
 
-        public static void DisplayDisciplinesAndSkaters(IEnumerable<BaseDiscipline> disciplines, IEnumerable<SkaterOnCompetition> skaters)
+        public static void DisplayDisciplinesAndSkaters(IEnumerable<BaseDiscipline> disciplines, IEnumerable<Competitor> skaters)
         {
             Console.WriteLine("Available disciplines:");
             foreach (var discipline in disciplines)

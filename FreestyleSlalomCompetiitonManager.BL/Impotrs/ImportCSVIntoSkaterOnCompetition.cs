@@ -10,21 +10,21 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 {
     public class ImportCSVIntoSkaterOnCompetition
     {
-        public static List<SkaterOnCompetition> ImportCSV(string path)
+        public static List<Competitor> ImportCSV(string path)
         {
             try
             {
                 using var reader = new StreamReader(path);
                 using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
-                var skaters = new List<SkaterOnCompetition>();
+                var skaters = new List<Competitor>();
 
                 csv.Read();
                 csv.ReadHeader();
 
                 while (csv.Read())
                 {
-                    SkaterOnCompetition skater = new(csv.GetField(1) + " " + csv.GetField(2), csv.GetField(10))
+                    Competitor skater = new(csv.GetField(1) + " " + csv.GetField(2), csv.GetField(10))
                     {
                         WSID = csv.GetField(9),
                         PhoneNumber = csv.GetField(11),

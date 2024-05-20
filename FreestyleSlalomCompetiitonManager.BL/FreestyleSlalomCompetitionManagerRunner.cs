@@ -226,12 +226,12 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             if (!CurrentCompetitionCheck()) { return; }
 
-            SkaterOnCompetition skaterOnCompetition = new(skater.Name, skater.Country)
+            Competitor competitor = new(skater.Name, skater.Country)
             {
                 WSID = skater.WSID,
             };
 
-            currentCompetition.Skaters.Add(skaterOnCompetition);
+            currentCompetition.Skaters.Add(competitor);
 
             ConsoleCommunicator.DisplaySkaterAddedToCompetitionMessage(skaterWsid, currentCompetition.Name);
         }
@@ -260,7 +260,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             }
 
             string filePath = args[0];
-            List<SkaterOnCompetition> skaters = ImportCSVIntoSkaterOnCompetition.ImportCSV(filePath);
+            List<Competitor> skaters = ImportCSVIntoSkaterOnCompetition.ImportCSV(filePath);
             if (!CurrentCompetitionCheck()) { return; }
 
             foreach (var skater in skaters)
