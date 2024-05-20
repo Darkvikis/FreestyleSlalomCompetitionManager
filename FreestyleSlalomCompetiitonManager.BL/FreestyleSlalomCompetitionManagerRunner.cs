@@ -237,13 +237,13 @@ namespace FreestyleSlalomCompetitionManager.BL
         }
         private void ExportSkatersToCsv(string[] args)
         {
-            if (!CurrentCompetitionCheck()) { return; }
 
             if (args.Length < 1)
             {
                 ConsoleCommunicator.DisplayFilePathMissingExportMessage();
                 return;
             }
+            if (!CurrentCompetitionCheck()) { return; }
 
             string filePath = args[0];
             CsvExporter.ExportSkatersToCsv(currentCompetition, filePath);
@@ -255,7 +255,7 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             if (args.Length < 1)
             {
-                ConsoleCommunicator.DisplayFolderPathMissingMessage();
+                ConsoleCommunicator.DisplayFilePathMissingMessage();
                 return;
             }
 
@@ -273,13 +273,13 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         private void LinkMusicToSkater(string[] args)
         {
-            if (!CurrentCompetitionCheck()) { return; }
-
             if (args.Length < 2)
             {
                 ConsoleCommunicator.DisplaySkaterWsidAndMusicPathMissingMessage();
                 return;
             }
+
+            if (!CurrentCompetitionCheck()) { return; }
 
             string skaterWsid = args[0];
             string musicPath = args[1];
@@ -339,6 +339,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         private void CreateBaseDisciplines()
         {
+            if (!CurrentCompetitionCheck()) { return; }
             var ageCategories = Enum.GetValues(typeof(AgeCategory)).Cast<AgeCategory>();
             var sexCategories = Enum.GetValues(typeof(SexCategory)).Cast<SexCategory>();
 
