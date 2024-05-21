@@ -184,5 +184,15 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             Console.WriteLine($"Skater '{skaterName}' has been assigned to discipline '{disciplineName}'.");
         }
+
+        public static void DisplaySkaterAssignedToDisciplinesMessage(string skaterName)
+        {
+            Console.WriteLine($"Skater '{skaterName}' has been assigned to disciplines.");
+        }
+
+        public static void DisplayNumberOfSkatersThatWereAssignedRankingsMessage(int count)
+        {
+            Console.WriteLine($"{count} skaters were assigned rankings.");
+        }
     }
 }

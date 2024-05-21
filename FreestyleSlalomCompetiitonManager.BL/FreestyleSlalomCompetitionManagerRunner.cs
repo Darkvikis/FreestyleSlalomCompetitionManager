@@ -300,6 +300,11 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             if (!CurrentCompetitionCheck()) { return; }
 
+            if (currentCompetition.Skaters.Count == 0)
+            {
+                ConsoleCommunicator.DisplayNoSkatersAddedToCompetitionMessage();
+                return;
+            }
             foreach (var skater in currentCompetition.Skaters)
             {
                 ConsoleCommunicator.DisplaySkaterDetails(skater);
@@ -319,6 +324,12 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             if (!CurrentCompetitionCheck()) { return; }
 
+            if (currentCompetition.Skaters.Count == 0)
+            {
+                ConsoleCommunicator.DisplayNoSkatersAddedToCompetitionMessage();
+                return;
+            }
+            int counterOfAssingedRankings = 0;
             foreach (var skater in currentCompetition.Skaters)
             {
                 if (skater.WSID != null && existingSkaters.TryGetValue(skater.WSID, out Skater WSRankSkater))
@@ -328,8 +339,11 @@ namespace FreestyleSlalomCompetitionManager.BL
                     skater.CompetitionRankClassic = GetRankForDiscipline(WSRankSkater, Discipline.Classic, skater.AgeCategory, skater.SexCategory);
                     skater.CompetitionRankJump = GetRankForDiscipline(WSRankSkater, Discipline.Jump, skater.AgeCategory, skater.SexCategory);
                     skater.CompetitionRankSlide = GetRankForDiscipline(WSRankSkater, Discipline.Slide, skater.AgeCategory, skater.SexCategory);
+                    counterOfAssingedRankings++;
+                    ConsoleCommunicator.DisplaySkaterAssignedToDisciplinesMessage(skater.Name);
                 }
             }
+            ConsoleCommunicator.DisplayNumberOfSkatersThatWereAssignedRankingsMessage(counterOfAssingedRankings);
         }
 
         private static int? GetRankForDiscipline(Skater skater, Discipline discipline, AgeCategory ageCategory, SexCategory sexCategory)
