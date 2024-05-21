@@ -25,14 +25,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public void SetMusic(string music, DateTime competitionDate)
         {
             Music = music;
-            if (competitionDate < DateTime.Now.AddDays(-7))
-            {
-                SendMusic = SendMusic.OnTime;
-            }
-            else
-            {
-                SendMusic = SendMusic.Late;
-            }
+            SendMusic = DateTime.Now.AddDays(7) >= competitionDate ? SendMusic.Late : SendMusic.OnTime;
         }
     }
 }

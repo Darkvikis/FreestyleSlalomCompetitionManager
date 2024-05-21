@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="FilesToImport\CSVsToTest\" />
+    <Folder Include="ModelTests\DisciplinesTests\" />
   </ItemGroup>
 
   <ItemGroup>
