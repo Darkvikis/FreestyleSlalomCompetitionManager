@@ -1,17 +1,14 @@
-﻿using FreestyleSlalomCompetitionManager.BL;
-using FreestyleSlalomCompetitionManager.BL.Enums;
+﻿using Bogus;
+using FreestyleSlalomCompetitionManager.BL;
 using FreestyleSlalomCompetitionManager.BL.Models;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
+
 
 namespace FreestyleSlalomCompetitionManager.Test
 {
     public class FreestyleSlalomCompetitionManagerRunnerTests
     {
         private readonly StringWriter consoleOut;
+        private static readonly Faker faker = new();
 
         public FreestyleSlalomCompetitionManagerRunnerTests()
         {
@@ -36,7 +33,7 @@ namespace FreestyleSlalomCompetitionManager.Test
         [InlineData("unknown", "Unknown command. Type 'help' to see available commands.", false)]
         [InlineData("getskatersoncurrentcompetition", "No skaters have been added to the competition. Please add skaters first.", true)]
         [InlineData("getrankingsforcurrentcompetition", "No skaters have been added to the competition. Please add skaters first.", true)]
-        [InlineData("getskatersoncurrentcompetition", "Skater Name: Name, Country: Country, WSID", true, true)]
+        [InlineData("getskatersoncurrentcompetition", "Skater Name: ", true, true)]
         [InlineData("getrankingsforcurrentcompetition", "0 skaters were assigned rankings.", true, true)]
         [InlineData("createbasedisciplines", "Standard disciplines have been created.", true)]
         [InlineData("assignskaterstodisciplines", "No disciplines have been created.", true)]
@@ -167,15 +164,13 @@ namespace FreestyleSlalomCompetitionManager.Test
             var consoleOut = new StringWriter();
             Console.SetOut(consoleOut);
             AddCompetition(runner);
-            var skaterInput = "newskater WSID Name Country";
-            await runner.ExecuteCommandAsync(skaterInput.Split(' ')[0], skaterInput.Split(' ')[1..]);
-            await runner.ExecuteCommandAsync("skatertocompetition", ["WSID"]);
+            var skaterWSID = AddSkaterToCompetition(runner);
             var musicPath = "test_music.mp3";
             // Act
-            await runner.ExecuteCommandAsync("linkmusictowsid", ["WSID", musicPath]);
+            await runner.ExecuteCommandAsync("linkmusictowsid", [skaterWSID, musicPath]);
             var output = consoleOut.ToString().Trim();
             // Assert
-            Assert.Contains($"Music '{musicPath}' linked to skater with WSID 'WSID'.", output);
+            Assert.Contains($"Music '{musicPath}' linked to skater with WSID '{skaterWSID}'.", output);
 
         }
 
@@ -184,7 +179,7 @@ namespace FreestyleSlalomCompetitionManager.Test
         {
             // Arrange
             var runner = new FreestyleSlalomCompetitionManagerRunner();
-            AddCompetition(runner);
+            var competitionName = AddCompetition(runner);
             runner.existingSkaters.TryAdd("WSID", new Skater("Name", "Country", "WSID"));
             var input = "skatertocompetition WSID".Split(' ');
 
@@ -193,7 +188,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             var output = consoleOut.ToString().Trim();
 
             // Assert
-            Assert.Contains("Skater with WSID 'WSID' added to the competition 'TestCompetition'.", output);
+            Assert.Contains($"Skater with WSID 'WSID' added to the competition '{competitionName}'.", output);
             Assert.True(runner.currentCompetition?.Skaters.Any(skater => skater.WSID == "WSID"));
         }
 
@@ -223,7 +218,7 @@ namespace FreestyleSlalomCompetitionManager.Test
         {
             // Arrange
             var runner = new FreestyleSlalomCompetitionManagerRunner();
-            AddCompetition(runner);
+            var competitionName = AddCompetition(runner);
 
             var filePath = "C:\\Users\\Lenovo\\Source\\repos\\Darkvikis\\FreestyleSlalomCompetitionManager\\FreestyleSlalomCompetitionManager.Test\\FilesToImport\\RegistrationExcels\\RandomlyGeneratedRegistrations.csv";
 
@@ -232,7 +227,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             var output = consoleOut.ToString().Trim();
 
             // Assert
-            Assert.Contains($"Skaters have been imported from {filePath} to competition 'TestCompetition'.", output);
+            Assert.Contains($"Skaters have been imported from {filePath} to competition '{competitionName}'.", output);
             Assert.True(runner.currentCompetition?.Skaters.Any(skater => skater.WSID == "32011ESP7482931456"));
         }
 
@@ -272,14 +267,30 @@ namespace FreestyleSlalomCompetitionManager.Test
             Assert.Contains("WSID: WSID", output);
         }
 
-        private static void AddCompetition(FreestyleSlalomCompetitionManagerRunner runner)
+        private static string AddCompetition(FreestyleSlalomCompetitionManagerRunner runner)
         {
-            runner.currentCompetition = new Competition("TestCompetition", DateTime.Now, DateTime.Now, "Description", "Address", new Organizer("Organizer", "WSID"));
+            string competitionName = faker.Company.CompanyName();
+            runner.currentCompetition = new Competition(
+                competitionName,
+                faker.Date.Recent(),
+                faker.Date.Soon(),
+                faker.Lorem.Paragraph(),
+                faker.Address.FullAddress(),
+                new Organizer(faker.Name.FullName(), faker.Random.Replace("####???##########"))
+            );
+            return competitionName;
         }
 
-        private static void AddSkaterToCompetition(FreestyleSlalomCompetitionManagerRunner runner)
+
+        private static string AddSkaterToCompetition(FreestyleSlalomCompetitionManagerRunner runner)
         {
-            runner.currentCompetition.Skaters.Add(new Competitor("Name", "Country") { WSID = "WSID" });
+            Competitor skater = new(faker.Name.FullName(), faker.Address.Country())
+            { WSID = faker.Random.Replace("####???##########") };
+
+            runner.currentCompetition?.Skaters.Add(skater);
+
+            return skater.WSID;
+
         }
     }
 }
