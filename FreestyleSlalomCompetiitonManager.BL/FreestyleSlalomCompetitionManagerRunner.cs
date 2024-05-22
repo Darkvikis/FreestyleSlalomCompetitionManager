@@ -373,9 +373,9 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             List<BaseDiscipline> disciplines = [];
 
-            disciplines.Add(new Battle() { AgeCategory = ageCategory, SexCategory = sexCategory });
-            disciplines.Add(new Speed() { AgeCategory = ageCategory, SexCategory = sexCategory });
-            disciplines.Add(new Slide() { AgeCategory = ageCategory, SexCategory = sexCategory });
+            disciplines.Add(new Battle(ageCategory, sexCategory));
+            disciplines.Add(new Speed(ageCategory, sexCategory));
+            disciplines.Add(new Slide(ageCategory, sexCategory));
 
             return disciplines;
         }
@@ -400,7 +400,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             foreach (var discipline in currentCompetition.Disciplines)
             {
-                discipline.AssignCompetitiors(currentCompetition.Skaters);
+                discipline.AssignCompetitors(currentCompetition.Skaters);
             }
         }
 
