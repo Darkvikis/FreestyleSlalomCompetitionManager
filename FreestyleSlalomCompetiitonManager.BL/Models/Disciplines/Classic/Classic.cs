@@ -30,7 +30,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
             }
         }
 
-        private void ValidateInputParameters(int numberOfPrequalified, int maxNumberOfSkatersInGroup, int numberOfQualificationGroups)
+        private static void ValidateInputParameters(int numberOfPrequalified, int maxNumberOfSkatersInGroup, int numberOfQualificationGroups)
         {
             if (numberOfPrequalified <= 0 || maxNumberOfSkatersInGroup <= 0)
             {
@@ -61,7 +61,8 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 
         private void GenerateMultipleQualificationRounds(int numberOfPrequalified, int numberOfQualificationGroups)
         {
-            List<ClassicRound> qualifications = new List<ClassicRound>();
+            List<ClassicRound> qualifications = new(numberOfQualificationGroups);
+
             for (int i = 0; i < numberOfQualificationGroups; i++)
             {
                 qualifications.Add(new ClassicRound() { Number = 1 + i, Type = Round.Qualification });
@@ -72,27 +73,14 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 
             for (int i = numberOfPrequalified; i < Competitors.Count; i++)
             {
-                if (addition)
-                {
-                    qualifications[roundsCounter++].Competitors.Add(Competitors[i]);
-                }
-                else
-                {
-                    qualifications[roundsCounter--].Competitors.Add(Competitors[i]);
-                }
+                qualifications[roundsCounter].Competitors.Add(Competitors[i]);
+
+                roundsCounter += addition ? 1 : -1;
 
                 if (roundsCounter >= qualifications.Count || roundsCounter < 0)
                 {
-                    if (addition)
-                    {
-                        addition = false;
-                        roundsCounter--;
-                    }
-                    else
-                    {
-                        addition = true;
-                        roundsCounter++;
-                    }
+                    addition = !addition;
+                    roundsCounter += addition ? 1 : -1;
                 }
             }
 
@@ -114,7 +102,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 
         public override void AssignCompetitors(List<Competitor> skaters)
         {
-            skaters.Where(s => s.CompetitionRankClassic != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankClassic).ToList().ForEach(s => Competitors.Add((int)s.CompetitionRankClassic, s));
+            skaters.Where(s => s.CompetitionRankClassic != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankClassic).ToList().ForEach(s => Competitors.Add(GetRank(s.CompetitionRankClassic), s));
         }
     }
 }

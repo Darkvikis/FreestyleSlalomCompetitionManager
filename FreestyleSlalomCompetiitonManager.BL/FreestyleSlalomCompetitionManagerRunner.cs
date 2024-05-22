@@ -23,14 +23,14 @@ namespace FreestyleSlalomCompetitionManager.BL
             while (true)
             {
                 Console.Write("> ");
-                string input = Console.ReadLine();
+                string? input = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(input))
                     continue;
 
                 List<string> parts = [];
                 bool inQuotes = false;
-                StringBuilder currentPart = new();
+                StringBuilder currentPart = new ();
 
                 foreach (char c in input)
                 {
@@ -59,7 +59,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
                 string command = parts[0].ToLower();
 
-                await ExecuteCommandAsync(command, parts.GetRange(1, parts.Count - 1).ToArray());
+                await ExecuteCommandAsync(command, [.. parts.GetRange(1, parts.Count - 1)]);
             }
         }
 
@@ -218,7 +218,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             string skaterWsid = args[0];
 
-            if (!existingSkaters.TryGetValue(skaterWsid, out Skater skater))
+            if (!existingSkaters.TryGetValue(skaterWsid, out var skater))
             {
                 ConsoleCommunicator.DisplaySkaterNotFoundMessage(skaterWsid);
                 return;
@@ -231,9 +231,9 @@ namespace FreestyleSlalomCompetitionManager.BL
                 WSID = skater.WSID,
             };
 
-            currentCompetition.Skaters.Add(competitor);
+            currentCompetition?.Skaters.Add(competitor);
 
-            ConsoleCommunicator.DisplaySkaterAddedToCompetitionMessage(skaterWsid, currentCompetition.Name);
+            ConsoleCommunicator.DisplaySkaterAddedToCompetitionMessage(skaterWsid!, currentCompetition!.Name);
         }
         private void ExportSkatersToCsv(string[] args)
         {
@@ -246,7 +246,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             if (!CurrentCompetitionCheck()) { return; }
 
             string filePath = args[0];
-            CsvExporter.ExportSkatersToCsv(currentCompetition, filePath);
+            CsvExporter.ExportSkatersToCsv(currentCompetition!, filePath);
             ConsoleCommunicator.DisplaySkatersExportedMessage(filePath);
         }
 
@@ -265,10 +265,11 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             foreach (var skater in skaters)
             {
-                currentCompetition.Skaters.Add(skater);
+                currentCompetition?.Skaters.Add(skater);
             }
 
-            ConsoleCommunicator.DisplaySkatersImportedMessage(filePath, currentCompetition.Name);
+            string competitionName = currentCompetition?.Name ?? string.Empty; // Ensure competitionName is not null
+            ConsoleCommunicator.DisplaySkatersImportedMessage(filePath, competitionName);
         }
 
         private void LinkMusicToSkater(string[] args)
@@ -284,14 +285,14 @@ namespace FreestyleSlalomCompetitionManager.BL
             string skaterWsid = args[0];
             string musicPath = args[1];
 
-            if (!currentCompetition.Skaters.Any(x => x.WSID == skaterWsid))
+            if (!currentCompetition?.Skaters.Any(x => x.WSID == skaterWsid) ?? true)
             {
                 ConsoleCommunicator.DisplaySkaterNotFoundMessage(skaterWsid);
                 return;
             }
 
-            currentCompetition.Skaters?.FirstOrDefault()?
-                .SetMusic(musicPath, currentCompetition.StartDate);
+            currentCompetition?.Skaters?.FirstOrDefault()?
+                .SetMusic(musicPath, currentCompetition!.StartDate);
 
             ConsoleCommunicator.DisplayMusicLinkedToSkaterMessage(skaterWsid, musicPath);
         }
@@ -300,12 +301,13 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             if (!CurrentCompetitionCheck()) { return; }
 
-            if (currentCompetition.Skaters.Count == 0)
+            if (currentCompetition?.Skaters.Count == 0)
             {
                 ConsoleCommunicator.DisplayNoSkatersAddedToCompetitionMessage();
                 return;
             }
-            foreach (var skater in currentCompetition.Skaters)
+
+            foreach (var skater in currentCompetition?.Skaters ?? [])
             {
                 ConsoleCommunicator.DisplaySkaterDetails(skater);
             }
@@ -324,15 +326,15 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             if (!CurrentCompetitionCheck()) { return; }
 
-            if (currentCompetition.Skaters.Count == 0)
+            if (currentCompetition?.Skaters.Count == 0)
             {
                 ConsoleCommunicator.DisplayNoSkatersAddedToCompetitionMessage();
                 return;
             }
             int counterOfAssingedRankings = 0;
-            foreach (var skater in currentCompetition.Skaters)
+            foreach (var skater in currentCompetition?.Skaters ?? Enumerable.Empty<Competitor>())
             {
-                if (skater.WSID != null && existingSkaters.TryGetValue(skater.WSID, out Skater WSRankSkater))
+                if (skater.WSID != null && existingSkaters.TryGetValue(skater.WSID, out Skater? WSRankSkater))
                 {
                     skater.CompetitionRankBattle = GetRankForDiscipline(WSRankSkater, Discipline.Battle, skater.AgeCategory, skater.SexCategory);
                     skater.CompetitionRankSpeed = GetRankForDiscipline(WSRankSkater, Discipline.Speed, skater.AgeCategory, skater.SexCategory);
@@ -384,23 +386,23 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             if (!CurrentCompetitionCheck()) { return; }
 
-            if (currentCompetition.Disciplines.Count == 0)
+            if (currentCompetition?.Disciplines.Count == 0)
             {
                 ConsoleCommunicator.DisplayNoDisciplinesCreatedMessage();
                 return;
             }
 
-            if (currentCompetition.Skaters.Count == 0)
+            if (currentCompetition?.Skaters.Count == 0)
             {
                 ConsoleCommunicator.DisplayNoSkatersAddedToCompetitionMessage();
                 return;
             }
 
-            ConsoleCommunicator.DisplayDisciplinesAndSkaters(currentCompetition.Disciplines, currentCompetition.Skaters);
+            ConsoleCommunicator.DisplayDisciplinesAndSkaters(currentCompetition?.Disciplines ?? Enumerable.Empty<BaseDiscipline>(), currentCompetition?.Skaters ?? Enumerable.Empty<Competitor>());
 
-            foreach (var discipline in currentCompetition.Disciplines)
+            foreach (var discipline in currentCompetition?.Disciplines ?? Enumerable.Empty<BaseDiscipline>())
             {
-                discipline.AssignCompetitors(currentCompetition.Skaters);
+                discipline?.AssignCompetitors(currentCompetition?.Skaters ?? []);
             }
         }
 

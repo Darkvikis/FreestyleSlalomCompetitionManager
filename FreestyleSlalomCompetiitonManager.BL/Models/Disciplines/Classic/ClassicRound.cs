@@ -8,7 +8,6 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 {
     public class ClassicRound : BaseRound
     {
-        public int Number { get; set; }
         public List<ClassicRun> Runs = [];
     }
 }

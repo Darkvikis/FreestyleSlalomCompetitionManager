@@ -198,7 +198,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             // Arrange
             var runner = new FreestyleSlalomCompetitionManagerRunner();
             AddCompetition(runner);
-            runner.currentCompetition.Skaters.Add(new Competitor("Name", "Country") { WSID = "WSID" });
+            runner.currentCompetition?.Skaters.Add(new Competitor("Name", "Country") { WSID = "WSID" });
             var input = "export test.csv".Split(' ');
 
             // Act
@@ -237,7 +237,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             // Arrange
             var runner = new FreestyleSlalomCompetitionManagerRunner();
             AddCompetition(runner);
-            runner.currentCompetition.Skaters.Add(new Competitor("Name", "Country") { WSID = "WSID" });
+            runner.currentCompetition?.Skaters.Add(new Competitor("Name", "Country") { WSID = "WSID" });
             var input = "linkmusictowsid WSID test.mp3".Split(' ');
 
             // Act
@@ -250,15 +250,15 @@ namespace FreestyleSlalomCompetitionManager.Test
         }
 
         [Fact]
-        public void ExecuteCommandAsync_GetSkatersOnCurrentCompetitionCommand_ShouldDisplaySkatersOnCurrentCompetition()
+        public async Task ExecuteCommandAsync_GetSkatersOnCurrentCompetitionCommand_ShouldDisplaySkatersOnCurrentCompetition()
         {
             // Arrange
             var runner = new FreestyleSlalomCompetitionManagerRunner();
             AddCompetition(runner);
-            runner.currentCompetition.Skaters.Add(new Competitor("Name", "Country") { WSID = "WSID" });
+            runner.currentCompetition?.Skaters.Add(new Competitor("Name", "Country") { WSID = "WSID" });
 
             // Act
-            runner.ExecuteCommandAsync("getskatersoncurrentcompetition", new string[0]);
+            await runner.ExecuteCommandAsync("getskatersoncurrentcompetition", []);
             var output = consoleOut.ToString().Trim();
 
             // Assert
