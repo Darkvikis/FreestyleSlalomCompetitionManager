@@ -17,6 +17,14 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
             {
                 throw new ArgumentException("Invalid input parameters. Number of prequalified skaters, and maximum number of skaters in a group must be greater than zero.");
             }
+            if (numberOfPrequalified > maxNumberOfSkatersInGroup)
+            {
+                throw new ArgumentException("Invalid input parameters. The number of prequalified skaters must be less than or equal to the maximum number of skaters in a group.");
+            }
+            if (maxNumberOfSkatersInGroup - numberOfPrequalified < numberOfQualificationGroups)
+            {
+                throw new ArgumentException("Invalid input parameters. The difference between the maximum number of skaters in a group and the number of prequalified skaters must be greater than or equal to the number of qualification groups.");
+            }
 
             Rounds.Add(new ClassicRound() { Number = 0, Type = Round.Final });
 
@@ -65,7 +73,6 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
                 }
 
                 Rounds.AddRange(Qualifications);
-
             }
             else
             {
