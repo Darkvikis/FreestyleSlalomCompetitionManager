@@ -9,7 +9,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs.Tests
 {
     public class ImportCSVWorldRankingsTests
     {
-        readonly string folderPath = "C:\\Users\\Lenovo\\Source\\repos\\Darkvikis\\FreestyleSlalomCompetitionManager\\FreestyleSlalomCompetitionManager.Test\\FilesToImport\\CSVsToTest\\";
+        readonly string folderPath = "..\\..\\..\\FilesToImport\\CSVsToTest\\";
 
         [Fact]
         public async void Import_ValidFolder_ReturnsExpectedNumberOfWorldRanks()

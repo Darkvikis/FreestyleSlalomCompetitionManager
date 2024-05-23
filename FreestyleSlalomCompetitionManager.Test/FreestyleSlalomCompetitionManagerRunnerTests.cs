@@ -147,7 +147,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             Console.SetOut(consoleOut);
             var competitionInput = "createcompetition TestCompetition 2024-06-01 2024-06-02 Description Address OrganizerName OrganizerWSID";
             await runner.ExecuteCommandAsync(competitionInput.Split(' ')[0], competitionInput.Split(' ')[1..]);
-            var filePath = "C:\\Users\\Lenovo\\Source\\repos\\Darkvikis\\FreestyleSlalomCompetitionManager\\FreestyleSlalomCompetitionManager.Test\\FilesToImport\\RegistrationExcels\\RandomlyGeneratedRegistrations.csv";
+            var filePath = "..\\..\\..\\FilesToImport\\RegistrationExcels\\RandomlyGeneratedRegistrations.csv";
             // Act
             await runner.ExecuteCommandAsync("importskatertocompetition", [filePath]);
             var output = consoleOut.ToString().Trim();
@@ -220,7 +220,9 @@ namespace FreestyleSlalomCompetitionManager.Test
             var runner = new FreestyleSlalomCompetitionManagerRunner();
             var competitionName = AddCompetition(runner);
 
-            var filePath = "C:\\Users\\Lenovo\\Source\\repos\\Darkvikis\\FreestyleSlalomCompetitionManager\\FreestyleSlalomCompetitionManager.Test\\FilesToImport\\RegistrationExcels\\RandomlyGeneratedRegistrations.csv";
+            var filePath = "..\\..\\..\\FilesToImport\\RegistrationExcels\\RandomlyGeneratedRegistrations.csv";
+
+            var currentDirectory = Directory.GetCurrentDirectory();
 
             // Act
             await runner.ExecuteCommandAsync("importskatertocompetition", [filePath]);
