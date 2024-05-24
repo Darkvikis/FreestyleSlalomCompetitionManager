@@ -13,5 +13,10 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
         {
             skaters.Where(s => s.CompetitionRankBattle != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankBattle).ToList().ForEach(s => Competitors.Add(GetRank(s.CompetitionRankBattle),s));
         }
+
+        public override string ToString()
+        {
+            return "Freestyle Slalom Battle";
+        }
     }
 }
