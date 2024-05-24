@@ -12,7 +12,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public string Description { get; set; } = description;
         public string Address { get; set; } = address;
         public Organizer Organizer { get; set; } = organizer;
-        public List<Competitor> Skaters { get; set; } = [];
+        public List<Competitor> Competitors { get; set; } = [];
         public List<BaseDiscipline> Disciplines { get; set; } = [];
     }
 }

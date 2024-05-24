@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models
 {
-    public class Skater(string name, string country, string WSID) : BaseSkater(name, country)
+    public class Skater(string firstName, string familyName, string country, string WSID) : BaseSkater(firstName, familyName, country)
     {
         public string WSID { get; set; } = WSID;
         public List<WorldRank> WorldRanks { get; set; } = [];

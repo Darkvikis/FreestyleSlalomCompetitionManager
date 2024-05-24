@@ -9,9 +9,10 @@ using System.Xml.Linq;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models
 {
-    public class BaseSkater(string name, string country) : BaseModel
+    public class BaseSkater(string firstName, string secondName, string country) : BaseModel
     {
-        public string Name { get; set; } = name;
+        public string FirstName { get; set; } = firstName;
+        public string FamilyName { get; set; } = secondName;
         public string Country { get; set; } = country;
         public AgeCategory AgeCategory { get; set; }
         public SexCategory SexCategory { get; set; }

@@ -92,7 +92,11 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
         private static Skater GetOrCreateSkater(string wsid, string name, string country, AgeCategory ageCategory, SexCategory sexCategory, ConcurrentDictionary<string, Skater> existingSkaters)
         {
-            return existingSkaters.GetOrAdd(wsid, _ => new Skater(name, country, wsid)
+            string[] nameParts = name.Split(' ');
+
+            string firstName = string.Join(' ', nameParts[..^1]);
+            string familyName = nameParts[^1];
+            return existingSkaters.GetOrAdd(wsid, _ => new Skater(firstName, familyName, country, wsid)
             {
                 AgeCategory = ageCategory,
                 SexCategory = sexCategory

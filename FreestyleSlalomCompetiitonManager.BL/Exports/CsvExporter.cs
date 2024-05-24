@@ -12,9 +12,9 @@ namespace FreestyleSlalomCompetitionManager.BL
             var csv = new StringBuilder();
             csv.AppendLine("Name,Country,WSID,PayedFee,SendMusic,Music,CompetitionRankBattle,CompetitionRankSpeed,CompetitionRankClassic,CompetitionRankJump,CompetitionRankSlide");
 
-            foreach (var skater in competition.Skaters)
+            foreach (var skater in competition.Competitors)
             {
-                csv.AppendLine($"{skater.Name},{skater.Country},{skater.WSID},{skater.PayedFee},{skater.SendMusic},{skater.Music},{skater.CompetitionRankBattle},{skater.CompetitionRankSpeed},{skater.CompetitionRankClassic},{skater.CompetitionRankJump},{skater.CompetitionRankSlide}");
+                csv.AppendLine($"{skater.FirstName} + {skater.FamilyName},{skater.Country},{skater.WSID},{skater.PayedFee},{skater.SendMusic},{skater.Music},{skater.CompetitionRankBattle},{skater.CompetitionRankSpeed},{skater.CompetitionRankClassic},{skater.CompetitionRankJump},{skater.CompetitionRankSlide}");
             }
 
             File.WriteAllText(filePath, csv.ToString());

@@ -138,7 +138,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         public static void DisplaySkaterDetails(Competitor skater)
         {
-            Console.WriteLine($"Skater Name: {skater.Name}, Country: {skater.Country}, WSID: {skater.WSID}, Guid: {skater.Id}");
+            Console.WriteLine($"Skater Name: {skater.FirstName} {skater.FamilyName}, Country: {skater.Country}, WSID: {skater.WSID}, Guid: {skater.Id}");
         }
 
         public static void DisplayStandardDisciplinesCreatedMessage()
@@ -166,7 +166,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             Console.WriteLine("Available skaters:");
             foreach (var skater in skaters)
             {
-                Console.WriteLine($"  {skater.Name} - {skater.WSID}");
+                Console.WriteLine($" {skater.FirstName} {skater.FamilyName} - {skater.WSID}");
             }
         }
 

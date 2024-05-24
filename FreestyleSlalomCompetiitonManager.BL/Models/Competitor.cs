@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models
 {
-    public class Competitor(string name, string country) : BaseSkater(name, country)
+    public class Competitor(string firstName, string familyName, string country) : BaseSkater(firstName, familyName, country)
     {
         public string? WSID { get; set; }
         public bool PayedFee { get; set; }
@@ -16,6 +16,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public string? ShirtSize { get; set; }
+        public DateTime? Birthdate { get; set; }
         public int? CompetitionRankBattle { get; set; }
         public int? CompetitionRankSpeed { get; set; }
         public int? CompetitionRankClassic { get; set; }

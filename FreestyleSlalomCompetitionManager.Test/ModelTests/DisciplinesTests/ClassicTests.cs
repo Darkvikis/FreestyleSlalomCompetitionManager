@@ -25,7 +25,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests.DisciplinesTests
             var classic = new Classic(AgeCategory.Senior, SexCategory.Man);
             for (int i = 0; i < numberOfSkaters; i++)
             {
-                classic.Competitors.Add(i, new Competitor(faker.Name.FullName(), faker.Address.Country()) { CompetitionRankClassic = i });
+                classic.Competitors.Add(i, new Competitor(faker.Name.FirstName(), faker.Name.LastName(), faker.Address.Country()) { CompetitionRankClassic = i });
             }
 
             // Act
@@ -88,11 +88,11 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests.DisciplinesTests
             {
                 Competitors = new SortedDictionary<int, Competitor>
                         {
-                            { 0, new Competitor(faker.Name.FullName(),faker.Address.Country()) },
-                            { 1, new Competitor(faker.Name.FullName(),faker.Address.Country()) },
-                            { 2, new Competitor(faker.Name.FullName(),faker.Address.Country()) },
-                            { 3, new Competitor(faker.Name.FullName(),faker.Address.Country()) },
-                            { 4, new Competitor(faker.Name.FullName(),faker.Address.Country()) }
+                            { 0, new Competitor(faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) },
+                            { 1, new Competitor(faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) },
+                            { 2, new Competitor(faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) },
+                            { 3, new Competitor(faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) },
+                            { 4, new Competitor(faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) }
                         }
             };
 
@@ -107,9 +107,9 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests.DisciplinesTests
             var classic = new Classic(AgeCategory.Senior, SexCategory.Man);
             var skaters = new List<Competitor>
                         {
-                           new(faker.Name.FullName(),faker.Address.Country()) { CompetitionRankClassic = 1, AgeCategory = AgeCategory.Senior, SexCategory = SexCategory.Man },
-                           new (faker.Name.FullName(),faker.Address.Country()) { CompetitionRankClassic = 2, AgeCategory = AgeCategory.Senior, SexCategory = SexCategory.Man },
-                           new (faker.Name.FullName(),faker.Address.Country()) { CompetitionRankClassic = 3, AgeCategory = AgeCategory.Senior, SexCategory = SexCategory.Man }
+                           new (faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 1, AgeCategory = AgeCategory.Senior, SexCategory = SexCategory.Man },
+                           new (faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 2, AgeCategory = AgeCategory.Senior, SexCategory = SexCategory.Man },
+                           new (faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 3, AgeCategory = AgeCategory.Senior, SexCategory = SexCategory.Man }
                         };
 
             // Act
@@ -166,7 +166,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests.DisciplinesTests
             var classic = new Classic(AgeCategory.Senior, SexCategory.Man);
             for (int i = 0; i < 6; i++)
             {
-                classic.Competitors.Add(i, new Competitor(faker.Name.FullName(), faker.Address.Country()) { CompetitionRankClassic = i });
+                classic.Competitors.Add(i, new Competitor(faker.Name.FirstName(), faker.Name.LastName(), faker.Address.Country()) { CompetitionRankClassic = i });
             }
 
             // Act

@@ -14,14 +14,16 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
         public void Competitor_Constructor_SetsPropertiesCorrectly()
         {
             // Arrange
-            var name = faker.Name.FullName();
+            var firstName = faker.Name.FirstName();
+            var familyName = faker.Name.LastName();
             var country = faker.Address.Country();
 
             // Act
-            var competitor = new Competitor(name, country);
+            var competitor = new Competitor(firstName, familyName, country);
 
             // Assert
-            Assert.Equal(name, competitor.Name);
+            Assert.Equal(firstName, competitor.FirstName);
+            Assert.Equal(familyName, competitor.FamilyName);
             Assert.Equal(country, competitor.Country);
         }
 
@@ -29,7 +31,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
         public void SetMusic_WithCompetitionDateMoreThan7DaysAway_SetsSendMusicToOnTime()
         {
             // Arrange
-            var competitor = new Competitor(faker.Name.FullName(), faker.Address.Country());
+            var competitor = new Competitor(faker.Name.FirstName(), faker.Name.LastName(), faker.Address.Country());
             var music = faker.Random.Word();
             var competitionDate = DateTime.Now.AddDays(8);
 
@@ -45,7 +47,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
         public void SetMusic_WithCompetitionDateLessThan7DaysAway_SetsSendMusicToLate()
         {
             // Arrange
-            var competitor = new Competitor(faker.Name.FullName(), faker.Address.Country());
+            var competitor = new Competitor(faker.Name.FirstName(), faker.Name.LastName(), faker.Address.Country());
             var music = faker.Random.Word();
             var competitionDate = DateTime.Now.AddDays(6);
 
