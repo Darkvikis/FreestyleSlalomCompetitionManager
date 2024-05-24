@@ -283,7 +283,7 @@ namespace FreestyleSlalomCompetitionManager.Test
 
             runner.currentCompetition?.Competitors.Add(skater);
 
-            return skater.WSID;
+            return skater.WSID ?? string.Empty;
 
         }
     }

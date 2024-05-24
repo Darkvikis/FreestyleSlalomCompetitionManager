@@ -13,7 +13,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
 {
     public class ResultsExports
     {
-        public static void ExportResultsToExcel(Competition competition, string folderPath)
+        public static async Task ExportResultsToExcel(Competition competition, string folderPath)
         {
             // Create a new Excel package
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -127,7 +127,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
             }
 
             // Save the Excel file
-            package.SaveAs($"{folderPath}/Results {competition.Name} - {DateTime.Today:dd-MM-yyyy}.xlsx");
+            await package.SaveAsAsync($"{folderPath}/Results {competition.Name} - {DateTime.Today:dd-MM-yyyy}.xlsx");
         }
     }
 }

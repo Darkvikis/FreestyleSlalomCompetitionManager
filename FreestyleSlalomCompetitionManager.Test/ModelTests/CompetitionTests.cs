@@ -1,12 +1,4 @@
-﻿using FreestyleSlalomCompetitionManager.BL.Exports;
-using FreestyleSlalomCompetitionManager.BL.Models;
-using OfficeOpenXml;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OfficeOpenXml;
-using System.Threading.Tasks;
+﻿using OfficeOpenXml;
 
 
 namespace FreestyleSlalomCompetitionManager.Test.ModelTests
@@ -53,7 +45,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
             }
             catch (Exception)
             {
-                
+
             }
             // Act
             competition.ExportResultsToCsv(folderPath);

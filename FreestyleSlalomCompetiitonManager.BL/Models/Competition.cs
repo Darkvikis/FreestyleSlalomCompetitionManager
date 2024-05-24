@@ -16,9 +16,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public List<Competitor> Competitors { get; set; } = [];
         public List<BaseDiscipline> Disciplines { get; set; } = [];
 
-        public void ExportResultsToCsv(string folderPath)
+        public async Task ExportResultsToCsv(string folderPath)
         {
-            ResultsExports.ExportResultsToExcel(this, folderPath);
+            await ResultsExports.ExportResultsToExcel(this, folderPath);
         }
 
         public void AssignCompetitors(List<Competitor> competitors)
