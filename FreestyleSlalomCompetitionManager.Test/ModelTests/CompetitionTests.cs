@@ -26,10 +26,9 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
             {
                 competition.Disciplines[0].Results.Add(i, competitors[i]);
             }
+
             try
             {
-
-
                 // Delete all files in a folder
                 DirectoryInfo directory = new(folderPath);
                 foreach (FileInfo file in directory.GetFiles())
@@ -47,6 +46,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
             {
 
             }
+
             // Act
             competition.ExportResultsToCsv(folderPath);
 
