@@ -1,6 +1,7 @@
 ﻿using static System.Runtime.InteropServices.JavaScript.JSType;
 using System;
 using FreestyleSlalomCompetitionManager.BL.Models.Disciplines;
+using FreestyleSlalomCompetitionManager.BL.Exports;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models
 {
@@ -14,5 +15,10 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public Organizer Organizer { get; set; } = organizer;
         public List<Competitor> Competitors { get; set; } = [];
         public List<BaseDiscipline> Disciplines { get; set; } = [];
+
+        public async Task ExportResultsToCsv()
+        {
+            await ResultsExports.ExportResultsToExcel(this);
+        }
     }
 }

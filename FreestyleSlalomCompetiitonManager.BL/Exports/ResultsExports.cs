@@ -11,7 +11,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
 {
     public class ResultsExports
     {
-        public void ExportResultsToExcel(Competition competition)
+        public static async Task ExportResultsToExcel(Competition competition)
         {
             // Create a new Excel package
             using ExcelPackage package = new();
@@ -61,20 +61,20 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
                 ExcelWorksheet disciplineWorksheet = package.Workbook.Worksheets.Add(discipline.ToString() + " " + discipline.AgeCategory.ToString()[0].ToString().ToUpper() + discipline.SexCategory.ToString()[0].ToString().ToUpper());
                 // Add code here to populate the worksheet with discipline-specific data
 
-                worksheet.Cells[2, 2].Value = "NAME OF EVENT";
-                worksheet.Cells[2, 3].Value = competition.Name;
-
-                worksheet.Cells[3, 2].Value = "PLACE OF EVENT";
-                worksheet.Cells[3, 3].Value = competition.Address;
-
-                worksheet.Cells[4, 2].Value = "DATE";
-                worksheet.Cells[4, 3].Value = competition.StartDate.Date;
-
-                worksheet.Cells[5, 2].Value = "DISCIPLINE";
-                worksheet.Cells[5, 3].Value = discipline.ToString();
-
-                worksheet.Cells[6, 2].Value = "CATEGORY";
-                worksheet.Cells[6, 3].Value = discipline.AgeCategory + " " + discipline.SexCategory;
+                disciplineWorksheet.Cells[2, 2].Value = "NAME OF EVENT";
+                disciplineWorksheet.Cells[2, 3].Value = competition.Name;
+                
+                disciplineWorksheet.Cells[3, 2].Value = "PLACE OF EVENT";
+                disciplineWorksheet.Cells[3, 3].Value = competition.Address;
+                
+                disciplineWorksheet.Cells[4, 2].Value = "DATE";
+                disciplineWorksheet.Cells[4, 3].Value = competition.StartDate.Date;
+                
+                disciplineWorksheet.Cells[5, 2].Value = "DISCIPLINE";
+                disciplineWorksheet.Cells[5, 3].Value = discipline.ToString();
+                
+                disciplineWorksheet.Cells[6, 2].Value = "CATEGORY";
+                disciplineWorksheet.Cells[6, 3].Value = discipline.AgeCategory + " " + discipline.SexCategory;
 
                 // Set bold font for the 2nd column
                 disciplineWorksheet.Cells[2, 2, disciplineWorksheet.Dimension.End.Row, 2].Style.Font.Bold = true;
@@ -82,7 +82,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
                 // Set bold font for the 9th row
                 disciplineWorksheet.Cells[9, 2, 9, disciplineWorksheet.Dimension.End.Column].Style.Font.Bold = true;
 
-                
+
                 // Set the headers for the final results
                 disciplineWorksheet.Cells[8, 1].Value = "FINAL RESULTS";
                 disciplineWorksheet.Cells[9, 1].Value = "RANK";
@@ -112,7 +112,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
             }
 
             // Save the Excel file
-            package.SaveAs(new System.IO.FileInfo("Results.xlsx"));
+            await package.SaveAsAsync(new System.IO.FileInfo("Results.xlsx"));
         }
     }
 }
