@@ -399,12 +399,11 @@ namespace FreestyleSlalomCompetitionManager.BL
                 return;
             }
 
+            currentCompetition?.AssignCompetitorsToDisciplines();
+
             ConsoleCommunicator.DisplayDisciplinesAndSkaters(currentCompetition?.Disciplines ?? Enumerable.Empty<BaseDiscipline>(), currentCompetition?.Competitors ?? Enumerable.Empty<Competitor>());
 
-            foreach (var discipline in currentCompetition?.Disciplines ?? Enumerable.Empty<BaseDiscipline>())
-            {
-                discipline?.AssignCompetitors(currentCompetition?.Competitors ?? []);
-            }
+
         }
 
     }

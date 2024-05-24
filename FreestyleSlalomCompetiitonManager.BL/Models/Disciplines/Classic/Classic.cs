@@ -99,7 +99,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
             Rounds.Add(qualification);
         }
 
-        public void AssignResultsBasedonClassicRuns()
+        public void AssignResultsBasedOnClassicRuns()
         {
             int order = 1;
             foreach (var run in Rounds[0].Runs.OrderBy(competitior => competitior.FinalMark))
@@ -111,6 +111,11 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
         public override void AssignCompetitors(List<Competitor> skaters)
         {
             skaters.Where(s => s.CompetitionRankClassic != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankClassic).ToList().ForEach(s => Competitors.Add(GetRank(s.CompetitionRankClassic), s));
+        }
+
+        public override string ToString()
+        {
+            return "Freestyle Slalom Classic";
         }
     }
 }

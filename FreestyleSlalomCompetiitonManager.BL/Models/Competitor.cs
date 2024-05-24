@@ -16,7 +16,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
         public string? ShirtSize { get; set; }
-        public DateTime? Birthdate { get; set; }
+        public DateOnly? Birthdate { get; set; }
         public int? CompetitionRankBattle { get; set; }
         public int? CompetitionRankSpeed { get; set; }
         public int? CompetitionRankClassic { get; set; }

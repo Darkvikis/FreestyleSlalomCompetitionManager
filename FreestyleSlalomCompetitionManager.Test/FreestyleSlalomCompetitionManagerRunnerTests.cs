@@ -5,7 +5,7 @@ using FreestyleSlalomCompetitionManager.BL.Models;
 
 namespace FreestyleSlalomCompetitionManager.Test
 {
-    public class FreestyleSlalomCompetitionManagerRunnerTests
+    public class FreestyleSlalomCompetitionManagerRunnerTests : BaseTest
     {
         private readonly StringWriter consoleOut;
         private static readonly Faker faker = new();
@@ -271,23 +271,15 @@ namespace FreestyleSlalomCompetitionManager.Test
 
         private static string AddCompetition(FreestyleSlalomCompetitionManagerRunner runner)
         {
-            string competitionName = faker.Company.CompanyName();
-            runner.currentCompetition = new Competition(
-                competitionName,
-                faker.Date.Recent(),
-                faker.Date.Soon(),
-                faker.Lorem.Paragraph(),
-                faker.Address.FullAddress(),
-                new Organizer(faker.Name.FullName(), faker.Random.Replace("####???##########"))
-            );
-            return competitionName;
+            Competition competition = CreateCompetition();
+            runner.currentCompetition = competition;
+            return competition.Name;
         }
 
 
         private static string AddSkaterToCompetition(FreestyleSlalomCompetitionManagerRunner runner)
         {
-            Competitor skater = new(faker.Name.FirstName(), faker.Name.LastName(), faker.Address.Country())
-            { WSID = faker.Random.Replace("####???##########") };
+            Competitor skater = CreateCompetitor();
 
             runner.currentCompetition?.Competitors.Add(skater);
 
