@@ -99,6 +99,14 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
             Rounds.Add(qualification);
         }
 
+        public void AssignResultsBasedonClassicRuns()
+        {
+            int order = 1;
+            foreach (var run in Rounds[0].Runs.OrderBy(competitior => competitior.FinalMark))
+            {
+                Results.Add(order++, run.Competitor);
+            }
+        }
 
         public override void AssignCompetitors(List<Competitor> skaters)
         {
