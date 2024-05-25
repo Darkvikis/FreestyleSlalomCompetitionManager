@@ -20,6 +20,66 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
             Rounds.Add(new BattleRound(Competitors));
         }
 
+        public void ProccessBattle()
+        {
+            ConsoleCommunicator.DisplayStartDiscipline(this.ToString(), AgeCategory.ToString(), SexCategory.ToString());
+
+            InitializeBattle();
+
+            Rounds.ForEach(r =>
+            {
+                ConsoleCommunicator.DisplayStartRound(r.ToString());
+                r.Groups.ForEach(g =>
+                {
+                    ConsoleCommunicator.DisplayStartGroup();
+                    int groupRank = 1;
+                    g.Competitors.Keys.ToList().ForEach(c =>
+                    {
+                        ConsoleCommunicator.DisplayCompetitor(groupRank, c.FirstName + " " + c.FamilyName);
+                    });
+
+                    do
+                    {
+                        ValidateGivenResults(ConsoleCommunicator.AskForBattleResults(), g.Competitors.Count);
+                    }
+                    while (!ConsoleCommunicator.DisplayEndGroup(g.Competitors));
+
+                });
+
+                Rounds.Add(new BattleRound(r.GetAdvancing()));
+                ConsoleCommunicator.DisplayEndRound();
+            });
+
+            ConsoleCommunicator.DisplayEndDiscipline(this.ToString(), AgeCategory.ToString(), SexCategory.ToString());
+        }
+
+        private List<int> ValidateGivenResults(string? inputs, int numOfSkatersInGroup)
+        {
+            if (inputs == null)
+            {
+                throw new ArgumentException("Invalid input. Results must be provided.");
+            }
+
+            var inputsList = inputs.Split(" ");
+
+            if (inputsList.Length != numOfSkatersInGroup)
+            {
+                throw new ArgumentException("Invalid input. The number of results must be equal to the number of skaters in a group.");
+            }
+
+            List<int> results = [];
+            foreach (var input in inputsList)
+            {
+                if (!int.TryParse(input, out int result))
+                {
+                    throw new ArgumentException("Invalid input. Results must be integers.");
+                }
+                results.Add(result);
+            }
+
+            return results;
+        }
+
         public override string ToString()
         {
             return "Freestyle Slalom Battle";

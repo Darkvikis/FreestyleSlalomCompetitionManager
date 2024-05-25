@@ -13,5 +13,6 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
         public int Number { get; set; }
 
         public virtual SortedDictionary<int,Competitor> Competitors { get; set; } = [];
+
     }
 }

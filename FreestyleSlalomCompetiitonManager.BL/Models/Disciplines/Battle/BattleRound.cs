@@ -1,10 +1,12 @@
-﻿using FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic;
+﻿using FreestyleSlalomCompetitionManager.BL.Enums;
+using FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static OfficeOpenXml.ExcelErrorValue;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
 {
@@ -16,7 +18,8 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
         {
             Competitors = competitors;
             CreateGroups();
-            AssignCompetitorsToGroups();
+            AssignCompetitorsToGroupsByRank();
+            AssignRoundType();
         }
 
         public void CreateGroups()
@@ -33,12 +36,12 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
             }
         }
 
-        public void AssignCompetitorsToGroups()
+        public void AssignCompetitorsToGroupsByRank()
         {
             int groupsCounter = 0;
             bool addition = true;
 
-            foreach(var Competitor in Competitors)
+            foreach (var Competitor in Competitors)
             {
                 Groups[groupsCounter].Competitors.Add(Competitor.Value, Competitor.Value.CompetitionRankBattle ?? int.MaxValue);
 
@@ -50,6 +53,41 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
                     groupsCounter += addition ? 1 : -1;
                 }
             }
+        }
+
+
+        public virtual SortedDictionary<int, Competitor> GetAdvancing()
+        {
+            SortedDictionary<int, Competitor> advancing = [];
+            int rank = 1;
+            foreach (var group in Groups)
+            {
+                advancing.Add(rank++, group.Competitors.First(x => x.Value == 1).Key);
+                advancing.Add(rank++, group.Competitors.First(x => x.Value == 2).Key);
+            }
+
+            return advancing;
+        }
+
+        public void AssignRoundType()
+        {
+            Type = Groups.Count switch
+            {
+                1 => Round.Final,
+                2 => Round.SemiFinal,
+                4 => Round.QuarterFinal,
+                8 => Round.EighthFinal,
+                16 => Round.SixteenthFinal,
+                32 => Round.ThirtySecondFinal,
+                64 => Round.SixtyFourthFinal,
+                128 => Round.HundredTwentyEighthFinal,
+                _ => Round.Qualification
+            };
+        }
+
+        public override string ToString()
+        {
+            return ((Round)Type).ToString();
         }
     }
 }

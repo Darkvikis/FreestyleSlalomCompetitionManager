@@ -194,5 +194,59 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             Console.WriteLine($"{count} skaters were assigned rankings.");
         }
+
+        public static void DisplayStartDiscipline(string disciplineName, string ageCategory, string sexCategory)
+        {
+            Console.WriteLine($"Starting {disciplineName} - Age Category: {ageCategory}, Sex Category: {sexCategory}");
+        }
+
+        public static void DisplayStartRound(string roundName)
+        {
+            Console.WriteLine($"Starting round: {roundName}");
+        }
+
+        public static void DisplayStartGroup()
+        {
+            Console.WriteLine("Starting group:");
+        }
+
+        public static void DisplayCompetitor(int rank, string fullName)
+        {
+            Console.WriteLine($"{rank}: {fullName}");
+        }
+
+        public static void DisplayEndDiscipline(string disciplineName, string ageCategory, string sexCategory)
+        {
+            Console.WriteLine($"End of {disciplineName} - Age Category: {ageCategory}, Sex Category: {sexCategory}");
+        }
+
+        public static void DisplayEndRound()
+        {
+            Console.WriteLine("End of round.");
+        }
+
+        public static string? AskForBattleResults()
+        {
+            Console.WriteLine("Please enter the battle results (1 4 3 2):");
+            return Console.ReadLine();
+        }
+
+        public static bool DisplayEndGroup(Dictionary<Competitor, int> competitors)
+        {
+            Console.WriteLine("End of group:");
+            foreach (var competitor in competitors)
+            {
+                Console.WriteLine($"{competitor.Value}: {competitor.Key.FirstName} {competitor.Key.FamilyName}");
+            }
+
+            string? input;
+            do
+            {
+                Console.WriteLine("Do you accept these results? (y/n)");
+                input = Console.ReadLine();
+            } while (string.IsNullOrEmpty(input) || !input.Equals("y", StringComparison.InvariantCultureIgnoreCase) && !input.Equals("n", StringComparison.InvariantCultureIgnoreCase));
+
+            return input.Equals("y", StringComparison.CurrentCultureIgnoreCase);
+        }
     }
 }
