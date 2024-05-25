@@ -2,6 +2,7 @@
 using FreestyleSlalomCompetitionManager.BL.Impotrs;
 using FreestyleSlalomCompetitionManager.BL.Models;
 using FreestyleSlalomCompetitionManager.BL.Models.Disciplines;
+using FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
