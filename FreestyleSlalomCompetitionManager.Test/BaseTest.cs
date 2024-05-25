@@ -27,19 +27,24 @@ namespace FreestyleSlalomCompetitionManager.Test
                         );
         }
 
-        public static Competitor CreateCompetitor()
+        public static Competitor CreateCompetitor(AgeCategory? ageCategory, SexCategory? sexCategory)
         {
             return new(faker.Name.FirstName(),
                 faker.Name.LastName(),
                 faker.Address.Country().Substring(0, 3).ToUpper())
-            { WSID = faker.Random.Replace("####???##########"), Birthdate = faker.Date.PastDateOnly() };
+            {
+                AgeCategory = ageCategory ?? faker.PickRandom<AgeCategory>(),
+                SexCategory = sexCategory ?? faker.PickRandom<SexCategory>(),
+                WSID = faker.Random.Replace("####???##########"),
+                Birthdate = faker.Date.PastDateOnly()
+            };
         }
-        public static List<Competitor> CreateListOfCompetitors(int numberOfCompetitors)
+        public static List<Competitor> CreateListOfCompetitors(int numberOfCompetitors, AgeCategory? ageCategory, SexCategory? sexCategory)
         {
             var competitors = new List<Competitor>();
             for (int i = 0; i < numberOfCompetitors; i++)
             {
-                competitors.Add(CreateCompetitor());
+                competitors.Add(CreateCompetitor(ageCategory, sexCategory));
             }
             return competitors;
         }

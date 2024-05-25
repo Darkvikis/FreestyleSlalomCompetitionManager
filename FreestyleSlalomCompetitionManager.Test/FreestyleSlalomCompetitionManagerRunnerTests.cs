@@ -279,7 +279,7 @@ namespace FreestyleSlalomCompetitionManager.Test
 
         private static string AddSkaterToCompetition(FreestyleSlalomCompetitionManagerRunner runner)
         {
-            Competitor skater = CreateCompetitor();
+            Competitor skater = CreateCompetitor(null, null);
 
             runner.currentCompetition?.Competitors.Add(skater);
 

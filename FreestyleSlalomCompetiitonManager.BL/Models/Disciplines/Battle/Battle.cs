@@ -17,7 +17,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
 
         public void InitializeBattle()
         {
-            Rounds.Add(new BattleRound() { Competitors = Competitors });
+            Rounds.Add(new BattleRound(Competitors));
         }
 
         public override string ToString()

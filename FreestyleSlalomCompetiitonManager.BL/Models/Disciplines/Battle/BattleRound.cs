@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,13 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
     public class BattleRound : BaseRound
     {
         public List<BattleGroup> Groups = [];
+
+        public BattleRound(SortedDictionary<int, Competitor> competitors)
+        {
+            Competitors = competitors;
+            CreateGroups();
+            AssignCompetitorsToGroups();
+        }
 
         public void CreateGroups()
         {
@@ -30,9 +38,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
             int groupsCounter = 0;
             bool addition = true;
 
-            for (int i = 0; i < Competitors.Count; i++)
+            foreach(var Competitor in Competitors)
             {
-                Groups[groupsCounter].Competitors.Add(Competitors[i], Competitors[i].CompetitionRankClassic ?? int.MaxValue);
+                Groups[groupsCounter].Competitors.Add(Competitor.Value, Competitor.Value.CompetitionRankBattle ?? int.MaxValue);
 
                 groupsCounter += addition ? 1 : -1;
 

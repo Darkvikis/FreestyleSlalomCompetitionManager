@@ -12,7 +12,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
         {
             // Arrange
             var competition = CreateCompetition();
-            var competitors = CreateListOfCompetitors(10);
+            var competitors = CreateListOfCompetitors(10, null, null);
 
             competitors[3].WSID = null;
             competitors[7].WSID = null;
