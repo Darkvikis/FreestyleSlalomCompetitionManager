@@ -55,7 +55,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
         {
             for (int i = 0; i < numberOfPrequalified; i++)
             {
-                Rounds.Find(r => r.Type == Round.Final)?.Competitors.Add(Competitors[i]);
+                Rounds.Find(r => r.Type == Round.Final)?.Competitors.Add(Competitors[i].CompetitionRankClassic ?? int.MaxValue,Competitors[i]);
             }
         }
 
@@ -73,7 +73,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 
             for (int i = numberOfPrequalified; i < Competitors.Count; i++)
             {
-                qualifications[roundsCounter].Competitors.Add(Competitors[i]);
+                qualifications[roundsCounter].Competitors.Add(Competitors[i].CompetitionRankClassic ?? int.MaxValue, Competitors[i]);
 
                 roundsCounter += addition ? 1 : -1;
 
@@ -93,7 +93,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 
             for (int i = numberOfPrequalified; i < Competitors.Count; i++)
             {
-                qualification.Competitors.Add(Competitors[i]);
+                qualification.Competitors.Add(Competitors[i].CompetitionRankClassic ?? int.MaxValue, Competitors[i]);
             }
 
             Rounds.Add(qualification);

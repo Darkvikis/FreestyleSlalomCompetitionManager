@@ -14,6 +14,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
         public SexCategory SexCategory { get; set; } = sexCategory;
         public SortedDictionary<int, Competitor> Competitors { get; set; } = [];
         public SortedDictionary<int, Competitor> Results { get; set; } = [];
+
         public virtual void AssignCompetitors(List<Competitor> skaters)
         {
             int count = 0;

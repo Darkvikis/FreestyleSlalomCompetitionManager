@@ -12,6 +12,6 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
         public Round Type { get; set; }
         public int Number { get; set; }
 
-        public List<Competitor> Competitors { get; set; } = [];
+        public virtual SortedDictionary<int,Competitor> Competitors { get; set; } = [];
     }
 }
