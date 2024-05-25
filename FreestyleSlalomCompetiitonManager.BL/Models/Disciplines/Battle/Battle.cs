@@ -10,6 +10,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
     public class Battle(AgeCategory ageCategory, SexCategory sexCategory) : BaseDiscipline(ageCategory, sexCategory)
     {
         public List<BattleRound> Rounds = [];
+
+        private BattleRound CurrentRound => Rounds.Last();
+
         public override void AssignCompetitors(List<Competitor> skaters)
         {
             skaters.Where(s => s.CompetitionRankBattle != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankBattle).ToList().ForEach(s => Competitors.Add(GetRank(s.CompetitionRankBattle), s));
@@ -25,11 +28,10 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
             ConsoleCommunicator.DisplayStartDiscipline(this.ToString(), AgeCategory.ToString(), SexCategory.ToString());
 
             InitializeBattle();
-
-            Rounds.ForEach(r =>
+            while (true)
             {
-                ConsoleCommunicator.DisplayStartRound(r.ToString());
-                r.Groups.ForEach(g =>
+                ConsoleCommunicator.DisplayStartRound(CurrentRound.ToString());
+                CurrentRound.Groups.ForEach(g =>
                 {
                     ConsoleCommunicator.DisplayStartGroup();
                     int groupRank = 1;
@@ -46,9 +48,18 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
 
                 });
 
-                Rounds.Add(new BattleRound(r.GetAdvancing()));
                 ConsoleCommunicator.DisplayEndRound();
-            });
+
+                if (CurrentRound.Type == Round.Final)
+                {
+                    break;
+                }
+                else
+                {
+                    Rounds.Add(new BattleRound(CurrentRound.GetAdvancing()));
+                }
+
+            }
 
             ConsoleCommunicator.DisplayEndDiscipline(this.ToString(), AgeCategory.ToString(), SexCategory.ToString());
         }
