@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
 {
-    public class Jump(AgeCategory ageCategory, SexCategory sexCategory) : BaseDiscipline(ageCategory, sexCategory)
+    public class Jump(AgeCategory ageCategory, SexCategory sexCategory) : BaseDiscipline(ageCategory, sexCategory, Discipline.Jump)
     {
         public override void AssignCompetitors(List<Competitor> skaters)
         {

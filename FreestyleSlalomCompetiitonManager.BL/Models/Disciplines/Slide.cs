@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
 {
-    public class Slide(AgeCategory ageCategory, SexCategory sexCategory) : BaseDiscipline(ageCategory, sexCategory)
+    public class Slide(AgeCategory ageCategory, SexCategory sexCategory) : BaseDiscipline(ageCategory, sexCategory, Discipline.Slide)
     {
         public override void AssignCompetitors(List<Competitor> skaters)
         {

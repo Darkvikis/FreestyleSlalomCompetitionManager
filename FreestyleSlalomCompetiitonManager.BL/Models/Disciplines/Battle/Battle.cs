@@ -1,4 +1,5 @@
 ﻿using FreestyleSlalomCompetitionManager.BL.Enums;
+using FreestyleSlalomCompetitionManager.BL.Exports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
 {
-    public class Battle(AgeCategory ageCategory, SexCategory sexCategory) : BaseDiscipline(ageCategory, sexCategory)
+    public class Battle(AgeCategory ageCategory, SexCategory sexCategory) : BaseDiscipline(ageCategory, sexCategory, Discipline.Battle)
     {
         public List<BattleRound> Rounds = [];
 

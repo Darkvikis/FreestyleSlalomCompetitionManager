@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 {
-    public class Classic(AgeCategory ageCategory, SexCategory sexCategory) : BaseDiscipline(ageCategory, sexCategory)
+    public class Classic(AgeCategory ageCategory, SexCategory sexCategory) : BaseDiscipline(ageCategory, sexCategory, Discipline.Classic)
     {
         public List<ClassicRound> Rounds { get; set; } = [];
 

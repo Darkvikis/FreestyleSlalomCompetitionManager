@@ -1,4 +1,5 @@
 ﻿using FreestyleSlalomCompetitionManager.BL.Enums;
+using FreestyleSlalomCompetitionManager.BL.Exports;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -8,10 +9,12 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
 {
-    public class BaseDiscipline (AgeCategory ageCategory, SexCategory sexCategory) : BaseModel
+    public abstract class BaseDiscipline(AgeCategory ageCategory, SexCategory sexCategory, Discipline disciplineType) : BaseModel
     {
         public AgeCategory AgeCategory { get; set; } = ageCategory;
         public SexCategory SexCategory { get; set; } = sexCategory;
+        public Discipline DisciplineType { get; set; } = disciplineType;
+
         public SortedDictionary<int, Competitor> Competitors { get; set; } = [];
         public SortedDictionary<int, Competitor> Results { get; set; } = [];
 
@@ -40,5 +43,11 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
         {
             return allegedRank ?? default;
         }
+
+        public virtual void ExportCompetitors()
+        {
+            ExportDisciplineStartingList.Export(this, DisciplineType);
+        }
+
     }
 }

@@ -107,6 +107,9 @@ namespace FreestyleSlalomCompetitionManager.BL
                 case "assignskaterstodisciplines":
                     AssignSkatersToDisciplines();
                     break;
+                case "exportstartinglists":
+                    ExportStartingLists();
+                    break;
                 case "exit":
                     Environment.Exit(0);
                     break;
@@ -403,8 +406,25 @@ namespace FreestyleSlalomCompetitionManager.BL
             currentCompetition?.AssignCompetitorsToDisciplines();
 
             ConsoleCommunicator.DisplayDisciplinesAndSkaters(currentCompetition?.Disciplines ?? Enumerable.Empty<BaseDiscipline>(), currentCompetition?.Competitors ?? Enumerable.Empty<Competitor>());
+        }
 
+        public void ExportStartingLists()
+        {
+            if (!CurrentCompetitionCheck()) { return; }
 
+            if (currentCompetition?.Disciplines.Count == 0)
+            {
+                ConsoleCommunicator.DisplayNoDisciplinesCreatedMessage();
+                return;
+            }
+
+            if (currentCompetition?.Competitors.Count == 0)
+            {
+                ConsoleCommunicator.DisplayNoSkatersAddedToCompetitionMessage();
+                return;
+            }
+
+            currentCompetition?.Disciplines.ForEach(comp => comp.ExportCompetitors());
         }
 
     }

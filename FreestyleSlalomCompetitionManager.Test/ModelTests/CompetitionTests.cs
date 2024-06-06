@@ -8,7 +8,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
         public const string folderPath = "..\\..\\..\\ExportedFiles\\";
 
         [Fact]
-        public void ExportResultsToCsv_ShouldCallResultsExports_ExportResultsToExcel()
+        public async void ExportResultsToCsv_ShouldCallResultsExports_ExportResultsToExcel()
         {
             // Arrange
             var competition = CreateCompetition();
@@ -48,7 +48,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
             }
 
             // Act
-            competition.ExportResultsToCsv(folderPath);
+            await competition.ExportResultsToCsv(folderPath);
 
             // Assert
             Assert.True(Directory.GetFiles(folderPath).Length == 1);
