@@ -248,5 +248,10 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             return input.Equals("y", StringComparison.CurrentCultureIgnoreCase);
         }
+
+        public static void DisplayInvalidFolderPathMessage()
+        {
+            Console.WriteLine("Invalid folder path. Please provide a valid folder path.");
+        }
     }
 }

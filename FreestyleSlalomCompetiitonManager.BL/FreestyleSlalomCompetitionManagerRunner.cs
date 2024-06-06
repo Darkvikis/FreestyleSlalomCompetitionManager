@@ -16,6 +16,7 @@ namespace FreestyleSlalomCompetitionManager.BL
     {
         public readonly ConcurrentDictionary<string, Skater> existingSkaters = new();
         public Competition? currentCompetition;
+        public string defaultFolderPath = "..//DefaultFolder";
 
         public async Task RunAsync()
         {
@@ -109,6 +110,9 @@ namespace FreestyleSlalomCompetitionManager.BL
                     break;
                 case "exportstartinglists":
                     ExportStartingLists();
+                    break;
+                case "changedefaultfolderpath":
+
                     break;
                 case "exit":
                     Environment.Exit(0);
@@ -424,8 +428,18 @@ namespace FreestyleSlalomCompetitionManager.BL
                 return;
             }
 
-            currentCompetition?.Disciplines.ForEach(comp => comp.ExportCompetitors());
+            currentCompetition?.Disciplines.ForEach(comp => comp.ExportCompetitors(defaultFolderPath));
         }
 
+        public void ChangeDefaultFolderPath(string folderPath)
+        {
+            if (!System.IO.Directory.Exists(folderPath))
+            {
+                ConsoleCommunicator.DisplayInvalidFolderPathMessage();
+                return;
+            }
+
+            defaultFolderPath = folderPath;
+        }
     }
 }

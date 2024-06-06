@@ -44,9 +44,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
             return allegedRank ?? default;
         }
 
-        public virtual void ExportCompetitors()
+        public virtual void ExportCompetitors(string folderPath)
         {
-            ExportDisciplineStartingList.Export(this, DisciplineType);
+            ExportDisciplineStartingList.Export(this, DisciplineType, folderPath);
         }
 
     }

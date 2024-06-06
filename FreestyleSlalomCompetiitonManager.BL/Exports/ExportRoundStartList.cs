@@ -11,7 +11,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
 {
     public class ExportRoundStartList
     {
-        public void ExportBattleRoundStartList(BattleRound round)
+        public static async void ExportBattleRoundStartList(BattleRound round, string folderPath)
         {
             // Create a new Excel package
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -43,6 +43,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
 
                 worksheet.Cells[6, 2, row, 5].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
                 worksheet.Cells[6, 2, row, 5].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+
+                // Save the Excel file
+                await package.SaveAsAsync($"{folderPath}/StartingList {round.Type} Battle - {DateTime.Today:dd-MM-yyyy}.xlsx");
             }
         }
     }

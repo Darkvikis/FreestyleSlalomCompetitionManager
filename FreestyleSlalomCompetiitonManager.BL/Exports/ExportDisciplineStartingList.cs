@@ -12,7 +12,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
 {
     public static class ExportDisciplineStartingList
     {
-        public static void Export(BaseDiscipline discipline, Discipline disciplineType)
+        public static async void Export(BaseDiscipline discipline, Discipline disciplineType, string folderPath)
         {
             // Create a new Excel package
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -46,6 +46,10 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
 
             // Auto-fit column widths
             worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+            // Save the Excel file
+            await package.SaveAsAsync($"{folderPath}/Results {disciplineType} {discipline.AgeCategory} {discipline.SexCategory}.xlsx");
+
         }
     }
 }
