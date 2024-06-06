@@ -3,6 +3,7 @@ using FreestyleSlalomCompetitionManager.BL.Models;
 using FreestyleSlalomCompetitionManager.BL.Enums;
 using Bogus;
 using System;
+using FreestyleSlalomCompetitionManager.BL.Converters;
 
 namespace FreestyleSlalomCompetitionManager.Test.ModelTests
 {
@@ -22,9 +23,9 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
             var competitor = new Competitor(firstName, familyName, country);
 
             // Assert
-            Assert.Equal(firstName, competitor.FirstName);
-            Assert.Equal(familyName, competitor.FamilyName);
-            Assert.Equal(country, competitor.Country);
+            Assert.Equal(NameConverter.NameWithoutDiacritics(firstName), competitor.FirstName);
+            Assert.Equal(NameConverter.NameWithoutDiacritics(familyName), competitor.FamilyName);
+            Assert.Equal(NameConverter.CountryToShortCut(country), competitor.Country);
         }
 
         [Fact]

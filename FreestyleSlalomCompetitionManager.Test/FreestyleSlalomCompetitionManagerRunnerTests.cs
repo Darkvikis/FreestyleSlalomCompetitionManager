@@ -116,7 +116,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             var competitionInput = "createcompetition TestCompetition 2024-06-01 2024-06-02 Description Address OrganizerName OrganizerWSID";
             await runner.ExecuteCommandAsync(competitionInput.Split(' ')[0], competitionInput.Split(' ')[1..]);
 
-            var skaterInput = "newskater WSID FirstName FamilyName Country";
+            var skaterInput = "newskater WSID FirstName FamilyName Czechia";
             await runner.ExecuteCommandAsync(skaterInput.Split(' ')[0], skaterInput.Split(' ')[1..]);
 
             await runner.ExecuteCommandAsync("skatertocompetition", ["WSID"]);
@@ -132,7 +132,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             // Verify the CSV content
             var csvContent = File.ReadAllText(filePath);
             Assert.Contains("Name,Country,WSID,PayedFee,SendMusic,Music,CompetitionRankBattle,CompetitionRankSpeed,CompetitionRankClassic,CompetitionRankJump,CompetitionRankSlide", csvContent);
-            Assert.Contains("Name,Country,WSID,False,No,,,,,,", csvContent);
+            Assert.Contains("Name,CZE,WSID,False,No,,,,,,", csvContent);
 
             // Cleanup
             File.Delete(filePath);
@@ -257,7 +257,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             // Arrange
             var runner = new FreestyleSlalomCompetitionManagerRunner();
             AddCompetition(runner);
-            runner.currentCompetition?.Competitors.Add(new Competitor("FirstName", "FamilyName", "Country") { WSID = "WSID" });
+            runner.currentCompetition?.Competitors.Add(new Competitor("FirstName", "FamilyName", "Czechia") { WSID = "WSID" });
 
             // Act
             await runner.ExecuteCommandAsync("getskatersoncurrentcompetition", []);
@@ -265,7 +265,7 @@ namespace FreestyleSlalomCompetitionManager.Test
 
             // Assert
             Assert.Contains("Name: FirstName FamilyName", output);
-            Assert.Contains("Country: Country", output);
+            Assert.Contains("Country: CZE", output);
             Assert.Contains("WSID: WSID", output);
         }
 

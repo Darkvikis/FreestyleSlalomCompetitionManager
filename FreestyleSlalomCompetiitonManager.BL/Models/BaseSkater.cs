@@ -1,4 +1,5 @@
-﻿using FreestyleSlalomCompetitionManager.BL.Enums;
+﻿using FreestyleSlalomCompetitionManager.BL.Converters;
+using FreestyleSlalomCompetitionManager.BL.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -11,9 +12,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
 {
     public class BaseSkater(string firstName, string secondName, string country) : BaseModel
     {
-        public string FirstName { get; set; } = firstName;
-        public string FamilyName { get; set; } = secondName;
-        public string Country { get; set; } = country;
+        public string FirstName { get; set; } = NameConverter.NameWithoutDiacritics(firstName);
+        public string FamilyName { get; set; } = NameConverter.NameWithoutDiacritics(secondName);
+        public string Country { get; set; } = NameConverter.CountryToShortCut(country);
         public AgeCategory AgeCategory { get; set; }
         public SexCategory SexCategory { get; set; }
     }
