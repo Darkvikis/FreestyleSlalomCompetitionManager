@@ -19,17 +19,21 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
             using ExcelPackage package = new();
             ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(disciplineType.ToString());
 
-            // Merge cells from 2,2 to 2,4
-            worksheet.Cells[2, 2, 2, 4].Merge = true;
+            worksheet.Cells[2, 2, 2, 5].Merge = true;
 
             worksheet.Cells[2, 2].Value = $"{disciplineType} {discipline.AgeCategory} {discipline.SexCategory}";
 
-            int row = 3;
+            worksheet.Cells[3, 2].Value = "WS ID";
+            worksheet.Cells[3, 3].Value = "NAME";
+            worksheet.Cells[3, 4].Value = "COUNTRY";
+            worksheet.Cells[3, 5].Value = "RANK";
+            int row = 4;
             foreach (var competitor in discipline.Competitors)
             {
-                worksheet.Cells[row, 2].Value = competitor.Key;
+                worksheet.Cells[row, 2].Value = competitor.Value.WSID;
                 worksheet.Cells[row, 3].Value = $"{competitor.Value.FirstName} {competitor.Value.FamilyName}";
-                worksheet.Cells[row, 4].Value = competitor.Value.WSID;
+                worksheet.Cells[row, 4].Value = competitor.Value.Country;
+                worksheet.Cells[row, 5].Value = competitor.Key;
 
                 row++;
             }
