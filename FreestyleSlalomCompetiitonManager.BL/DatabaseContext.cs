@@ -31,8 +31,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         public DatabaseContext()
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             DbPath = System.IO.Path.Join(path, "freestyle.db");
         }
 

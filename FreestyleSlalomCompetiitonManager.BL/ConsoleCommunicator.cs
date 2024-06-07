@@ -196,6 +196,11 @@ namespace FreestyleSlalomCompetitionManager.BL
             Console.WriteLine($"Skater '{skaterName}' has been assigned to disciplines.");
         }
 
+        public static void DisplaySkaterNotAssignedToDisciplinesMessage(string skaterName)
+        {
+            Console.WriteLine($"Skater '{skaterName}' has NOT been assigned to disciplines. Not found.");
+        }
+
         public static void DisplayNumberOfSkatersThatWereAssignedRankingsMessage(int count)
         {
             Console.WriteLine($"{count} skaters were assigned rankings.");
@@ -295,7 +300,6 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         public static BaseDiscipline CreateDiscipline()
         {
-            Console.WriteLine("What AgeCategory you want (senior, junior):");
             Console.WriteLine("What AgeCategory you want (senior, junior):");
             string? read = Console.ReadLine();
 

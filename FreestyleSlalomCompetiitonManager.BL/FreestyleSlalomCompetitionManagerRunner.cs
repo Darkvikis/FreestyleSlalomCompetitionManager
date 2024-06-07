@@ -17,7 +17,7 @@ namespace FreestyleSlalomCompetitionManager.BL
     {
         public ConcurrentDictionary<string, Skater> existingSkaters = new();
         public Competition? currentCompetition;
-        public string defaultFolderPath = "..//DefaultFolder";
+        public string defaultFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
         public async Task RunAsync()
         {
@@ -114,7 +114,7 @@ namespace FreestyleSlalomCompetitionManager.BL
                     break;
                 case "changedefaultfolderpath":
                     ChangeDefaultFolderPath(ConsoleCommunicator.AskForDefaultFolderPath());
-                    break;
+                    break; 
                 case "createdisciplineforcompetition":
                     CreateDisciplineFoCurrentCompetition();
                     break;
@@ -363,6 +363,11 @@ namespace FreestyleSlalomCompetitionManager.BL
                     skater.CompetitionRankJump = GetRankForDiscipline(WSRankSkater, Discipline.Jump, skater.AgeCategory, skater.SexCategory);
                     counterOfAssingedRankings++;
                     ConsoleCommunicator.DisplaySkaterAssignedToDisciplinesMessage(skater.FirstName + " " + skater.FamilyName);
+                }
+                else
+                {
+
+                    ConsoleCommunicator.DisplaySkaterNotAssignedToDisciplinesMessage(skater.FirstName + " " + skater.FamilyName);
                 }
             }
             ConsoleCommunicator.DisplayNumberOfSkatersThatWereAssignedRankingsMessage(counterOfAssingedRankings);
