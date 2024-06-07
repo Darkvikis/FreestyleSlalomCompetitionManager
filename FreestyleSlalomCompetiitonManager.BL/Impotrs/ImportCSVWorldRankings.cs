@@ -150,7 +150,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
             var existingRanks = db?.WorldRanks
                 .Where(x => x.Discipline == discipline && x.SexCategory == sexCategory && x.AgeCategory == ageCategory)
-                .ToHashSet();
+                .ToHashSet() ?? [];
 
             var newRanks = worldRanks
                 .Where(rank => !existingRanks.Any(x => x.WSID == rank.WSID && x.Rank == rank.Rank))
