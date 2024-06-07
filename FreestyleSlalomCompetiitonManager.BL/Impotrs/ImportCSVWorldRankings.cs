@@ -42,7 +42,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             // Extract category and discipline from file name
             (Discipline discipline, SexCategory sexCategory, AgeCategory ageCategory) = ExtractFileParts(filePath);
 
-            await TryToMoveWorldRanksDB(db, discipline, sexCategory, ageCategory);
+            await TryToMoveWorldRanksDB(discipline, sexCategory, ageCategory);
 
             List<WorldRank> worldRanks = [];
 
@@ -66,7 +66,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
                 }
             }
 
-            await TryToSaveWorldRanks(db, worldRanks);
+            await TryToSaveWorldRanks(worldRanks);
             return worldRanks;
         }
 
@@ -124,8 +124,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             worldRanks.Add(worldRank);
         }
 
-        private async static Task TryToMoveWorldRanksDB(DatabaseContext? db, Discipline discipline, SexCategory sexCategory, AgeCategory ageCategory)
+        private async static Task TryToMoveWorldRanksDB(Discipline discipline, SexCategory sexCategory, AgeCategory ageCategory)
         {
+            using DatabaseContext? db = new();
             if (db == null) return;
 
             var ranks = await db.WorldRanks
@@ -140,8 +141,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             }
         }
 
-        private async static Task TryToSaveWorldRanks(DatabaseContext? db, List<WorldRank> worldRanks)
+        private async static Task TryToSaveWorldRanks(List<WorldRank> worldRanks)
         {
+            using DatabaseContext? db = new();
             if (db == null) return;
 
             Discipline discipline = worldRanks[0].Discipline;
