@@ -27,11 +27,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: Test
-      run: dotnet test ${{ env.Test_Project_Path }} --configuration ${{ matrix.configuration }}
-      env:
-        Configuration: ${{ matrix.configuration }}
-
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1
 
@@ -42,6 +37,11 @@ jobs:
 
     - name: Build the application
       run: msbuild ${{ env.Solution_Name }} /p:Configuration=${{ matrix.configuration }}
+      env:
+        Configuration: ${{ matrix.configuration }}
+
+    - name: Test
+      run: dotnet test ${{ env.Test_Project_Path }} --configuration ${{ matrix.configuration }}
       env:
         Configuration: ${{ matrix.configuration }}
 
