@@ -262,14 +262,30 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             while (!int.TryParse(read, out mark))
             {
-                Console.WriteLine("Invalid number. Give valid mark;");
+                Console.WriteLine("Invalid number. Give valid mark:");
                 read = Console.ReadLine();
             }
             return mark;
         }
+
         public static void DisplayNotEnoughCompetitorsForDiscipline()
         {
             Console.WriteLine("Not enough competitors for this discipline.");
+        }
+
+        public static string AskForDefaultFolderPath()
+        {
+            Console.WriteLine("Give default folder path");
+            string? read = Console.ReadLine();
+
+            while (!Directory.Exists(read))
+            {
+                Console.WriteLine("Invalid folder path. Fiolder does not exists.");
+                read = Console.ReadLine();
+            }
+
+            return read;
+
         }
     }
 }

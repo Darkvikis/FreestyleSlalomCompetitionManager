@@ -113,7 +113,7 @@ namespace FreestyleSlalomCompetitionManager.BL
                     ExportStartingLists();
                     break;
                 case "changedefaultfolderpath":
-
+                    ChangeDefaultFolderPath(ConsoleCommunicator.AskForDefaultFolderPath());
                     break;
                 case "exit":
                     Environment.Exit(0);
