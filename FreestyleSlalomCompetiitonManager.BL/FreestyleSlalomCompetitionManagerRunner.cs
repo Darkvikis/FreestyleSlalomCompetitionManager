@@ -3,6 +3,7 @@ using FreestyleSlalomCompetitionManager.BL.Impotrs;
 using FreestyleSlalomCompetitionManager.BL.Models;
 using FreestyleSlalomCompetitionManager.BL.Models.Disciplines;
 using FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle;
+using FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -349,7 +350,6 @@ namespace FreestyleSlalomCompetitionManager.BL
                     skater.CompetitionRankSpeed = GetRankForDiscipline(WSRankSkater, Discipline.Speed, skater.AgeCategory, skater.SexCategory);
                     skater.CompetitionRankClassic = GetRankForDiscipline(WSRankSkater, Discipline.Classic, skater.AgeCategory, skater.SexCategory);
                     skater.CompetitionRankJump = GetRankForDiscipline(WSRankSkater, Discipline.Jump, skater.AgeCategory, skater.SexCategory);
-                    skater.CompetitionRankSlide = GetRankForDiscipline(WSRankSkater, Discipline.Slide, skater.AgeCategory, skater.SexCategory);
                     counterOfAssingedRankings++;
                     ConsoleCommunicator.DisplaySkaterAssignedToDisciplinesMessage(skater.FirstName + " " + skater.FamilyName);
                 }
@@ -386,7 +386,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             disciplines.Add(new Battle(ageCategory, sexCategory));
             disciplines.Add(new Speed(ageCategory, sexCategory));
-            disciplines.Add(new Slide(ageCategory, sexCategory));
+            disciplines.Add(new Classic(ageCategory, sexCategory));
 
             return disciplines;
         }
