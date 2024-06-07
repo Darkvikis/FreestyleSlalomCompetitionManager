@@ -7,7 +7,7 @@ using FreestyleSlalomCompetitionManager.BL.Converters;
 
 namespace FreestyleSlalomCompetitionManager.Test.ModelTests
 {
-    public class CompetitorTests
+    public class CompetitorTests : BaseTest
     {
         private readonly Faker faker = new();
 
@@ -18,21 +18,22 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
             var firstName = faker.Name.FirstName();
             var familyName = faker.Name.LastName();
             var country = faker.Address.Country();
-
+            var WSID = faker.Random.Replace("####???##########");
             // Act
-            var competitor = new Competitor(firstName, familyName, country);
+            var competitor = new Competitor(WSID, firstName, familyName, country);
 
             // Assert
             Assert.Equal(NameConverter.NameWithoutDiacritics(firstName), competitor.FirstName);
             Assert.Equal(NameConverter.NameWithoutDiacritics(familyName), competitor.FamilyName);
             Assert.Equal(NameConverter.CountryToShortCut(country), competitor.Country);
+            Assert.Equal(WSID, competitor.WSID);
         }
 
         [Fact]
         public void SetMusic_WithCompetitionDateMoreThan7DaysAway_SetsSendMusicToOnTime()
         {
             // Arrange
-            var competitor = new Competitor(faker.Name.FirstName(), faker.Name.LastName(), faker.Address.Country());
+            var competitor = CreateCompetitor(null, null);
             var music = faker.Random.Word();
             var competitionDate = DateTime.Now.AddDays(8);
 
@@ -48,7 +49,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
         public void SetMusic_WithCompetitionDateLessThan7DaysAway_SetsSendMusicToLate()
         {
             // Arrange
-            var competitor = new Competitor(faker.Name.FirstName(), faker.Name.LastName(), faker.Address.Country());
+            var competitor = CreateCompetitor(null, null);
             var music = faker.Random.Word();
             var competitionDate = DateTime.Now.AddDays(6);
 

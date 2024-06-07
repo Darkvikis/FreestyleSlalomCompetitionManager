@@ -52,7 +52,6 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 name: "Skaters",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     WSID = table.Column<string>(type: "TEXT", nullable: false),
                     FirstName = table.Column<string>(type: "TEXT", nullable: false),
                     FamilyName = table.Column<string>(type: "TEXT", nullable: false),
@@ -62,7 +61,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Skaters", x => x.Id);
+                    table.PrimaryKey("PK_Skaters", x => x.WSID);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,16 +98,16 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                     SexCategory = table.Column<int>(type: "INTEGER", nullable: false),
                     Rank = table.Column<ushort>(type: "INTEGER", nullable: false),
                     DateAdded = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    SkaterId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    SkaterWSID = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_WorldRank", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WorldRank_Skaters_SkaterId",
-                        column: x => x.SkaterId,
+                        name: "FK_WorldRank_Skaters_SkaterWSID",
+                        column: x => x.SkaterWSID,
                         principalTable: "Skaters",
-                        principalColumn: "Id");
+                        principalColumn: "WSID");
                 });
 
             migrationBuilder.CreateTable(
@@ -155,8 +154,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 name: "Competitors",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    WSID = table.Column<string>(type: "TEXT", nullable: true),
+                    WSID = table.Column<string>(type: "TEXT", nullable: false),
                     PayedFee = table.Column<bool>(type: "INTEGER", nullable: false),
                     SendMusic = table.Column<int>(type: "INTEGER", nullable: false),
                     Music = table.Column<string>(type: "TEXT", nullable: true),
@@ -184,7 +182,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Competitors", x => x.Id);
+                    table.PrimaryKey("PK_Competitors", x => x.WSID);
                     table.ForeignKey(
                         name: "FK_Competitors_BaseDiscipline_BaseDisciplineId",
                         column: x => x.BaseDisciplineId,
@@ -212,7 +210,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CompetitorId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CompetitorWSID = table.Column<string>(type: "TEXT", nullable: true),
                     RankInGroup = table.Column<int>(type: "INTEGER", nullable: false),
                     BattleGroupId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
@@ -225,11 +223,10 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                         principalTable: "BattleGroups",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_BattleGroupCompetitor_Competitors_CompetitorId",
-                        column: x => x.CompetitorId,
+                        name: "FK_BattleGroupCompetitor_Competitors_CompetitorWSID",
+                        column: x => x.CompetitorWSID,
                         principalTable: "Competitors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "WSID");
                 });
 
             migrationBuilder.CreateTable(
@@ -237,17 +234,17 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CompetitorId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    CompetitorWSID = table.Column<string>(type: "TEXT", nullable: true),
                     FinalMark = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ClassicRuns", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClassicRuns_Competitors_CompetitorId",
-                        column: x => x.CompetitorId,
+                        name: "FK_ClassicRuns_Competitors_CompetitorWSID",
+                        column: x => x.CompetitorWSID,
                         principalTable: "Competitors",
-                        principalColumn: "Id");
+                        principalColumn: "WSID");
                 });
 
             migrationBuilder.CreateIndex(
@@ -261,9 +258,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 column: "BattleGroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BattleGroupCompetitor_CompetitorId",
+                name: "IX_BattleGroupCompetitor_CompetitorWSID",
                 table: "BattleGroupCompetitor",
-                column: "CompetitorId");
+                column: "CompetitorWSID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClassicRounds_ClassicId",
@@ -271,9 +268,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 column: "ClassicId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClassicRuns_CompetitorId",
+                name: "IX_ClassicRuns_CompetitorWSID",
                 table: "ClassicRuns",
-                column: "CompetitorId");
+                column: "CompetitorWSID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Competitions_OrganizerId",
@@ -301,9 +298,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 column: "CompetitionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorldRank_SkaterId",
+                name: "IX_WorldRank_SkaterWSID",
                 table: "WorldRank",
-                column: "SkaterId");
+                column: "SkaterWSID");
         }
 
         /// <inheritdoc />

@@ -15,13 +15,12 @@ namespace FreestyleSlalomCompetitionManager.BL
 {
     public class FreestyleSlalomCompetitionManagerRunner
     {
-        public readonly ConcurrentDictionary<string, Skater> existingSkaters = new();
+        public ConcurrentDictionary<string, Skater> existingSkaters = new();
         public Competition? currentCompetition;
         public string defaultFolderPath = "..//DefaultFolder";
 
         public async Task RunAsync()
         {
-
             ConsoleCommunicator.DisplayWelcomeMessageAndHelp();
 
             while (true)
@@ -143,7 +142,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             string folderPath = args[0];
             try
             {
-                
+                GetExistingSkatersFromDB();
                 var worldRanks = await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
                 ConsoleCommunicator.DisplayImportSuccessMessage(worldRanks.Count, folderPath);
             }
@@ -164,6 +163,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             string filePath = args[0];
             try
             {
+                GetExistingSkatersFromDB();
                 List<WorldRank> worldRanks = await ImportCSVWorldRankings.ImportAsync(filePath, existingSkaters);
                 ConsoleCommunicator.DisplayImportSuccessMessage(worldRanks.Count, filePath);
             }
@@ -224,7 +224,7 @@ namespace FreestyleSlalomCompetitionManager.BL
                 return;
             }
 
-            Skater newSkater = new(firstName, familyName, country, wsid);
+            Skater newSkater = new(wsid,firstName, familyName, country);
             existingSkaters.TryAdd(wsid, newSkater);
 
             ConsoleCommunicator.DisplaySkaterCreationSuccessMessage(firstName + " " + familyName, wsid);
@@ -248,10 +248,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             if (!CurrentCompetitionCheck()) { return; }
 
-            Competitor competitor = new(skater.FirstName, skater.FamilyName, skater.Country)
-            {
-                WSID = skater.WSID,
-            };
+            Competitor competitor = new(skater.WSID, skater.FirstName, skater.FamilyName, skater.Country) ;
 
             currentCompetition?.Competitors.Add(competitor);
 
@@ -354,6 +351,8 @@ namespace FreestyleSlalomCompetitionManager.BL
                 return;
             }
             int counterOfAssingedRankings = 0;
+            GetExistingSkatersFromDB();
+
             foreach (var skater in currentCompetition?.Competitors ?? Enumerable.Empty<Competitor>())
             {
                 if (skater.WSID != null && existingSkaters.TryGetValue(skater.WSID, out Skater? WSRankSkater))
@@ -460,5 +459,12 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             currentCompetition?.CreateDiscipline();
         }
+
+        public void GetExistingSkatersFromDB()
+        {
+            using DatabaseContext db = new();
+            existingSkaters = new ConcurrentDictionary<string, Skater>(db.Skaters.ToDictionary(skater => skater.WSID));
+        }
+
     }
 }

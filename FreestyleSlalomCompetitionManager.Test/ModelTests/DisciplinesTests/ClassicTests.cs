@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.Test.ModelTests.DisciplinesTests
 {
-    public class ClassicTests
+    public class ClassicTests : BaseTest
     {
         private readonly Faker faker = new();
 
@@ -25,7 +25,9 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests.DisciplinesTests
             var classic = new Classic(AgeCategory.Senior, SexCategory.Man);
             for (int i = 0; i < numberOfSkaters; i++)
             {
-                classic.Competitors.Add(new Competitor(faker.Name.FirstName(), faker.Name.LastName(), faker.Address.Country()) { CompetitionRankClassic = i });
+                var competitor = CreateCompetitor(null, null);
+                competitor.CompetitionRankClassic = i;
+                classic.Competitors.Add(competitor);
             }
 
             // Act
@@ -86,14 +88,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests.DisciplinesTests
             // Arrange
             var classic = new Classic(AgeCategory.Senior, SexCategory.Man)
             {
-                Competitors = new List<Competitor>
-                        {
-                            { new Competitor(faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 1} },
-                            { new Competitor(faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 2}  },
-                            { new Competitor(faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 3}  },
-                            { new Competitor(faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 4}  },
-                            { new Competitor(faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 5}  }
-                        }
+                Competitors = CreateListOfCompetitors(5, AgeCategory.Senior, SexCategory.Man)
             };
 
             // Act and Assert
@@ -105,13 +100,11 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests.DisciplinesTests
         {
             // Arrange
             var classic = new Classic(AgeCategory.Senior, SexCategory.Man);
-            var skaters = new List<Competitor>
-                        {
-                           new (faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 1, AgeCategory = AgeCategory.Senior, SexCategory = SexCategory.Man },
-                           new (faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 2, AgeCategory = AgeCategory.Senior, SexCategory = SexCategory.Man },
-                           new (faker.Name.FirstName(), faker.Name.LastName(),faker.Address.Country()) { CompetitionRankClassic = 3, AgeCategory = AgeCategory.Senior, SexCategory = SexCategory.Man }
-                        };
-
+            var skaters = CreateListOfCompetitors(3, AgeCategory.Senior, SexCategory.Man);
+            for (int i = 0; i < skaters.Count; i++)
+            {
+                skaters[i].CompetitionRankClassic = i;
+            }
             // Act
             classic.AssignCompetitors(skaters);
 
@@ -166,7 +159,9 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests.DisciplinesTests
             var classic = new Classic(AgeCategory.Senior, SexCategory.Man);
             for (int i = 0; i < 6; i++)
             {
-                classic.Competitors.Add(new Competitor(faker.Name.FirstName(), faker.Name.LastName(), faker.Address.Country()) { CompetitionRankClassic = i });
+                var competitor = CreateCompetitor(null, null);
+                competitor.CompetitionRankClassic = i;
+                classic.Competitors.Add(competitor);
             }
 
             // Act
@@ -176,7 +171,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests.DisciplinesTests
             Assert.Equal(2, classic.Rounds.Count);
             Assert.Contains(classic.Rounds[0].Competitors, x => x.CompetitionRankClassic == 0);
             Assert.Contains(classic.Rounds[0].Competitors, c => c.CompetitionRankClassic == 1);
-                                                         
+
             Assert.Contains(classic.Rounds[1].Competitors, x => x.CompetitionRankClassic == 2);
             Assert.Contains(classic.Rounds[1].Competitors, c => c.CompetitionRankClassic == 5);
             Assert.Contains(classic.Rounds[1].Competitors, x => x.CompetitionRankClassic == 3);

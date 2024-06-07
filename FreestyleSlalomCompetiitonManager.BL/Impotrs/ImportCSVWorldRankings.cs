@@ -12,7 +12,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 {
     public class ImportCSVWorldRankings
     {
-        public static async Task<List<WorldRank>> ImportFromFolderAsync(string folderPath, ConcurrentDictionary<string, Skater> existingSkaters, DatabaseContext? db = null)
+        public static async Task<List<WorldRank>> ImportFromFolderAsync(string folderPath, ConcurrentDictionary<string, Skater> existingSkaters)
         {
             List<WorldRank> allWorldRanks = [];
 
@@ -26,7 +26,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
             foreach (FileInfo file in directory.GetFiles("*.csv"))
             {
-                List<WorldRank> worldRanks = await ImportAsync(file.FullName, existingSkaters, db);
+                List<WorldRank> worldRanks = await ImportAsync(file.FullName, existingSkaters);
 
                 allWorldRanks.AddRange(worldRanks);
             }
@@ -34,7 +34,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             return allWorldRanks;
         }
 
-        public static async Task<List<WorldRank>> ImportAsync(string filePath, ConcurrentDictionary<string, Skater> existingSkaters, DatabaseContext? db = null)
+        public static async Task<List<WorldRank>> ImportAsync(string filePath, ConcurrentDictionary<string, Skater> existingSkaters)
         {
             if (!File.Exists(filePath))
                 throw new Exception($"File {filePath} not found. Please provide valid file path to import from.");
@@ -100,11 +100,39 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
             string firstName = string.Join(' ', nameParts[..^1]);
             string familyName = nameParts[^1];
-            return existingSkaters.GetOrAdd(wsid, _ => new Skater(firstName, familyName, country, wsid)
+
+            if (existingSkaters.TryGetValue(wsid, out Skater? skater))
             {
-                AgeCategory = ageCategory,
-                SexCategory = sexCategory
-            });
+                if (skater.AgeCategory < ageCategory)
+                {
+                    skater.AgeCategory = ageCategory;
+                }
+
+                using var db = new DatabaseContext();
+                if (!db.Skaters.Any(dbSkater => dbSkater.WSID == skater.WSID))
+                {
+                    db.Skaters.Update(skater);
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+
+                skater = new(wsid, firstName, familyName, country)
+                {
+                    AgeCategory = ageCategory,
+                    SexCategory = sexCategory
+                };
+
+                using var db = new DatabaseContext();
+                if (!db.Skaters.Any(dbSkater => dbSkater.WSID == skater.WSID))
+                {
+                    db.Skaters.Add(skater);
+                    db.SaveChanges();
+                }
+            }
+
+            return existingSkaters.GetOrAdd(wsid, _ => skater);
         }
 
         private static WorldRank CreateWorldRank(string wsid, AgeCategory ageCategory, SexCategory sexCategory, Discipline discipline, ushort rank)

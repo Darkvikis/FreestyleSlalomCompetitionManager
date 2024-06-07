@@ -30,17 +30,23 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
                 string firstName = worksheet.Cells[row, 3].Value?.ToString()?.Split(' ')[0] ?? string.Empty;
                 string familyName = worksheet.Cells[row, 3].Value?.ToString()?.Split(' ')[1] ?? string.Empty;
                 string country = worksheet.Cells[row, 4].Value?.ToString() ?? string.Empty;
-                Competitor competitor = new(firstName, familyName, country)
+                string wsid = worksheet.Cells[row, 2].Value.ToString();
+                if (wsid != null)
                 {
-                    WSID = worksheet.Cells[row, 2].Value.ToString(),
-                };
-                if (int.TryParse(worksheet.Cells[row, 5].Value?.ToString(), out int rank))
+                    Competitor competitor = new(wsid, firstName, familyName, country);
+                    if (int.TryParse(worksheet.Cells[row, 5].Value?.ToString(), out int rank))
+                    {
+                        AssignRankToCompetitor(competitor, discipline, rank);
+                    }
+                    competitors.Add(competitor);
+                }
+                else
                 {
-                    AssignRankToCompetitor(competitor, discipline, rank);
+                    ConsoleCommunicator.InvalidSkaterMissingWSID();
                 }
 
 
-                competitors.Add(competitor);
+
             }
 
         }

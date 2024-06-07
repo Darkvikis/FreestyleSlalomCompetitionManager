@@ -32,14 +32,28 @@ namespace FreestyleSlalomCompetitionManager.Test
 
         public static Competitor CreateCompetitor(AgeCategory? ageCategory, SexCategory? sexCategory)
         {
-            return new(faker.Name.FirstName(),
+            return new(
+                 faker.Random.Replace("####???##########"),
+                 faker.Name.FirstName(),
                 faker.Name.LastName(),
                 faker.Address.Country().ToUpper())
             {
                 AgeCategory = ageCategory ?? faker.PickRandom<AgeCategory>(),
                 SexCategory = sexCategory ?? faker.PickRandom<SexCategory>(),
-                WSID = faker.Random.Replace("####???##########"),
                 Birthdate = faker.Date.PastDateOnly()
+            };
+        }
+
+        public static Skater CreateSkater(AgeCategory? ageCategory, SexCategory? sexCategory)
+        {
+            return new(
+                 faker.Random.Replace("####???##########"),
+                 faker.Name.FirstName(),
+                faker.Name.LastName(),
+                faker.Address.Country().ToUpper())
+            {
+                AgeCategory = ageCategory ?? faker.PickRandom<AgeCategory>(),
+                SexCategory = sexCategory ?? faker.PickRandom<SexCategory>()
             };
         }
         public static List<Competitor> CreateListOfCompetitors(int numberOfCompetitors, AgeCategory? ageCategory, SexCategory? sexCategory)

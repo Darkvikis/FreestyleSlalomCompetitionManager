@@ -144,7 +144,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         public static void DisplaySkaterDetails(Competitor skater)
         {
-            Console.WriteLine($"Skater Name: {skater.FirstName} {skater.FamilyName}, Country: {skater.Country}, WSID: {skater.WSID}, Guid: {skater.Id}");
+            Console.WriteLine($"Skater Name: {skater.FirstName} {skater.FamilyName}, Country: {skater.Country}, WSID: {skater.WSID}");
         }
 
         public static void DisplayStandardDisciplinesCreatedMessage()
@@ -372,6 +372,11 @@ namespace FreestyleSlalomCompetitionManager.BL
         public static void CannotStartCompetition()
         {
             Console.WriteLine("Cannot start the competition. Please make sure there are competitors and disciplines available.");
+        }
+
+        internal static void InvalidSkaterMissingWSID()
+        {
+            Console.WriteLine("Invalid skater. WSID is missing.");
         }
     }
 }

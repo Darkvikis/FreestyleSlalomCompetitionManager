@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models
 {
-    public class Competitor(string firstName, string familyName, string country) : BaseSkater(firstName, familyName, country)
+    public class Competitor(string WSID, string firstName, string familyName, string country) : BaseSkater(WSID, firstName, familyName, country)
     {
-        public string? WSID { get; set; }
         public bool PayedFee { get; set; }
         public SendMusic SendMusic { get; set; }
         public string? Music { get; set; }

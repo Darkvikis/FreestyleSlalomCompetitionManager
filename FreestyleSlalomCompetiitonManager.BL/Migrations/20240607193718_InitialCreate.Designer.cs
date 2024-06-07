@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FreestyleSlalomCompetitionManager.BL.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240607153211_InitialCreate")]
+    [Migration("20240607193718_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -56,8 +56,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
 
             modelBuilder.Entity("FreestyleSlalomCompetitionManager.BL.Models.Competitor", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("WSID")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AgeCategory")
@@ -135,10 +134,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                     b.Property<string>("ShirtSize")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("WSID")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
+                    b.HasKey("WSID");
 
                     b.HasIndex("BaseDisciplineId");
 
@@ -205,7 +201,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                     b.Property<Guid?>("BattleGroupId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("CompetitorId")
+                    b.Property<string>("CompetitorWSID")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RankInGroup")
@@ -215,7 +211,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
 
                     b.HasIndex("BattleGroupId");
 
-                    b.HasIndex("CompetitorId");
+                    b.HasIndex("CompetitorWSID");
 
                     b.ToTable("BattleGroupCompetitor");
                 });
@@ -265,7 +261,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CompetitorId")
+                    b.Property<string>("CompetitorWSID")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("FinalMark")
@@ -273,7 +269,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompetitorId");
+                    b.HasIndex("CompetitorWSID");
 
                     b.ToTable("ClassicRuns");
                 });
@@ -299,8 +295,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
 
             modelBuilder.Entity("FreestyleSlalomCompetitionManager.BL.Models.Skater", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("WSID")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("AgeCategory")
@@ -321,11 +316,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                     b.Property<int>("SexCategory")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("WSID")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
+                    b.HasKey("WSID");
 
                     b.ToTable("Skaters");
                 });
@@ -351,7 +342,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                     b.Property<int>("SexCategory")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("SkaterId")
+                    b.Property<string>("SkaterWSID")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("WSID")
@@ -360,7 +351,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SkaterId");
+                    b.HasIndex("SkaterWSID");
 
                     b.ToTable("WorldRank");
                 });
@@ -424,9 +415,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
 
                     b.HasOne("FreestyleSlalomCompetitionManager.BL.Models.Competitor", "Competitor")
                         .WithMany()
-                        .HasForeignKey("CompetitorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompetitorWSID");
 
                     b.Navigation("Competitor");
                 });
@@ -442,7 +431,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 {
                     b.HasOne("FreestyleSlalomCompetitionManager.BL.Models.Competitor", "Competitor")
                         .WithMany()
-                        .HasForeignKey("CompetitorId");
+                        .HasForeignKey("CompetitorWSID");
 
                     b.Navigation("Competitor");
                 });
@@ -451,7 +440,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Migrations
                 {
                     b.HasOne("FreestyleSlalomCompetitionManager.BL.Models.Skater", null)
                         .WithMany("WorldRanks")
-                        .HasForeignKey("SkaterId");
+                        .HasForeignKey("SkaterWSID");
                 });
 
             modelBuilder.Entity("FreestyleSlalomCompetitionManager.BL.Models.Competition", b =>
