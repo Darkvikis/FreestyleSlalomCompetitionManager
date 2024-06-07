@@ -13,8 +13,8 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public string Description { get; set; } = description;
         public string Address { get; set; } = address;
         public Organizer Organizer { get; set; } = organizer;
-        public List<Competitor> Competitors { get; set; } = [];
-        public List<BaseDiscipline> Disciplines { get; set; } = [];
+        public virtual List<Competitor> Competitors { get; set; } = [];
+        public virtual List<BaseDiscipline> Disciplines { get; set; } = [];
 
         public async Task ExportResultsToCsv(string folderPath)
         {
