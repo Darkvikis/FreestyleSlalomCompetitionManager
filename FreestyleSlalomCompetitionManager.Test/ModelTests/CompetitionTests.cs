@@ -24,7 +24,7 @@ namespace FreestyleSlalomCompetitionManager.Test.ModelTests
 
             for (int i = 0; i < 5; i++)
             {
-                competition.Disciplines[0].Results.Add(i, competitors[i]);
+                competition.Disciplines[0].Competitors.ForEach(x=> x.CompetitionResultClassic = i);
             }
 
             try

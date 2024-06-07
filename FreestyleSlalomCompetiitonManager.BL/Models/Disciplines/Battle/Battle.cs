@@ -16,12 +16,15 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
 
         public override void AssignCompetitors(List<Competitor> skaters)
         {
-            skaters.Where(s => s.CompetitionRankBattle != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankBattle).ToList().ForEach(s => Competitors.Add(GetRank(s.CompetitionRankBattle), s));
+            skaters.Where(s => s.CompetitionRankBattle != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankBattle).ToList().ForEach(s => Competitors.Add(s));
         }
 
         public void InitializeBattle()
         {
-            Rounds.Add(new BattleRound(Competitors));
+            BattleRound round = new() { Competitors = Competitors };
+            round.InitialiazeBattleRound();
+            Rounds.Add(round);
+
         }
 
         public override void ProcessDiscipline()
@@ -36,9 +39,9 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
                 {
                     ConsoleCommunicator.DisplayStartGroup();
                     int groupRank = 1;
-                    g.Competitors.Keys.ToList().ForEach(c =>
+                    g.Competitors.ToList().ForEach(c =>
                     {
-                        ConsoleCommunicator.DisplayCompetitor(groupRank, c.FirstName + " " + c.FamilyName);
+                        ConsoleCommunicator.DisplayCompetitor(groupRank, c.Competitor.FirstName + " " + c.Competitor.FamilyName);
                     });
 
                     do
@@ -57,7 +60,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
                 }
                 else
                 {
-                    Rounds.Add(new BattleRound(CurrentRound.GetAdvancing()));
+                    Rounds.Add(new BattleRound() { Competitors = CurrentRound.GetAdvancing() });
                 }
 
             }
@@ -92,6 +95,11 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
             return results;
         }
 
+
+        public override List<Competitor> GetResults()
+        {
+            return Competitors.OrderBy(x => x.CompetitionResultBattle).ToList();
+        }
         public override string ToString()
         {
             return "Freestyle Slalom Battle";

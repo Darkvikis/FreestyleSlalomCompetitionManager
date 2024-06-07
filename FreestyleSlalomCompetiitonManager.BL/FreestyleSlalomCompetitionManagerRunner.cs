@@ -21,6 +21,8 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         public async Task RunAsync()
         {
+            using DatabaseContext? db = new();
+
             ConsoleCommunicator.DisplayWelcomeMessageAndHelp();
 
             while (true)
@@ -62,11 +64,11 @@ namespace FreestyleSlalomCompetitionManager.BL
 
                 string command = parts[0].ToLower();
 
-                await ExecuteCommandAsync(command, [.. parts.GetRange(1, parts.Count - 1)]);
+                await ExecuteCommandAsync(command, [.. parts.GetRange(1, parts.Count - 1)], db);
             }
         }
 
-        public async Task ExecuteCommandAsync(string command, string[] args)
+        public async Task ExecuteCommandAsync(string command, string[] args, DatabaseContext? db = null)
         {
             switch (command.ToLower())
             {
@@ -74,10 +76,10 @@ namespace FreestyleSlalomCompetitionManager.BL
                     ConsoleCommunicator.DisplayHelp();
                     break;
                 case "importfolder":
-                    await ImportFromFolderAsync(args);
+                    await ImportFromFolderAsync(args, db);
                     break;
                 case "importfile":
-                    await ImportFromFileAsync(args);
+                    await ImportFromFileAsync(args, db);
                     break;
                 case "createcompetition":
                     CreateCompetition(args);
@@ -131,7 +133,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             }
         }
 
-        private async Task ImportFromFolderAsync(string[] args)
+        private async Task ImportFromFolderAsync(string[] args, DatabaseContext? db = null)
         {
             if (args.Length < 1)
             {
@@ -142,7 +144,8 @@ namespace FreestyleSlalomCompetitionManager.BL
             string folderPath = args[0];
             try
             {
-                var worldRanks = await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
+                
+                var worldRanks = await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters, db);
                 ConsoleCommunicator.DisplayImportSuccessMessage(worldRanks.Count, folderPath);
             }
             catch (Exception ex)
@@ -151,7 +154,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             }
         }
 
-        private async Task ImportFromFileAsync(string[] args)
+        private async Task ImportFromFileAsync(string[] args, DatabaseContext? db)
         {
             if (args.Length < 1)
             {
@@ -162,7 +165,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             string filePath = args[0];
             try
             {
-                List<WorldRank> worldRanks = await ImportCSVWorldRankings.ImportAsync(filePath, existingSkaters);
+                List<WorldRank> worldRanks = await ImportCSVWorldRankings.ImportAsync(filePath, existingSkaters, db);
                 ConsoleCommunicator.DisplayImportSuccessMessage(worldRanks.Count, filePath);
             }
             catch (Exception ex)
@@ -196,7 +199,10 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         private void CreateCompetition(string name, DateTime startDate, DateTime endDate, string description, string address, Organizer organizer)
         {
-            currentCompetition = new(name, startDate, endDate, description, address, organizer);
+            currentCompetition = new(name, startDate, endDate, description, address)
+            {
+                Organizer = organizer
+            };
             ConsoleCommunicator.DisplayCompetitionCreationSuccessMessage(currentCompetition.Name);
         }
 

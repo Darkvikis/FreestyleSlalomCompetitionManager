@@ -35,8 +35,8 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
                 foreach (var competitor in group.Competitors)
                 {
                     worksheet.Cells[row, 2].Value = skaterNum++;
-                    worksheet.Cells[row, 3].Value = $"{competitor.Key.FirstName} {competitor.Key.FamilyName}";
-                    worksheet.Cells[row, 4].Value = competitor.Key.Country;
+                    worksheet.Cells[row, 3].Value = $"{competitor.Competitor.FirstName} {competitor.Competitor.FamilyName}";
+                    worksheet.Cells[row, 4].Value = competitor.Competitor.Country;
 
                     row++;
                 }

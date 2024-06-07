@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 {
-    public class ClassicRun (Competitor competitor) : BaseModel
+    public class ClassicRun : BaseModel
     {
-        public Competitor Competitor { get; set; } = competitor;
+        public Competitor? Competitor { get; set; }
         public int FinalMark { get; set; }
     }
 }

@@ -12,11 +12,14 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 
         public void ProcessClassicRound()
         {
-            foreach (ClassicRun run in Runs)
+            foreach (var competitor in Competitors)
             {
+                ClassicRun run = new ClassicRun() { Competitor = competitor};
                 run.FinalMark = ConsoleCommunicator.ClassicRunGetMark(run.Competitor);
+                Runs.Add(run);
             }
 
         }
+
     }
 }

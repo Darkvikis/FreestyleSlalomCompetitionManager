@@ -92,7 +92,8 @@ namespace FreestyleSlalomCompetitionManager.Test
             // Arrange
             FreestyleSlalomCompetitionManagerRunner runner = new()
             {
-                currentCompetition = new Competition("TestCompetition", DateTime.Now, DateTime.Now, "Description", "Address", new("Organizer", "WSID"))
+                currentCompetition = new Competition("TestCompetition", DateTime.Now, DateTime.Now, "Description", "Address")
+                { Organizer = new("Organizer", "WSID") }
             };
             runner.existingSkaters.TryAdd("WSID", new Skater("FirsName", "FamilyName", "Country", "WSID"));
             var input = "skatertocompetition WSID".Split(' ');

@@ -11,7 +11,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 {
     public class ImportCSVWorldRankings
     {
-        public static async Task<List<WorldRank>> ImportFromFolderAsync(string folderPath, ConcurrentDictionary<string, Skater> existingSkaters)
+        public static async Task<List<WorldRank>> ImportFromFolderAsync(string folderPath, ConcurrentDictionary<string, Skater> existingSkaters, DatabaseContext? db = null)
         {
             List<WorldRank> allWorldRanks = [];
 
@@ -25,7 +25,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
             foreach (FileInfo file in directory.GetFiles("*.csv"))
             {
-                List<WorldRank> worldRanks = await ImportAsync(file.FullName, existingSkaters);
+                List<WorldRank> worldRanks = await ImportAsync(file.FullName, existingSkaters, db);
 
                 allWorldRanks.AddRange(worldRanks);
             }
@@ -33,13 +33,15 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             return allWorldRanks;
         }
 
-        public static async Task<List<WorldRank>> ImportAsync(string filePath, ConcurrentDictionary<string, Skater> existingSkaters)
+        public static async Task<List<WorldRank>> ImportAsync(string filePath, ConcurrentDictionary<string, Skater> existingSkaters, DatabaseContext? db = null)
         {
             if (!File.Exists(filePath))
                 throw new Exception($"File {filePath} not found. Please provide valid file path to import from.");
 
             // Extract category and discipline from file name
             (Discipline discipline, SexCategory sexCategory, AgeCategory ageCategory) = ExtractFileParts(filePath);
+
+            await TryToMoveWorldRanksDB(db, discipline, sexCategory, ageCategory);
 
             List<WorldRank> worldRanks = [];
 
@@ -120,5 +122,16 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             worldRanks.Add(worldRank);
         }
 
+        private async static Task TryToMoveWorldRanksDB(DatabaseContext? db, Discipline discipline, SexCategory sexCategory, AgeCategory ageCategory)
+        {
+            if (db == null) return;
+
+            var ranks = db?.WorldRanks?.Where(x => x.Discipline == discipline && x.SexCategory == sexCategory && x.AgeCategory == ageCategory).ToList() ?? [];
+            if (ranks.Count > 0)
+            {
+                await db.WorldRanksHistory.AddRangeAsync(ranks);
+                db.WorldRanks.RemoveRange(ranks);
+            }
+        }
     }
 }

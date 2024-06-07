@@ -237,12 +237,12 @@ namespace FreestyleSlalomCompetitionManager.BL
             return Console.ReadLine();
         }
 
-        public static bool DisplayEndGroup(Dictionary<Competitor, int> competitors)
+        public static bool DisplayEndGroup(List<BattleGroupCompetitor> competitors)
         {
             Console.WriteLine("End of group:");
             foreach (var competitor in competitors)
             {
-                Console.WriteLine($"{competitor.Value}: {competitor.Key.FirstName} {competitor.Key.FamilyName}");
+                Console.WriteLine($"{competitor.RankInGroup}: {competitor.Competitor.FirstName} {competitor.Competitor.FamilyName}");
             }
 
             string? input;

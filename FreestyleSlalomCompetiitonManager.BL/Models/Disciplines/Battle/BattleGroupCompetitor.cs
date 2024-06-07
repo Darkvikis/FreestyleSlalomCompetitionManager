@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
 {
 
-    public class BattleGroup : BaseModel
+    public class BattleGroupCompetitor : BaseModel
     {
-        public List<BattleGroupCompetitor> Competitors { get; set; } = [];
+        public Competitor Competitor { get; set; }
+        public int RankInGroup { get; set; }
     }
 }

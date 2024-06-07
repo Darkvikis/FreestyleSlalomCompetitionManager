@@ -15,23 +15,12 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
         public SexCategory SexCategory { get; set; } = sexCategory;
         public Discipline DisciplineType { get; set; } = disciplineType;
 
-        public virtual SortedDictionary<int, Competitor> Competitors { get; set; } = [];
-        public virtual SortedDictionary<int, Competitor> Results { get; set; } = [];
+        public virtual List<Competitor> Competitors { get; set; } = [];
 
         public virtual void AssignCompetitors(List<Competitor> skaters)
         {
             int count = 0;
-            skaters.Where(s => s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).ToList().ForEach(s => Competitors.Add(count++, s));
-        }
-
-        public virtual void AssignResults(SortedDictionary<int, Competitor> results)
-        {
-            Results = results;
-        }
-
-        public virtual void ClearResults()
-        {
-            Results.Clear();
+            skaters.Where(s => s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).ToList().ForEach(s => Competitors.Add(s));
         }
 
         public virtual void ClearCompetitors()
@@ -53,6 +42,8 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
         {
             return $"{ToString()} {AgeCategory} {SexCategory}";
         }
+
+        public abstract List<Competitor> GetResults();
         public abstract void ProcessDiscipline();
     }
 }

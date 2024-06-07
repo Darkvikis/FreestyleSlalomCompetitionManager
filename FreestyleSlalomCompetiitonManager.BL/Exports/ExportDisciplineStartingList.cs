@@ -28,12 +28,13 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
             worksheet.Cells[3, 4].Value = "COUNTRY";
             worksheet.Cells[3, 5].Value = "RANK";
             int row = 4;
+            int counter = 1;
             foreach (var competitor in discipline.Competitors)
             {
-                worksheet.Cells[row, 2].Value = competitor.Value.WSID;
-                worksheet.Cells[row, 3].Value = $"{competitor.Value.FirstName} {competitor.Value.FamilyName}";
-                worksheet.Cells[row, 4].Value = competitor.Value.Country;
-                worksheet.Cells[row, 5].Value = competitor.Key;
+                worksheet.Cells[row, 2].Value = competitor.WSID;
+                worksheet.Cells[row, 3].Value = $"{competitor.FirstName} {competitor.FamilyName}";
+                worksheet.Cells[row, 4].Value = competitor.Country;
+                worksheet.Cells[row, 5].Value = counter++;
 
                 row++;
             }
