@@ -11,6 +11,32 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
     {
         public List<ClassicRound> Rounds { get; set; } = [];
 
+        public void ProcessClassic()
+        {
+            if (Rounds.Count == 0)
+            {
+                if (Competitors.Count > 0)
+                {
+                    GenerateRounds(Competitors.Count, Competitors.Count, 0);
+                }
+                else
+                {
+                    ConsoleCommunicator.DisplayNotEnoughCompetitorsForDiscipline();
+                }
+            }
+            ClassicRound final = Rounds.Where(x => x.Type == Round.Final).First();
+            foreach (var round in Rounds.Where(x => x.Type == Round.Qualification))
+            {
+                round.ProcessClassicRound();
+                Competitor finalist = round.Runs.OrderBy(x => x.FinalMark).First().Competitor;
+                final.Competitors.Add(finalist.CompetitionRankClassic ?? 0, finalist);
+            }
+
+            final.ProcessClassicRound();
+
+
+        }
+
         public void GenerateRounds(int numberOfPrequalified, int maxNumberOfSkatersInGroup, int numberOfQualificationGroups = 1)
         {
             ValidateInputParameters(numberOfPrequalified, maxNumberOfSkatersInGroup, numberOfQualificationGroups);
@@ -55,7 +81,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
         {
             for (int i = 0; i < numberOfPrequalified; i++)
             {
-                Rounds.Find(r => r.Type == Round.Final)?.Competitors.Add(Competitors[i].CompetitionRankClassic ?? int.MaxValue,Competitors[i]);
+                Rounds.Find(r => r.Type == Round.Final)?.Competitors.Add(Competitors[i].CompetitionRankClassic ?? int.MaxValue, Competitors[i]);
             }
         }
 

@@ -253,5 +253,23 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             Console.WriteLine("Invalid folder path. Please provide a valid folder path.");
         }
+
+        public static int ClassicRunGetMark(Competitor competitor)
+        {
+            Console.WriteLine($"{competitor.FirstName} {competitor.FamilyName} mark:");
+            string? read = Console.ReadLine();
+            int mark;
+
+            while (!int.TryParse(read, out mark))
+            {
+                Console.WriteLine("Invalid number. Give valid mark;");
+                read = Console.ReadLine();
+            }
+            return mark;
+        }
+        public static void DisplayNotEnoughCompetitorsForDiscipline()
+        {
+            Console.WriteLine("Not enough competitors for this discipline.");
+        }
     }
 }
