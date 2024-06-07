@@ -1,5 +1,6 @@
 ﻿using FreestyleSlalomCompetitionManager.BL.Enums;
 using FreestyleSlalomCompetitionManager.BL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -65,6 +66,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
                 }
             }
 
+            await TryToSaveWorldRanks(db, worldRanks);
             return worldRanks;
         }
 
@@ -126,12 +128,37 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
         {
             if (db == null) return;
 
-            var ranks = db?.WorldRanks?.Where(x => x.Discipline == discipline && x.SexCategory == sexCategory && x.AgeCategory == ageCategory).ToList() ?? [];
+            var ranks = await db.WorldRanks
+                .Where(x => x.Discipline == discipline && x.SexCategory == sexCategory && x.AgeCategory == ageCategory)
+                .ToListAsync<WorldRank>();
+
             if (ranks.Count > 0)
             {
-                await db.WorldRanksHistory.AddRangeAsync(ranks);
+                db.WorldRanksHistory.AddRange(ranks);
                 db.WorldRanks.RemoveRange(ranks);
+                await db.SaveChangesAsync();
             }
         }
+
+        private async static Task TryToSaveWorldRanks(DatabaseContext? db, List<WorldRank> worldRanks)
+        {
+            if (db == null) return;
+
+            Discipline discipline = worldRanks[0].Discipline;
+            SexCategory sexCategory = worldRanks[0].SexCategory;
+            AgeCategory ageCategory = worldRanks[0].AgeCategory;
+
+            var existingRanks = db?.WorldRanks
+                .Where(x => x.Discipline == discipline && x.SexCategory == sexCategory && x.AgeCategory == ageCategory)
+                .ToHashSet();
+
+            var newRanks = worldRanks
+                .Where(rank => !existingRanks.Any(x => x.WSID == rank.WSID && x.Rank == rank.Rank))
+                .ToList();
+
+            await db.WorldRanks.AddRangeAsync(newRanks);
+            await db.SaveChangesAsync();
+        }
+
     }
 }
