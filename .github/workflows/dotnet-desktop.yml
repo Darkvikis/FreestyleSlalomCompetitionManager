@@ -1,10 +1,6 @@
 name: .NET Core Desktop
 
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: [push, pull_request]
 
 jobs:
 
@@ -15,11 +11,7 @@ jobs:
         configuration: [Debug, Release]
 
     runs-on: windows-latest
-
-    env:
-      Solution_Name: FreestyleSlalomCompetitionManager.sln
-      Test_Project_Path: FreestyleSlalomCompetitionManager.Tests/FreestyleSlalomCompetitionManager.Tests.csproj
-
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v2

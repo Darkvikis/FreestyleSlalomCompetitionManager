@@ -27,28 +27,29 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
             worksheet.Cells[3, 3].Value = "NAME";
             worksheet.Cells[3, 4].Value = "COUNTRY";
             worksheet.Cells[3, 5].Value = "RANK";
-            int row = 4;
+            int row = 3;
+            int counter = 1;
             foreach (var competitor in discipline.Competitors)
             {
-                worksheet.Cells[row, 2].Value = competitor.Value.WSID;
-                worksheet.Cells[row, 3].Value = $"{competitor.Value.FirstName} {competitor.Value.FamilyName}";
-                worksheet.Cells[row, 4].Value = competitor.Value.Country;
-                worksheet.Cells[row, 5].Value = competitor.Key;
-
                 row++;
+                worksheet.Cells[row, 2].Value = competitor.WSID;
+                worksheet.Cells[row, 3].Value = $"{competitor.FirstName} {competitor.FamilyName}";
+                worksheet.Cells[row, 4].Value = competitor.Country;
+                worksheet.Cells[row, 5].Value = counter++;
+
             }
 
             // Set border for the cells
-            worksheet.Cells[2, 2, row, 4].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            worksheet.Cells[2, 2, row, 4].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            worksheet.Cells[2, 2, row, 4].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
-            worksheet.Cells[2, 2, row, 4].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            worksheet.Cells[2, 2, row, 5].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            worksheet.Cells[2, 2, row, 5].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            worksheet.Cells[2, 2, row, 5].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            worksheet.Cells[2, 2, row, 5].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
 
             // Auto-fit column widths
             worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
             // Save the Excel file
-            await package.SaveAsAsync($"{folderPath}/Results {disciplineType} {discipline.AgeCategory} {discipline.SexCategory}.xlsx");
+            await package.SaveAsAsync($"{folderPath}/Results{disciplineType}{discipline.AgeCategory}{discipline.SexCategory}.xlsx");
 
         }
     }

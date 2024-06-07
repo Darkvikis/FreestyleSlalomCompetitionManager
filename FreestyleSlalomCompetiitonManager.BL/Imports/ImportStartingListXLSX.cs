@@ -13,7 +13,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 {
     public partial class ImportStartingListXLSX
     {
-        public static async Task ImportExcelFile(string filePath)
+        public static async Task<List<Competitor>> ImportExcelFile(string filePath)
         {
             using ExcelPackage package = new(new FileInfo(filePath));
             ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
@@ -30,19 +30,22 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
                 string firstName = worksheet.Cells[row, 3].Value?.ToString()?.Split(' ')[0] ?? string.Empty;
                 string familyName = worksheet.Cells[row, 3].Value?.ToString()?.Split(' ')[1] ?? string.Empty;
                 string country = worksheet.Cells[row, 4].Value?.ToString() ?? string.Empty;
-                Competitor competitor = new(firstName, familyName, country)
+                string wsid = worksheet.Cells[row, 2].Value.ToString();
+                if (wsid != null)
                 {
-                    WSID = worksheet.Cells[row, 2].Value.ToString(),
-                };
-                if (int.TryParse(worksheet.Cells[row, 5].Value?.ToString(), out int rank))
-                {
-                    AssignRankToCompetitor(competitor, discipline, rank);
+                    Competitor competitor = new(wsid, firstName, familyName, country);
+                    if (int.TryParse(worksheet.Cells[row, 5].Value?.ToString(), out int rank))
+                    {
+                        AssignRankToCompetitor(competitor, discipline, rank);
+                    }
+                    competitors.Add(competitor);
                 }
-
-
-                competitors.Add(competitor);
+                else
+                {
+                    ConsoleCommunicator.InvalidSkaterMissingWSID();
+                }
             }
-
+            return competitors;
         }
 
         public static void AssignRankToCompetitor(Competitor competitor, string discipline, int rank)

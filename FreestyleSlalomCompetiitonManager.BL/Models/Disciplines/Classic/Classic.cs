@@ -29,7 +29,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
             {
                 round.ProcessClassicRound();
                 Competitor finalist = round.Runs.OrderBy(x => x.FinalMark).First().Competitor;
-                final.Competitors.Add(finalist.CompetitionRankClassic ?? 0, finalist);
+                final.Competitors.Add(finalist);
             }
 
             final.ProcessClassicRound();
@@ -81,7 +81,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
         {
             for (int i = 0; i < numberOfPrequalified; i++)
             {
-                Rounds.Find(r => r.Type == Round.Final)?.Competitors.Add(Competitors[i].CompetitionRankClassic ?? int.MaxValue, Competitors[i]);
+                Rounds.Find(r => r.Type == Round.Final)?.Competitors.Add(Competitors[i]);
             }
         }
 
@@ -99,7 +99,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 
             for (int i = numberOfPrequalified; i < Competitors.Count; i++)
             {
-                qualifications[roundsCounter].Competitors.Add(Competitors[i].CompetitionRankClassic ?? int.MaxValue, Competitors[i]);
+                qualifications[roundsCounter].Competitors.Add(Competitors[i]);
 
                 roundsCounter += addition ? 1 : -1;
 
@@ -119,7 +119,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
 
             for (int i = numberOfPrequalified; i < Competitors.Count; i++)
             {
-                qualification.Competitors.Add(Competitors[i].CompetitionRankClassic ?? int.MaxValue, Competitors[i]);
+                qualification.Competitors.Add(Competitors[i]);
             }
 
             Rounds.Add(qualification);
@@ -128,15 +128,20 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
         public void AssignResultsBasedOnClassicRuns()
         {
             int order = 1;
-            foreach (var run in Rounds[0].Runs.OrderBy(competitior => competitior.FinalMark))
+            foreach (var run in Rounds[0].Runs.OrderByDescending(competitior => competitior.FinalMark))
             {
-                Results.Add(order++, run.Competitor);
+                run.Competitor.CompetitionRankClassic = order++;
             }
         }
 
         public override void AssignCompetitors(List<Competitor> skaters)
         {
-            skaters.Where(s => s.CompetitionRankClassic != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankClassic).ToList().ForEach(s => Competitors.Add(GetRank(s.CompetitionRankClassic), s));
+            skaters.Where(s => s.CompetitionRankClassic != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankClassic).ToList().ForEach(s => Competitors.Add(s));
+        }
+
+        public override List<Competitor> GetResults()
+        {
+            return Competitors.OrderBy(x => x.CompetitionResultClassic).ToList();
         }
 
         public override string ToString()

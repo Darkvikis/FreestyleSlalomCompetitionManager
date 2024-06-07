@@ -92,9 +92,11 @@ namespace FreestyleSlalomCompetitionManager.Test
             // Arrange
             FreestyleSlalomCompetitionManagerRunner runner = new()
             {
-                currentCompetition = new Competition("TestCompetition", DateTime.Now, DateTime.Now, "Description", "Address", new("Organizer", "WSID"))
+                currentCompetition = new Competition("TestCompetition", DateTime.Now, DateTime.Now, "Description", "Address")
+                { Organizer = new("Organizer", "WSID") }
             };
-            runner.existingSkaters.TryAdd("WSID", new Skater("FirsName", "FamilyName", "Country", "WSID"));
+            var skater = CreateSkater(null,null);
+            runner.existingSkaters.TryAdd("WSID", skater);
             var input = "skatertocompetition WSID".Split(' ');
 
             // Act
@@ -103,7 +105,7 @@ namespace FreestyleSlalomCompetitionManager.Test
 
             // Assert
             Assert.Contains("Skater with WSID 'WSID' added to the competition 'TestCompetition'.", output);
-            Assert.True(runner.currentCompetition?.Competitors.Any(skater => skater.WSID == "WSID"));
+            Assert.True(runner.currentCompetition?.Competitors.Any(s => s.WSID == skater.WSID));
         }
 
         [Fact]
@@ -180,7 +182,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             // Arrange
             var runner = new FreestyleSlalomCompetitionManagerRunner();
             var competitionName = AddCompetition(runner);
-            runner.existingSkaters.TryAdd("WSID", new Skater("FirsName", "FamilyName", "Country", "WSID"));
+            runner.existingSkaters.TryAdd("WSID", new Skater("WSID","FirsName", "FamilyName", "Country"));
             var input = "skatertocompetition WSID".Split(' ');
 
             // Act
@@ -198,7 +200,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             // Arrange
             var runner = new FreestyleSlalomCompetitionManagerRunner();
             AddCompetition(runner);
-            runner.currentCompetition?.Competitors.Add(new Competitor("FirsName", "FamilyName", "Country") { WSID = "WSID" });
+            runner.currentCompetition?.Competitors.Add(new Competitor("FirsName", "FamilyName", "Country", "WSID"));
             var input = "export test.csv".Split(' ');
 
             // Act
@@ -239,7 +241,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             // Arrange
             var runner = new FreestyleSlalomCompetitionManagerRunner();
             AddCompetition(runner);
-            runner.currentCompetition?.Competitors.Add(new Competitor("FirstName", "FamilyName", "Country") { WSID = "WSID" });
+            runner.currentCompetition?.Competitors.Add(new Competitor("WSID", "FirstName", "FamilyName", "Country"));
             var input = "linkmusictowsid WSID test.mp3".Split(' ');
 
             // Act
@@ -257,7 +259,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             // Arrange
             var runner = new FreestyleSlalomCompetitionManagerRunner();
             AddCompetition(runner);
-            runner.currentCompetition?.Competitors.Add(new Competitor("FirstName", "FamilyName", "Czechia") { WSID = "WSID" });
+            runner.currentCompetition?.Competitors.Add(new Competitor("WSID", "FirstName", "FamilyName", "Czechia"));
 
             // Act
             await runner.ExecuteCommandAsync("getskatersoncurrentcompetition", []);
@@ -285,6 +287,34 @@ namespace FreestyleSlalomCompetitionManager.Test
 
             return skater.WSID ?? string.Empty;
 
+        }
+
+        [Fact]
+        public async Task ExecuteCommandAsync_ChangeDefaultFolderPath_ShouldChangeDefaultFolderPath()
+        {
+            // Arrange
+            var runner = new FreestyleSlalomCompetitionManagerRunner();
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+
+            // Act
+            runner.ChangeDefaultFolderPath(path);
+
+            // Assert
+            Assert.Equal(path, runner.defaultFolderPath);
+        }
+
+        [Fact]
+        public async Task ExecuteCommandAsync_GetExistingSkatersFromDB_ShouldGetExistingSkatersFromDB()
+        {
+            // Arrange
+            var runner = new FreestyleSlalomCompetitionManagerRunner();
+
+            // Act
+            runner.GetExistingSkatersFromDB();
+
+            // Assert
+            Assert.NotNull(runner.existingSkaters);
         }
     }
 }

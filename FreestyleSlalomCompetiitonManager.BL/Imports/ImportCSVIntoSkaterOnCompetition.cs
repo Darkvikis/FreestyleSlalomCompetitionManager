@@ -24,9 +24,8 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
                 while (csv.Read())
                 {
-                    Competitor skater = new(csv.GetField(1), csv.GetField(2), csv.GetField(10))
+                    Competitor skater = new( csv.GetField(9),csv.GetField(1), csv.GetField(2), csv.GetField(10))
                     {
-                        WSID = csv.GetField(9),
                         PhoneNumber = csv.GetField(11),
                         Email = csv.GetField(12),
                         ShirtSize = csv.GetField(13),

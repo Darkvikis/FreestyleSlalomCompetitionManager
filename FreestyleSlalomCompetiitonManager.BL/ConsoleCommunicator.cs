@@ -18,22 +18,24 @@ namespace FreestyleSlalomCompetitionManager.BL
         public static void DisplayHelp()
         {
             Console.WriteLine("Available commands:");
-            Console.WriteLine("  help                      - Display this help message");
-            Console.WriteLine("  importfolder <folder>     - Import world rankings from the specified folder");
-            Console.WriteLine("  importfile <file>         - Import world rankings from the specified file");
-            Console.WriteLine("  createcompetition <name> <start_date> <end_date> <description> <address> <organizer_wsid> <organizer_name> - Create a new competition with the specified details");
-            Console.WriteLine("  newskater <WSID> <name> <country> - Add a new skater");
-            Console.WriteLine("  skatertocompetition <WSID> - Add an existing skater to the competition");
-            Console.WriteLine("  export <file>             - Export skaters to a CSV file");
-            Console.WriteLine("  importskatertocompetition <file> - Import skaters to the current competition from the specified file");
-            Console.WriteLine("  linkmusictowsid <WSID> <music_path> - Link music to a skater with the specified WSID");
-            Console.WriteLine("  getskatersoncurrentcompetition - Get the skaters on the current competition");
-            Console.WriteLine("  getrankingsforcurrentcompetition - Get the rankings for the current competition");
-            Console.WriteLine("  createbasedisciplines         - Create base disciplines");
-            Console.WriteLine("  assignskaterstodisciplines - Automatically assign skaters to their disciplines based on imported skaters and their ranks");
-            Console.WriteLine("  changedefaultfolderpath <folder> - Change the default folder path for imports and exports");
-            Console.WriteLine("  createdisciplineforcurrentcompetition - Create a new discipline for the current competition");
-            Console.WriteLine("  exit                      - Exit the program");
+            Console.WriteLine("help - Display this help message");
+            Console.WriteLine("importfolder <folderPath> - Import skaters from a folder");
+            Console.WriteLine("importfile <filePath> - Import skaters from a file");
+            Console.WriteLine("createcompetition <name> <startDate> <endDate> <description> <address> <organizerName> <organizerWsid> - Create a new competition");
+            Console.WriteLine("newskater <wsid> <firstName> <familyName> <country> - Add a new skater");
+            Console.WriteLine("skatertocompetition <skaterWsid> - Add an existing skater to the current competition");
+            Console.WriteLine("export <filePath> - Export skaters to a CSV file");
+            Console.WriteLine("importskatertocompetition <filePath> - Import skaters from a CSV file and add them to the current competition");
+            Console.WriteLine("linkmusictowsid <skaterWsid> <musicPath> - Link music to a skater");
+            Console.WriteLine("getskatersoncurrentcompetition - Display the skaters in the current competition");
+            Console.WriteLine("getrankingsforcurrentcompetition - Display the rankings for the skaters in the current competition");
+            Console.WriteLine("createbasedisciplines - Create base disciplines for the current competition");
+            Console.WriteLine("assignskaterstodisciplines - Assign skaters to disciplines in the current competition");
+            Console.WriteLine("exportstartinglists - Export starting lists for the current competition");
+            Console.WriteLine("changedefaultfolderpath - Change the default folder path for exporting files");
+            Console.WriteLine("createdisciplineforcompetition - Create a new discipline for the current competition");
+            Console.WriteLine("runcompetition - Run the current competition");
+            Console.WriteLine("exit - Exit the program");
         }
 
 
@@ -144,7 +146,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         public static void DisplaySkaterDetails(Competitor skater)
         {
-            Console.WriteLine($"Skater Name: {skater.FirstName} {skater.FamilyName}, Country: {skater.Country}, WSID: {skater.WSID}, Guid: {skater.Id}");
+            Console.WriteLine($"Skater Name: {skater.FirstName} {skater.FamilyName}, Country: {skater.Country}, WSID: {skater.WSID}");
         }
 
         public static void DisplayStandardDisciplinesCreatedMessage()
@@ -196,6 +198,11 @@ namespace FreestyleSlalomCompetitionManager.BL
             Console.WriteLine($"Skater '{skaterName}' has been assigned to disciplines.");
         }
 
+        public static void DisplaySkaterNotAssignedToDisciplinesMessage(string skaterName)
+        {
+            Console.WriteLine($"Skater '{skaterName}' has NOT been assigned to disciplines. Not found.");
+        }
+
         public static void DisplayNumberOfSkatersThatWereAssignedRankingsMessage(int count)
         {
             Console.WriteLine($"{count} skaters were assigned rankings.");
@@ -237,12 +244,12 @@ namespace FreestyleSlalomCompetitionManager.BL
             return Console.ReadLine();
         }
 
-        public static bool DisplayEndGroup(Dictionary<Competitor, int> competitors)
+        public static bool DisplayEndGroup(List<BattleGroupCompetitor> competitors)
         {
             Console.WriteLine("End of group:");
             foreach (var competitor in competitors)
             {
-                Console.WriteLine($"{competitor.Value}: {competitor.Key.FirstName} {competitor.Key.FamilyName}");
+                Console.WriteLine($"{competitor.RankInGroup}: {competitor.Competitor.FirstName} {competitor.Competitor.FamilyName}");
             }
 
             string? input;
@@ -295,7 +302,6 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         public static BaseDiscipline CreateDiscipline()
         {
-            Console.WriteLine("What AgeCategory you want (senior, junior):");
             Console.WriteLine("What AgeCategory you want (senior, junior):");
             string? read = Console.ReadLine();
 
@@ -372,6 +378,25 @@ namespace FreestyleSlalomCompetitionManager.BL
         public static void CannotStartCompetition()
         {
             Console.WriteLine("Cannot start the competition. Please make sure there are competitors and disciplines available.");
+        }
+
+        internal static void InvalidSkaterMissingWSID()
+        {
+            Console.WriteLine("Invalid skater. WSID is missing.");
+        }
+
+        public static int GetSkatersResult(Competitor competitor)
+        {
+            Console.WriteLine($"{competitor.FirstName} {competitor.FamilyName} result:");
+            string? read = Console.ReadLine();
+            int result;
+
+            while (!int.TryParse(read, out result))
+            {
+                Console.WriteLine("Invalid number. Give valid result:");
+                read = Console.ReadLine();
+            }
+            return result;
         }
     }
 }

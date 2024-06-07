@@ -14,9 +14,8 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
     {
         public List<BattleGroup> Groups = [];
 
-        public BattleRound(SortedDictionary<int, Competitor> competitors)
+        public void InitialiazeBattleRound()
         {
-            Competitors = competitors;
             CreateGroups();
             AssignCompetitorsToGroupsByRank();
             AssignRoundType();
@@ -43,7 +42,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
 
             foreach (var Competitor in Competitors)
             {
-                Groups[groupsCounter].Competitors.Add(Competitor.Value, Competitor.Value.CompetitionRankBattle ?? int.MaxValue);
+                Groups[groupsCounter].Competitors.Add(new() { Competitor = Competitor, RankInGroup = Competitor.CompetitionRankBattle ?? int.MaxValue });
 
                 groupsCounter += addition ? 1 : -1;
 
@@ -56,14 +55,14 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
         }
 
 
-        public virtual SortedDictionary<int, Competitor> GetAdvancing()
+        public virtual List<Competitor> GetAdvancing()
         {
-            SortedDictionary<int, Competitor> advancing = [];
+            List<Competitor> advancing = [];
             int rank = 1;
             foreach (var group in Groups)
             {
-                advancing.Add(rank++, group.Competitors.First(x => x.Value == 1).Key);
-                advancing.Add(rank++, group.Competitors.First(x => x.Value == 2).Key);
+                advancing.Add(group.Competitors.First(x => x.RankInGroup == 1).Competitor);
+                advancing.Add(group.Competitors.First(x => x.RankInGroup == 2).Competitor);
             }
 
             return advancing;

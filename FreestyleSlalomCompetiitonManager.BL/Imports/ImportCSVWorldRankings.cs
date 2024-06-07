@@ -1,5 +1,6 @@
 ﻿using FreestyleSlalomCompetitionManager.BL.Enums;
 using FreestyleSlalomCompetitionManager.BL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -41,6 +42,8 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
             // Extract category and discipline from file name
             (Discipline discipline, SexCategory sexCategory, AgeCategory ageCategory) = ExtractFileParts(filePath);
 
+            await TryToMoveWorldRanksDB(discipline, sexCategory, ageCategory);
+
             List<WorldRank> worldRanks = [];
 
             using (StreamReader reader = new(filePath))
@@ -63,6 +66,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
                 }
             }
 
+            await TryToSaveWorldRanks(worldRanks);
             return worldRanks;
         }
 
@@ -96,11 +100,39 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
             string firstName = string.Join(' ', nameParts[..^1]);
             string familyName = nameParts[^1];
-            return existingSkaters.GetOrAdd(wsid, _ => new Skater(firstName, familyName, country, wsid)
+
+            if (existingSkaters.TryGetValue(wsid, out Skater? skater))
             {
-                AgeCategory = ageCategory,
-                SexCategory = sexCategory
-            });
+                if (skater.AgeCategory < ageCategory)
+                {
+                    skater.AgeCategory = ageCategory;
+                }
+
+                using var db = new DatabaseContext();
+                if (!db.Skaters.Any(dbSkater => dbSkater.WSID == skater.WSID))
+                {
+                    db.Skaters.Update(skater);
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+
+                skater = new(wsid, firstName, familyName, country)
+                {
+                    AgeCategory = ageCategory,
+                    SexCategory = sexCategory
+                };
+
+                using var db = new DatabaseContext();
+                if (!db.Skaters.Any(dbSkater => dbSkater.WSID == skater.WSID))
+                {
+                    db.Skaters.Add(skater);
+                    db.SaveChanges();
+                }
+            }
+
+            return existingSkaters.GetOrAdd(wsid, _ => skater);
         }
 
         private static WorldRank CreateWorldRank(string wsid, AgeCategory ageCategory, SexCategory sexCategory, Discipline discipline, ushort rank)
@@ -118,6 +150,44 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
         {
             skater.WorldRanks.Add(worldRank);
             worldRanks.Add(worldRank);
+        }
+
+        private async static Task TryToMoveWorldRanksDB(Discipline discipline, SexCategory sexCategory, AgeCategory ageCategory)
+        {
+            using DatabaseContext? db = new();
+            if (db == null) return;
+
+            var ranks = await db.WorldRanks
+                .Where(x => x.Discipline == discipline && x.SexCategory == sexCategory && x.AgeCategory == ageCategory)
+                .ToListAsync<WorldRank>();
+
+            if (ranks.Count > 0)
+            {
+                db.WorldRanksHistory.AddRange(ranks);
+                db.WorldRanks.RemoveRange(ranks);
+                await db.SaveChangesAsync();
+            }
+        }
+
+        private async static Task TryToSaveWorldRanks(List<WorldRank> worldRanks)
+        {
+            using DatabaseContext? db = new();
+            if (db == null) return;
+
+            Discipline discipline = worldRanks[0].Discipline;
+            SexCategory sexCategory = worldRanks[0].SexCategory;
+            AgeCategory ageCategory = worldRanks[0].AgeCategory;
+
+            var existingRanks = db?.WorldRanks
+                .Where(x => x.Discipline == discipline && x.SexCategory == sexCategory && x.AgeCategory == ageCategory)
+                .ToHashSet() ?? [];
+
+            var newRanks = worldRanks
+                .Where(rank => !existingRanks.Any(x => x.WSID == rank.WSID && x.Rank == rank.Rank))
+                .ToList();
+
+            await db.WorldRanks.AddRangeAsync(newRanks);
+            await db.SaveChangesAsync();
         }
 
     }

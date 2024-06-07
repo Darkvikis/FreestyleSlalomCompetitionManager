@@ -11,11 +11,20 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
     {
         public override void AssignCompetitors(List<Competitor> skaters)
         {
-            skaters.Where(s => s.CompetitionRankSpeed != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankSpeed).ToList().ForEach(s => Competitors.Add(GetRank(s.CompetitionRankSpeed),s));
+            skaters.Where(s => s.CompetitionRankSpeed != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankSpeed).ToList().ForEach(s => Competitors.Add(s));
         }
+
         public override void ProcessDiscipline()
         {
+            foreach (var s in Competitors)
+            {
+                s.CompetitionResultSpeed = ConsoleCommunicator.GetSkatersResult(s);
+            }
+        }
 
+        public override List<Competitor> GetResults()
+        {
+            return Competitors.OrderBy(x =>x.CompetitionResultSpeed).ToList();
         }
 
         public override string ToString()

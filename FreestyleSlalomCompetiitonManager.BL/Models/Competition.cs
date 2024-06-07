@@ -5,17 +5,18 @@ using FreestyleSlalomCompetitionManager.BL.Exports;
 
 namespace FreestyleSlalomCompetitionManager.BL.Models
 {
-    public class Competition(string name, DateTime startDate, DateTime endDate, string description, string address, Organizer organizer) : BaseModel
+    public class Competition(string name, DateTime startDate, DateTime endDate, string description, string address) : BaseModel
     {
         public string Name { get; set; } = name;
         public DateTime StartDate { get; set; } = startDate;
         public DateTime EndDate { get; set; } = endDate;
         public string Description { get; set; } = description;
         public string Address { get; set; } = address;
-        public Organizer Organizer { get; set; } = organizer;
+        public Organizer Organizer { get; set; }
         public virtual List<Competitor> Competitors { get; set; } = [];
         public virtual List<BaseDiscipline> Disciplines { get; set; } = [];
 
+       
 
         public void RunCompetition()
         {

@@ -21,22 +21,39 @@ namespace FreestyleSlalomCompetitionManager.Test
                             faker.Date.Recent(),
                             faker.Date.Soon(),
                             faker.Lorem.Paragraph(),
-                            faker.Address.FullAddress(),
-                            new Organizer(faker.Name.FullName(),
+                            faker.Address.FullAddress()
+
+                        )
+            {
+                Organizer = new Organizer(faker.Name.FullName(),
                             faker.Random.Replace("####???##########"))
-                        );
+            }; ;
         }
 
         public static Competitor CreateCompetitor(AgeCategory? ageCategory, SexCategory? sexCategory)
         {
-            return new(faker.Name.FirstName(),
+            return new(
+                 faker.Random.Replace("####???##########"),
+                 faker.Name.FirstName(),
                 faker.Name.LastName(),
-                faker.Address.Country().Substring(0, 3).ToUpper())
+                faker.Address.Country().ToUpper())
             {
                 AgeCategory = ageCategory ?? faker.PickRandom<AgeCategory>(),
                 SexCategory = sexCategory ?? faker.PickRandom<SexCategory>(),
-                WSID = faker.Random.Replace("####???##########"),
                 Birthdate = faker.Date.PastDateOnly()
+            };
+        }
+
+        public static Skater CreateSkater(AgeCategory? ageCategory, SexCategory? sexCategory)
+        {
+            return new(
+                 faker.Random.Replace("####???##########"),
+                 faker.Name.FirstName(),
+                faker.Name.LastName(),
+                faker.Address.Country().ToUpper())
+            {
+                AgeCategory = ageCategory ?? faker.PickRandom<AgeCategory>(),
+                SexCategory = sexCategory ?? faker.PickRandom<SexCategory>()
             };
         }
         public static List<Competitor> CreateListOfCompetitors(int numberOfCompetitors, AgeCategory? ageCategory, SexCategory? sexCategory)

@@ -98,13 +98,13 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
                 // Populate the final results
                 int rank = 1;
                 int resultsRow = 10;
-                foreach (var result in discipline.Results)
+                foreach (var result in discipline.GetResults())
                 {
                     disciplineWorksheet.Cells[resultsRow, 2].Value = rank;
-                    disciplineWorksheet.Cells[resultsRow, 3].Value = result.Value.WSID ?? string.Empty;
-                    disciplineWorksheet.Cells[resultsRow, 4].Value = result.Value.FirstName;
-                    disciplineWorksheet.Cells[resultsRow, 5].Value = result.Value.FamilyName;
-                    disciplineWorksheet.Cells[resultsRow, 6].Value = result.Value.Country;
+                    disciplineWorksheet.Cells[resultsRow, 3].Value = result.WSID ?? string.Empty;
+                    disciplineWorksheet.Cells[resultsRow, 4].Value = result.FirstName;
+                    disciplineWorksheet.Cells[resultsRow, 5].Value = result.FamilyName;
+                    disciplineWorksheet.Cells[resultsRow, 6].Value = result.Country;
 
                     rank++;
                     resultsRow++;
