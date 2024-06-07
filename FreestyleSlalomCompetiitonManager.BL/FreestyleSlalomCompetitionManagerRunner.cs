@@ -1,5 +1,5 @@
 ﻿using FreestyleSlalomCompetitionManager.BL.Enums;
-using FreestyleSlalomCompetitionManager.BL.Imports;
+using FreestyleSlalomCompetitionManager.BL.Impotrs;
 using FreestyleSlalomCompetitionManager.BL.Models;
 using FreestyleSlalomCompetitionManager.BL.Models.Disciplines;
 using FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle;
