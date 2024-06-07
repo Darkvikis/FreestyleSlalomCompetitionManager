@@ -45,7 +45,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 
             using (StreamReader reader = new(filePath))
             {
-                string line;
+                string? line;
                 while ((line = await reader.ReadLineAsync()) != null)
                 {
                     if (IsHeaderRow(line))

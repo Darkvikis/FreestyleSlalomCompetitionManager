@@ -1,5 +1,8 @@
-﻿using FreestyleSlalomCompetitionManager.BL.Models;
+﻿using FreestyleSlalomCompetitionManager.BL.Enums;
+using FreestyleSlalomCompetitionManager.BL.Models;
 using FreestyleSlalomCompetitionManager.BL.Models.Disciplines;
+using FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle;
+using FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic;
 using System.Data;
 
 namespace FreestyleSlalomCompetitionManager.BL
@@ -285,7 +288,43 @@ namespace FreestyleSlalomCompetitionManager.BL
             }
 
             return read;
+        }
 
+        public static BaseDiscipline CreateDiscipline()
+        {
+            Console.WriteLine("What AgeCategory you want (senior, junior):");
+            Console.WriteLine("What AgeCategory you want (senior, junior):");
+            string? read = Console.ReadLine();
+
+            AgeCategory ageCategory = read?.ToLower() switch
+            {
+                "senior" => AgeCategory.Senior,
+                "junior" => AgeCategory.Junior,
+                _ => throw new ArgumentException("Invalid AgeCategory.")
+            };
+
+            Console.WriteLine("What SexCategory you want (men, women):");
+            read = Console.ReadLine();
+            SexCategory sexCategory = read?.ToLower() switch
+            {
+                "men" => SexCategory.Man,
+                "women" => SexCategory.Woman,
+                _ => throw new ArgumentException("Invalid AgeCategory.")
+            };
+
+            Console.WriteLine("What discipline you want (battle, classic, speed, jump):");
+            read = Console.ReadLine();
+
+            BaseDiscipline discipline = read?.ToLower() switch
+            {
+                "battle" => new Battle(ageCategory, sexCategory),
+                "classic" => new Classic(ageCategory, sexCategory),
+                "speed" => new Speed(ageCategory, sexCategory),
+                "jump" => new Jump(ageCategory, sexCategory),
+                _ => throw new ArgumentException("Invalid discipline."),
+            };
+
+            return discipline;
         }
     }
 }

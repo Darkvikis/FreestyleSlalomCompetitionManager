@@ -33,6 +33,11 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
                 discipline?.AssignCompetitors(Competitors ?? []);
             }
         }
+
+        public void CreateDiscipline()
+        {
+            Disciplines.Add(ConsoleCommunicator.CreateDiscipline());
+        }
     }
 }
 

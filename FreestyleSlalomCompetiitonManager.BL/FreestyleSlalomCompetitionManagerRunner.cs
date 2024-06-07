@@ -68,7 +68,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
         public async Task ExecuteCommandAsync(string command, string[] args)
         {
-            switch (command)
+            switch (command.ToLower())
             {
                 case "help":
                     ConsoleCommunicator.DisplayHelp();
@@ -114,6 +114,9 @@ namespace FreestyleSlalomCompetitionManager.BL
                     break;
                 case "changedefaultfolderpath":
                     ChangeDefaultFolderPath(ConsoleCommunicator.AskForDefaultFolderPath());
+                    break;
+                case "createdisciplineforcompetition":
+                    CreateDisciplineFoCurrentCompetition();
                     break;
                 case "exit":
                     Environment.Exit(0);
@@ -440,6 +443,13 @@ namespace FreestyleSlalomCompetitionManager.BL
             }
 
             defaultFolderPath = folderPath;
+        }
+
+        public void CreateDisciplineFoCurrentCompetition()
+        {
+            if (!CurrentCompetitionCheck()) { return; }
+
+            currentCompetition?.CreateDiscipline();
         }
     }
 }
