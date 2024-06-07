@@ -288,5 +288,33 @@ namespace FreestyleSlalomCompetitionManager.Test
             return skater.WSID ?? string.Empty;
 
         }
+
+        [Fact]
+        public async Task ExecuteCommandAsync_ChangeDefaultFolderPath_ShouldChangeDefaultFolderPath()
+        {
+            // Arrange
+            var runner = new FreestyleSlalomCompetitionManagerRunner();
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+
+            // Act
+            runner.ChangeDefaultFolderPath(path);
+
+            // Assert
+            Assert.Equal(path, runner.defaultFolderPath);
+        }
+
+        [Fact]
+        public async Task ExecuteCommandAsync_GetExistingSkatersFromDB_ShouldGetExistingSkatersFromDB()
+        {
+            // Arrange
+            var runner = new FreestyleSlalomCompetitionManagerRunner();
+
+            // Act
+            runner.GetExistingSkatersFromDB();
+
+            // Assert
+            Assert.NotNull(runner.existingSkaters);
+        }
     }
 }
