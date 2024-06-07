@@ -13,7 +13,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 {
     public partial class ImportStartingListXLSX
     {
-        public static async Task ImportExcelFile(string filePath)
+        public static async Task<List<Competitor>> ImportExcelFile(string filePath)
         {
             using ExcelPackage package = new(new FileInfo(filePath));
             ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
@@ -44,11 +44,8 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
                 {
                     ConsoleCommunicator.InvalidSkaterMissingWSID();
                 }
-
-
-
             }
-
+            return competitors;
         }
 
         public static void AssignRankToCompetitor(Competitor competitor, string discipline, int rank)
