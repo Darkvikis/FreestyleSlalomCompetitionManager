@@ -382,5 +382,19 @@ namespace FreestyleSlalomCompetitionManager.BL
         {
             Console.WriteLine("Invalid skater. WSID is missing.");
         }
+
+        public static int GetSkatersResult(Competitor competitor)
+        {
+            Console.WriteLine($"{competitor.FirstName} {competitor.FamilyName} result:");
+            string? read = Console.ReadLine();
+            int result;
+
+            while (!int.TryParse(read, out result))
+            {
+                Console.WriteLine("Invalid number. Give valid result:");
+                read = Console.ReadLine();
+            }
+            return result;
+        }
     }
 }

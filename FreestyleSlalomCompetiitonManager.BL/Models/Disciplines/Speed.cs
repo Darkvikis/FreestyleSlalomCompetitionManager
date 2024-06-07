@@ -13,14 +13,18 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
         {
             skaters.Where(s => s.CompetitionRankSpeed != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankSpeed).ToList().ForEach(s => Competitors.Add(s));
         }
+
         public override void ProcessDiscipline()
         {
-
+            foreach (var s in Competitors)
+            {
+                s.CompetitionResultSpeed = ConsoleCommunicator.GetSkatersResult(s);
+            }
         }
 
         public override List<Competitor> GetResults()
         {
-            return Competitors.OrderBy(x =>x.CompetitionRankSpeed).ToList();
+            return Competitors.OrderBy(x =>x.CompetitionResultSpeed).ToList();
         }
 
         public override string ToString()
