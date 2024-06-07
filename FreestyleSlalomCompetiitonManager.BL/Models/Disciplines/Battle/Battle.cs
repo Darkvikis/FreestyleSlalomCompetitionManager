@@ -24,7 +24,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle
             Rounds.Add(new BattleRound(Competitors));
         }
 
-        public void ProccessBattle()
+        public override void ProcessDiscipline()
         {
             ConsoleCommunicator.DisplayStartDiscipline(this.ToString(), AgeCategory.ToString(), SexCategory.ToString());
 

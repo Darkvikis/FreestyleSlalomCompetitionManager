@@ -118,6 +118,10 @@ namespace FreestyleSlalomCompetitionManager.BL
                 case "createdisciplineforcompetition":
                     CreateDisciplineFoCurrentCompetition();
                     break;
+                case "runcompetition":
+                    if (!CurrentCompetitionCheck()) { return; }
+                    currentCompetition.RunCompetition();
+                    break;
                 case "exit":
                     Environment.Exit(0);
                     break;

@@ -13,6 +13,10 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
         {
             skaters.Where(s => s.CompetitionRankJump != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankJump).ToList().ForEach(s => Competitors.Add(GetRank(s.CompetitionRankJump), s));
         }
+        public override void ProcessDiscipline()
+        {
+
+        }
 
         public override string ToString()
         {

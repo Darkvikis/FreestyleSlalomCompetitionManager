@@ -30,9 +30,12 @@ namespace FreestyleSlalomCompetitionManager.BL
             Console.WriteLine("  getskatersoncurrentcompetition - Get the skaters on the current competition");
             Console.WriteLine("  getrankingsforcurrentcompetition - Get the rankings for the current competition");
             Console.WriteLine("  createbasedisciplines         - Create base disciplines");
-            Console.WriteLine("  assignskaterstodisciplines - Autamatically assign a skaters to their disciplines based on importskatertocompetition and their ranks");
+            Console.WriteLine("  assignskaterstodisciplines - Automatically assign skaters to their disciplines based on imported skaters and their ranks");
+            Console.WriteLine("  changedefaultfolderpath <folder> - Change the default folder path for imports and exports");
+            Console.WriteLine("  createdisciplineforcurrentcompetition - Create a new discipline for the current competition");
             Console.WriteLine("  exit                      - Exit the program");
         }
+
 
         public static void DisplayUnknownCommandMessage()
         {
@@ -325,6 +328,50 @@ namespace FreestyleSlalomCompetitionManager.BL
             };
 
             return discipline;
+        }
+
+        public static void ListAllDisciplines(List<BaseDiscipline> disciplines)
+        {
+            for (int i = 0; i < disciplines.Count; i++)
+            {
+                Console.WriteLine($"{i}: {disciplines[i].FullNameOfDiscipline}");
+            }
+        }
+
+        public static int PickDiscipline(List<BaseDiscipline> disciplines)
+        {
+            ListAllDisciplines(disciplines);
+            Console.WriteLine("Pick corresponding number:");
+            var read = Console.ReadLine();
+            int discNum;
+
+            while (!int.TryParse(read, out discNum))
+            {
+                Console.WriteLine("Invalid number. Give valid discipline number:");
+                read = Console.ReadLine();
+            }
+            return discNum;
+        }
+
+        public static bool WantToContinue()
+        {
+            Console.WriteLine("Do you wan to continue (y/n)?");
+            var read = Console.ReadLine();
+            bool discNum;
+
+            discNum = read?.ToLower() switch
+            {
+                "y" => true,
+                _ => false
+            };
+
+            return discNum;
+
+        }
+
+        public static void CannotStartCompetition()
+        {
+            Console.WriteLine("Cannot start the competition. Please make sure there are competitors and disciplines available.");
         }
     }
 }

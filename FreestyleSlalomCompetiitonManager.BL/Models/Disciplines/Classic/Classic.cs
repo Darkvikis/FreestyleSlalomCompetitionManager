@@ -11,7 +11,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic
     {
         public List<ClassicRound> Rounds { get; set; } = [];
 
-        public void ProcessClassic()
+        public override void ProcessDiscipline()
         {
             if (Rounds.Count == 0)
             {

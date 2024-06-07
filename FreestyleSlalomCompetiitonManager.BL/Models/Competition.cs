@@ -16,6 +16,23 @@ namespace FreestyleSlalomCompetitionManager.BL.Models
         public virtual List<Competitor> Competitors { get; set; } = [];
         public virtual List<BaseDiscipline> Disciplines { get; set; } = [];
 
+
+        public void RunCompetition()
+        {
+            if(Competitors.Count == 0 || Disciplines.Count == 0)
+            {
+                ConsoleCommunicator.CannotStartCompetition();
+                return;
+            }
+
+            do
+            {
+                int discNum = ConsoleCommunicator.PickDiscipline(Disciplines);
+                Disciplines[discNum].ProcessDiscipline();
+            }
+            while (ConsoleCommunicator.WantToContinue());
+        }
+
         public async Task ExportResultsToCsv(string folderPath)
         {
             await ResultsExports.ExportResultsToExcel(this, folderPath);

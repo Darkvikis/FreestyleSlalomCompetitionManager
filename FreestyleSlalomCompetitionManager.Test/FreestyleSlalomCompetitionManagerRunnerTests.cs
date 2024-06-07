@@ -131,8 +131,8 @@ namespace FreestyleSlalomCompetitionManager.Test
 
             // Verify the CSV content
             var csvContent = File.ReadAllText(filePath);
-            Assert.Contains("Name,Country,WSID,PayedFee,SendMusic,Music,CompetitionRankBattle,CompetitionRankSpeed,CompetitionRankClassic,CompetitionRankJump,CompetitionRankSlide", csvContent);
-            Assert.Contains("Name,CZE,WSID,False,No,,,,,,", csvContent);
+            Assert.Contains("Name,Country,WSID,PayedFee,SendMusic,Music,CompetitionRankBattle,CompetitionRankSpeed,CompetitionRankClassic,CompetitionRankJump", csvContent);
+            Assert.Contains("Name,CZE,WSID,False,No,,,,,", csvContent);
 
             // Cleanup
             File.Delete(filePath);

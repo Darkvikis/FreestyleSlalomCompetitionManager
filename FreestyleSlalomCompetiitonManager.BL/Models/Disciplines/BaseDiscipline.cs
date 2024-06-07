@@ -49,5 +49,10 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
             ExportDisciplineStartingList.Export(this, DisciplineType, folderPath);
         }
 
+        public string FullNameOfDiscipline()
+        {
+            return $"{ToString()} {AgeCategory} {SexCategory}";
+        }
+        public abstract void ProcessDiscipline();
     }
 }
