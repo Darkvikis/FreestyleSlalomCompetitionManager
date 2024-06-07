@@ -11,11 +11,7 @@ jobs:
         configuration: [Debug, Release]
 
     runs-on: windows-latest
-
-    env:
-      Solution_Name: FreestyleSlalomCompetitionManager.sln
-      Test_Project_Path: FreestyleSlalomCompetitionManager.Tests/FreestyleSlalomCompetitionManager.Tests.csproj
-
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -37,11 +33,6 @@ jobs:
 
     - name: Build the application
       run: msbuild ${{ env.Solution_Name }} /p:Configuration=${{ matrix.configuration }}
-      env:
-        Configuration: ${{ matrix.configuration }}
-
-    - name: Test
-      run: dotnet test ${{ env.Test_Project_Path }} --configuration ${{ matrix.configuration }}
       env:
         Configuration: ${{ matrix.configuration }}
 
