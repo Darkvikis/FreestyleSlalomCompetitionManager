@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using FreestyleSlalomCompetitionManager.BL.Models;
 using FreestyleSlalomCompetitionManager.BL.Enums;
+using System.Text.RegularExpressions;
 
 namespace FreestyleSlalomCompetitionManager.BL.Impotrs
 {

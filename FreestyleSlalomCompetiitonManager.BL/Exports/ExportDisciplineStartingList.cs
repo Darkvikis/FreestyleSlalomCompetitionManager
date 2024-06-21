@@ -32,10 +32,10 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
             foreach (var competitor in discipline.Competitors)
             {
                 row++;
-                worksheet.Cells[row, 2].Value = competitor.WSID;
-                worksheet.Cells[row, 3].Value = $"{competitor.FirstName} {competitor.FamilyName}";
+                worksheet.Cells[row, 2].Value = competitor.WSID.ToUpper();
+                worksheet.Cells[row, 3].Value = $"{competitor.FamilyName} {competitor.FirstName}";
                 worksheet.Cells[row, 4].Value = competitor.Country;
-                worksheet.Cells[row, 5].Value = counter++;
+                worksheet.Cells[row, 5].Value = GetRankForDiscipline(disciplineType, competitor).ToUpper();
 
             }
 
@@ -49,8 +49,23 @@ namespace FreestyleSlalomCompetitionManager.BL.Exports
             worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
             // Save the Excel file
-            await package.SaveAsAsync($"{folderPath}/Results{disciplineType}{discipline.AgeCategory}{discipline.SexCategory}.xlsx");
+            await package.SaveAsAsync($"{folderPath}/StartingList{disciplineType}{discipline.AgeCategory}{discipline.SexCategory}.xlsx");
 
+        }
+
+        private static string GetRankForDiscipline(Discipline disciplineType, Competitor competitor)
+        {
+            var rank = disciplineType switch
+            {
+                Discipline.Battle => competitor.CompetitionRankBattle ?? int.MaxValue,
+                Discipline.Classic => competitor.CompetitionRankClassic ?? int.MaxValue,
+                Discipline.Speed => competitor.CompetitionRankSpeed ?? int.MaxValue,
+                Discipline.Jump => competitor.CompetitionRankJump ?? int.MaxValue,
+                _ => int.MaxValue
+            };
+
+            if (rank == int.MaxValue) return "none";
+            return rank.ToString();
         }
     }
 }

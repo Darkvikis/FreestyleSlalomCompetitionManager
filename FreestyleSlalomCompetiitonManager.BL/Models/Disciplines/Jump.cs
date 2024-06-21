@@ -11,7 +11,7 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
     {
         public override void AssignCompetitors(List<Competitor> skaters)
         {
-            skaters.Where(s => s.CompetitionRankJump != null && s.AgeCategory == AgeCategory && s.SexCategory == SexCategory).OrderBy(s => s.CompetitionRankJump).ToList().ForEach(s => Competitors.Add( s));
+            skaters.Where(s => s.CompetitionRankJump != null && IsInAgeCategory(AgeCategory, s.AgeCategory) && IsInSexCategory(SexCategory, s.SexCategory)).OrderBy(s => s.CompetitionRankJump).ToList().ForEach(s => Competitors.Add( s));
         }
 
         public override void ProcessDiscipline()

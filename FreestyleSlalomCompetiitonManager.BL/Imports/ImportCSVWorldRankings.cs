@@ -31,6 +31,10 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
                 allWorldRanks.AddRange(worldRanks);
             }
 
+            foreach (Skater skater in existingSkaters.Values)
+            {
+                skater.WorldRanks.AddRange(allWorldRanks.Where(x =>x.WSID == skater.WSID));
+            }
             return allWorldRanks;
         }
 
@@ -57,6 +61,11 @@ namespace FreestyleSlalomCompetitionManager.BL.Impotrs
                     string[] values = line.Replace("\"", "").Split(',');
 
                     string ranksWSID = values[5];
+
+                    if(ranksWSID == "Davito Moci")
+                    {
+                        break;
+                    }
 
                     Skater skater = GetOrCreateSkater(ranksWSID, values[3], values[4], ageCategory, sexCategory, existingSkaters);
 

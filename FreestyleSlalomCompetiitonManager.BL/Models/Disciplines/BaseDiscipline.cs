@@ -43,6 +43,34 @@ namespace FreestyleSlalomCompetitionManager.BL.Models.Disciplines
             return $"{ToString()} {AgeCategory} {SexCategory}";
         }
 
+        public static bool IsInAgeCategory(AgeCategory disciplineCategory, AgeCategory skaterCategory)
+        {
+            if (disciplineCategory == skaterCategory)
+            {
+                return true;
+            }
+            if (disciplineCategory == AgeCategory.Mixed && (skaterCategory == AgeCategory.Junior || skaterCategory == AgeCategory.Senior))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool IsInSexCategory(SexCategory disciplineCategory, SexCategory skaterCategory)
+        {
+
+            if (disciplineCategory == skaterCategory)
+            {
+                return true;
+            }
+            if (disciplineCategory == SexCategory.Mixed && (skaterCategory == SexCategory.Man || skaterCategory == SexCategory.Woman))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
         public abstract List<Competitor> GetResults();
         public abstract void ProcessDiscipline();
     }

@@ -34,7 +34,7 @@ namespace FreestyleSlalomCompetitionManager.Test
             ExportDisciplineStartingList.Export(discipline, disciplineType, folderPath);
 
             // Assert
-            var filePath = Path.Combine(folderPath, $"Results {disciplineType} {discipline.AgeCategory} {discipline.SexCategory}.xlsx");
+            var filePath = Path.Combine(folderPath, $"StartingList{disciplineType}{discipline.AgeCategory}{discipline.SexCategory}.xlsx");
             Assert.True(File.Exists(filePath));
 
             using (var package = new ExcelPackage(new FileInfo(filePath)))
@@ -48,12 +48,12 @@ namespace FreestyleSlalomCompetitionManager.Test
                 Assert.Equal("RANK", worksheet.Cells[3, 5].Value.ToString());
 
                 Assert.Equal(competitors[0].WSID, worksheet.Cells[4, 2].Value.ToString());
-                Assert.Equal(competitors[0].FirstName + " " + competitors[0].FamilyName, worksheet.Cells[4, 3].Value.ToString());
+                Assert.Equal(competitors[0].FamilyName + " " + competitors[0].FirstName, worksheet.Cells[4, 3].Value.ToString());
                 Assert.Equal(competitors[0].Country, worksheet.Cells[4, 4].Value.ToString());
                 Assert.Equal(competitors[0].CompetitionRankClassic.ToString(), worksheet.Cells[4, 5].Value.ToString());
 
                 Assert.Equal(competitors[1].WSID, worksheet.Cells[5, 2].Value.ToString());
-                Assert.Equal(competitors[1].FirstName + " " + competitors[1].FamilyName, worksheet.Cells[5, 3].Value.ToString());
+                Assert.Equal(competitors[1].FamilyName + " " + competitors[1].FirstName, worksheet.Cells[5, 3].Value.ToString());
                 Assert.Equal(competitors[1].Country, worksheet.Cells[5, 4].Value.ToString());
                 Assert.Equal(competitors[1].CompetitionRankClassic.ToString(), worksheet.Cells[5, 5].Value.ToString());
             }

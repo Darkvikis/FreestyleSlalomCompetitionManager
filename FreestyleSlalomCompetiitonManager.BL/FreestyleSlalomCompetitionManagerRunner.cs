@@ -4,12 +4,8 @@ using FreestyleSlalomCompetitionManager.BL.Models;
 using FreestyleSlalomCompetitionManager.BL.Models.Disciplines;
 using FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Battle;
 using FreestyleSlalomCompetitionManager.BL.Models.Disciplines.Classic;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace FreestyleSlalomCompetitionManager.BL
 {
@@ -114,9 +110,12 @@ namespace FreestyleSlalomCompetitionManager.BL
                     break;
                 case "changedefaultfolderpath":
                     ChangeDefaultFolderPath(ConsoleCommunicator.AskForDefaultFolderPath());
-                    break; 
+                    break;
                 case "createdisciplineforcompetition":
                     CreateDisciplineFoCurrentCompetition();
+                    break;
+                case "generateolmouccompetition":
+                    await GenerateOlmoucCompetition();
                     break;
                 case "runcompetition":
                     if (!CurrentCompetitionCheck()) { return; }
@@ -131,25 +130,27 @@ namespace FreestyleSlalomCompetitionManager.BL
             }
         }
 
-        private async Task ImportFromFolderAsync(string[] args)
+        private async Task<List<WorldRank>> ImportFromFolderAsync(string[] args)
         {
+            List<WorldRank> worldRanks = new();
             if (args.Length < 1)
             {
                 ConsoleCommunicator.DisplayFolderPathMissingMessage();
-                return;
+                return worldRanks;
             }
 
             string folderPath = args[0];
             try
             {
                 GetExistingSkatersFromDB();
-                var worldRanks = await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
+                worldRanks = await ImportCSVWorldRankings.ImportFromFolderAsync(folderPath, existingSkaters);
                 ConsoleCommunicator.DisplayImportSuccessMessage(worldRanks.Count, folderPath);
             }
             catch (Exception ex)
             {
                 ConsoleCommunicator.DisplayImportErrorMessage(folderPath, ex.Message);
             }
+            return worldRanks;
         }
 
         private async Task ImportFromFileAsync(string[] args)
@@ -224,7 +225,7 @@ namespace FreestyleSlalomCompetitionManager.BL
                 return;
             }
 
-            Skater newSkater = new(wsid,firstName, familyName, country);
+            Skater newSkater = new(wsid, firstName, familyName, country);
             existingSkaters.TryAdd(wsid, newSkater);
 
             ConsoleCommunicator.DisplaySkaterCreationSuccessMessage(firstName + " " + familyName, wsid);
@@ -248,7 +249,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
             if (!CurrentCompetitionCheck()) { return; }
 
-            Competitor competitor = new(skater.WSID, skater.FirstName, skater.FamilyName, skater.Country) ;
+            Competitor competitor = new(skater.WSID, skater.FirstName, skater.FamilyName, skater.Country);
 
             currentCompetition?.Competitors.Add(competitor);
 
@@ -282,10 +283,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             List<Competitor> skaters = ImportCSVIntoSkaterOnCompetition.ImportCSV(filePath);
             if (!CurrentCompetitionCheck()) { return; }
 
-            foreach (var skater in skaters)
-            {
-                currentCompetition?.Competitors.Add(skater);
-            }
+            currentCompetition?.Competitors.AddRange(skaters);
 
             string competitionName = currentCompetition?.Name ?? string.Empty; // Ensure competitionName is not null
             ConsoleCommunicator.DisplaySkatersImportedMessage(filePath, competitionName);
@@ -369,6 +367,7 @@ namespace FreestyleSlalomCompetitionManager.BL
 
                     ConsoleCommunicator.DisplaySkaterNotAssignedToDisciplinesMessage(skater.FirstName + " " + skater.FamilyName);
                 }
+
             }
             ConsoleCommunicator.DisplayNumberOfSkatersThatWereAssignedRankingsMessage(counterOfAssingedRankings);
         }
@@ -407,6 +406,73 @@ namespace FreestyleSlalomCompetitionManager.BL
             return disciplines;
         }
 
+        private async Task GenerateOlmoucCompetition()
+        {
+            Competition competition = new("WFSC Olomouc", DateTime.Now, DateTime.Now.AddDays(2), "", "VPG hala 2") { Organizer = new("1234", "Alena Miketova") };
+            List<BaseDiscipline> disciplines = [];
+
+            disciplines.Add(new Battle(AgeCategory.Junior, SexCategory.Woman));
+            disciplines.Add(new Battle(AgeCategory.Junior, SexCategory.Man));
+            disciplines.Add(new Battle(AgeCategory.Senior, SexCategory.Woman));
+            disciplines.Add(new Battle(AgeCategory.Senior, SexCategory.Man));
+
+            disciplines.Add(new Classic(AgeCategory.Junior, SexCategory.Mixed));
+            disciplines.Add(new Classic(AgeCategory.Senior, SexCategory.Mixed));
+
+            disciplines.Add(new Speed(AgeCategory.Junior, SexCategory.Woman));
+            disciplines.Add(new Speed(AgeCategory.Junior, SexCategory.Man));
+            disciplines.Add(new Speed(AgeCategory.Senior, SexCategory.Mixed));
+
+            disciplines.Add(new Jump(AgeCategory.Junior, SexCategory.Mixed));
+            disciplines.Add(new Jump(AgeCategory.Senior, SexCategory.Mixed));
+            competition.Disciplines.AddRange(disciplines);
+
+            currentCompetition = competition;
+            string defaultFoolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "OlomoucCompetition2024");
+            string ranksFolderPath = Path.Combine(defaultFoolderPath, "Rankings");
+            string registrationFilePath = Path.Combine(defaultFoolderPath, "registration.csv");
+            string folderToExport = Path.Combine(defaultFoolderPath, "StartingLists");
+
+            List<WorldRank> worldRanks = await ImportFromFolderAsync([ranksFolderPath]);
+
+            ImportSkatersToCompetition([registrationFilePath]);
+
+            AssignRanksToCompetitors(worldRanks);
+
+            AssignSkatersToDisciplines();
+
+            ExportStartingLists(folderToExport);
+        }
+
+        public void AssignRanksToCompetitors(List<WorldRank> worldRanks)
+        {
+            foreach (Competitor competitor in currentCompetition?.Competitors)
+            {
+                var competitorsRanks = worldRanks.Where(x => x.WSID == competitor.WSID && competitor.AgeCategory == x.AgeCategory);
+
+                foreach (var rank in competitorsRanks)
+                {
+                    switch (rank.Discipline)
+                    {
+                        case Discipline.Battle:
+                            competitor.CompetitionRankBattle = rank.Rank;
+                            break;
+                        case Discipline.Classic:
+                            competitor.CompetitionRankClassic = rank.Rank;
+                            break;
+                        case Discipline.Jump:
+                            competitor.CompetitionRankJump = rank.Rank;
+                            break;
+                        case Discipline.Speed:
+                            competitor.CompetitionRankSpeed = rank.Rank;
+                            break;
+                        default:
+                            throw new ArgumentException("Invalid discipline");
+                    }
+                }
+            }
+        }
+
         private void AssignSkatersToDisciplines()
         {
             if (!CurrentCompetitionCheck()) { return; }
@@ -428,7 +494,7 @@ namespace FreestyleSlalomCompetitionManager.BL
             ConsoleCommunicator.DisplayDisciplinesAndSkaters(currentCompetition?.Disciplines ?? Enumerable.Empty<BaseDiscipline>(), currentCompetition?.Competitors ?? Enumerable.Empty<Competitor>());
         }
 
-        public void ExportStartingLists()
+        public void ExportStartingLists(string? folderPath = null)
         {
             if (!CurrentCompetitionCheck()) { return; }
 
@@ -444,7 +510,9 @@ namespace FreestyleSlalomCompetitionManager.BL
                 return;
             }
 
-            currentCompetition?.Disciplines.ForEach(comp => comp.ExportCompetitors(defaultFolderPath));
+            if (folderPath == null) { folderPath = defaultFolderPath; }
+
+            currentCompetition?.Disciplines.ForEach(comp => comp.ExportCompetitors(folderPath));
         }
 
         public void ChangeDefaultFolderPath(string folderPath)
